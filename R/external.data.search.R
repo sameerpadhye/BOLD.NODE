@@ -2,12 +2,7 @@
 #'
 #' @description Search the BOLD dataset release based on various search criteria including taxonomy, geography, institutes etc.
 #'
-#' @details This function loads a Parquet file containing BOLD dataset release data and applies filters based on the provided parameters.
-#' It supports filtering by taxonomic identifiers (process IDs, sample IDs), taxonomy (from kingdom to species level),
-#' geography (country/ocean to site level), institutes, identifiers, sequence sources, genetic markers, nucleotide base counts,
-#' biogeographic categories, dataset/projects, bounding boxes, and ambiguous base cutoffs. The function returns a tbl_sql object
-#' that represents the filtered data, allowing for efficient querying without loading the entire dataset into memory.
-#' Users can also specify particular columns to return using the specific.cols parameter.
+#' @details This function loads the BOLD dataset release parquet files via duckDB and applies filters based on the provided parameters.It supports filtering by ids (sampleid, processid), taxonomy (from kingdom to species level), geography (country/ocean to site level), BINs, institutes, identifiers, sequence sources, genetic markers, nucleotide base counts,biogeographic categories, dataset/projects, spatial bounding boxes, and ambiguous base percent cutoffs. Users can also specify particular columns to return using the specific.cols parameter. The `tbl_sql` object can then be used by any of the `get` functions for data transformations or `bold.data.collect` to load all the data in memory.
 #'
 #' @param input.parquet Path to the input parquet file
 #' @param ids Vector of process IDs or sample IDs to filter by
@@ -25,7 +20,7 @@
 #' @param ambi.base.cutoff Character value for filtering data based proportion of ambiguous bases (IUPAC codes).Three values currently available ("<1%", "1-5%", or ">5%"); Default value is NULL
 #' @param specific.cols Optional character vector of specific columns to return
 #'
-#' @return A tbl_sql object containing the filtered data
+#' @return A tbl_sql object containing the filtered data. Total records in the search are printed on the console.
 #'
 #' @importFrom dplyr filter select
 #' @importFrom tools file_ext

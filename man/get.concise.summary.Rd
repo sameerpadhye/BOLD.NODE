@@ -10,13 +10,13 @@ get.concise.summary(bold.search.res)
 \item{bold.search.res}{A tbl_sql object containing bold.data.search results}
 }
 \value{
-A data frame with summary statistics
+A data frame with the summary statistics
 }
 \description{
 Creates a summary statistics table from the bold.data.search tb_sql object that includes counts of records, sequences, species, BINs, countries, institutes, identifiers, depositories, and amplicon length ranges.
 }
 \details{
-This function computes key biodiversity metrics from BOLD search results, including total records, records with sequences, species diversity, BIN (Barcode Index Number) diversity, geographic distribution, institutional participation, and sequence characteristics. It requires that all BCDM (Barcode Core Data Model) fields are present in the search results. The function first validates the presence of required fields, then calculates summary statistics using SQL aggregation for efficiency with large datasets. The results are returned in long format with Category and Value columns for easy plotting or reporting.
+The function provides a concise summary of the search obtained by \code{bold.data.search} that includes details like total records, unique BINs, unique institutes, unique markers and amplicon size range.
 }
 \examples{
 \dontrun{

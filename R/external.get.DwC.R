@@ -2,7 +2,7 @@
 #'
 #' @description Converts bold.data.search results from BCDM format to Darwin Core Standard format.
 #'
-#' @details This function maps BCDM (Barcode Core Data Model) fields to their Darwin Core equivalents using the official mapping file from the BCDM repository. It processes coordinate data to extract decimal latitude and longitude, applies the field name mappings, and returns a data frame with Darwin Core standardized column names. The function handles special cases for fields like processID, sampleID, taxonID, and others that require specific mappings to Darwin Core terms.
+#' @details This function maps BCDM (Barcode Core Data Model) fields to their Darwin Core equivalents using the official mapping file from the BCDM repository.
 #'
 #' @param bold.search.res A tbl_sql object containing BOLD search results
 #'

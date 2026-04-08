@@ -30,7 +30,7 @@ A data frame with occurrence data (taxon names as columns, site categories or co
 Extracts occurrence data (specimen counts by taxon and location) from BOLD search results.
 }
 \details{
-This function aggregates BOLD search results to produce occurrence data matrices showing specimen counts by taxon and location. It supports aggregation at different taxonomic ranks (from kingdom to species), optional filtering by specific taxon names, and grouping by site categories or geographic coordinates. The function can convert count data to presence/absence (1/0) format. Results are returned in wide format with taxa as columns and site categories or coordinates as rows, making it suitable for diversity analyses and community ecology applications.
+This function transforms the search results from \code{bold.data.search} into occurrence data matrices used commonly in biodiversity and ecological analyses. It supports aggregation at different taxonomic ranks (from kingdom to species), optional filtering by specific taxon names, and grouping by site categories or geographic coordinates. The function can convert count data to presence/absence (1/0) format.
 }
 \examples{
 \dontrun{

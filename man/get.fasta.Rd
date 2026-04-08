@@ -22,7 +22,7 @@ writes a FASTA file to disk with custom headers as specified by the user
 Exports nucleotide sequences from BOLD search results to a FASTA file with customizable headers.
 }
 \details{
-This function exports nucleotide sequences from BOLD search results to a FASTA file, which is a standard format for sequence data. It processes the data in chunks to handle large datasets efficiently, constructs FASTA headers from user-specified fields (joined with "|"), and writes the data directly to disk. The function uses DuckDB's SQL capabilities to safely concatenate fields for headers and employs temporary tables for repeated operations. Progress is tracked through chunk-based processing.
+This function transforms the search results from \code{bold.data.search} into a FASTA file. Data chunking  option is available to manage large sizes to avoid memory issues. The \code{fas.header} argument lets users create custom headers using the BCDM column names.
 }
 \examples{
 \dontrun{

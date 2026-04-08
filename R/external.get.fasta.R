@@ -2,7 +2,7 @@
 #'
 #' @description Exports nucleotide sequences from BOLD search results to a FASTA file with customizable headers.
 #'
-#' @details This function exports nucleotide sequences from BOLD search results to a FASTA file, which is a standard format for sequence data. It processes the data in chunks to handle large datasets efficiently, constructs FASTA headers from user-specified fields (joined with "|"), and writes the data directly to disk. The function uses DuckDB's SQL capabilities to safely concatenate fields for headers and employs temporary tables for repeated operations. Progress is tracked through chunk-based processing.
+#' @details This function transforms the search results from `bold.data.search` into a FASTA file. Data chunking  option is available to manage large sizes to avoid memory issues. The `fas.header` argument lets users create custom headers using the BCDM column names.
 #'
 #' @param bold.search.res A tbl_sql object containing BOLD search results
 #' @param output.file Path to the output FASTA file

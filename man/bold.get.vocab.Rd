@@ -27,7 +27,7 @@ A list containing unique values from the specified column; if \code{save.data} =
 Extracts distinct values of specified field/s in BOLD parquet data
 }
 \details{
-This function extracts unique values from one or more specified columns in BOLD parquet data. It handles both direct file paths and tbl_sql objects as input, making it flexible for use in different workflows. The function filters out missing and empty values before extracting distinct values, ensuring clean vocabulary lists. Optionally, the results can be saved to disk as an RDS file for later use. This is particularly useful for enumerating possible values in categorical fields like taxon names, geographic locations, or genetic markers.
+This function extracts unique values from one or more specified columns in BOLD parquet data. It handles both the parquet file and tbl_sql objects from \code{bold.data.search} as input. The results can be saved to disk as an RDS file for later use.
 }
 \examples{
 \dontrun{

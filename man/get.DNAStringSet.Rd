@@ -20,7 +20,7 @@ A DNAStringSet object
 Converts the sequence data from the BOLD search into a DNAStringSet object for downstream multiple sequence alignment with customized headers.
 }
 \details{
-This function processes BOLD search results to extract nucleotide sequences, clean them by removing gap characters, and optionally filter by specific genetic markers. It constructs sequence names from user-specified fields and returns a named DNAStringSet object suitable for multiple sequence alignment or other phylogenetic analyses. The function works directly with tbl_sql objects to handle large datasets efficiently.
+This function transforms the search results from \code{bold.data.search} into DNAStringSet object suitable for downstream data analyses. The \code{cols_for_seq_names} argument lets users create custom headers using the BCDM column names.
 }
 \examples{
 \dontrun{

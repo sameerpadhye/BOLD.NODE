@@ -6,7 +6,7 @@
 \usage{
 bold.data.collect(
   bold.search.res,
-  chunk.size = 4e+06,
+  chunk.size = 1e+06,
   sys.sleep = 0,
   export = FALSE,
   export.type = c("tsv", "parquet"),
@@ -14,17 +14,17 @@ bold.data.collect(
 )
 }
 \arguments{
-\item{bold.search.res}{A tbl_sql object obtained from 'bold.data.search'}
+\item{bold.search.res}{A \code{tbl_sql} object obtained from 'bold.data.search'}
 
-\item{chunk.size}{Maximum number of rows to process in each chunk (default: 4e6)}
+\item{chunk.size}{Maximum number of rows to process in each chunk. Default value is 1e6}
 
-\item{sys.sleep}{Time to sleep between chunks in seconds (default: 0)}
+\item{sys.sleep}{Time to sleep between chunks in seconds. Default value is 0}
 
 \item{export}{Logical value that allows user to export the output locally. Default value is FALSE}
 
 \item{export.type}{Character string specifying the data type of the exported file (tsv or parquet)}
 
-\item{output.path}{Character string specifying the local path for data export}
+\item{output.path}{Character string specifying the local path for data export along with the file name and extension}
 }
 \value{
 A data frame containing all collected results; if export = T, either a TSV or parquet file exported locally
@@ -33,11 +33,8 @@ A data frame containing all collected results; if export = T, either a TSV or pa
 collects,outputs and exports the tbl_sql 'bold.data.search' results object, processing large datasets in user defined manageable chunks.
 }
 \details{
-This function processes large BOLD search results in manageable chunks to avoid memory issues.
-It supports exporting results in either TSV or Parquet format. For Parquet export, data is written directly
-without chunking using DuckDB's COPY command. For TSV export, data is collected in chunks and then written to  file.The function uses progress bars to track processing status and allows optional pausing between chunks via the
-sys.sleep parameter. When export=FALSE, the function returns the collected data; when export=TRUE, it returns
-NULL invisibly after writing the data to disk.#'
+This function collects (downloads it in the R session) the search results from \code{bold.data.search}. Data chunking and system sleep options are available to manage large sizes to avoid memory issues. The function also supports exporting the searches in either TSV or Parquet format. export=FALSE (default) returns the collected data. The full output_path has to be provided (along with the intended file name and file extension) when export=TRUE.
+\emph{Important Note}: Some data searches (e.g. all Diptera) once collected can get very large and overload the RAM capacity for some machines.
 }
 \examples{
 \dontrun{

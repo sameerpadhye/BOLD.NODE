@@ -2,7 +2,7 @@
 #'
 #' @description Converts the sequence data from the BOLD search into a DNAStringSet object for downstream multiple sequence alignment with customized headers.
 #'
-#' @details This function processes BOLD search results to extract nucleotide sequences, clean them by removing gap characters, and optionally filter by specific genetic markers. It constructs sequence names from user-specified fields and returns a named DNAStringSet object suitable for multiple sequence alignment or other phylogenetic analyses. The function works directly with tbl_sql objects to handle large datasets efficiently.
+#' @details This function transforms the search results from `bold.data.search` into DNAStringSet object suitable for downstream data analyses. The `cols_for_seq_names` argument lets users create custom headers using the BCDM column names.
 #'
 #' @param bold.search.res A tbl_sql object containing BOLD search results
 #' @param marker Character vector specifying the genetic marker

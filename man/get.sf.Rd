@@ -4,7 +4,7 @@
 \alias{get.sf}
 \title{Convert BOLD search results to spatial points}
 \usage{
-get.sf(bold.search.res, chunk.size = 10000)
+get.sf(bold.search.res, chunk.size = 1e+05)
 }
 \arguments{
 \item{bold.search.res}{A tbl_sql object containing BOLD search results}
@@ -18,7 +18,7 @@ An sf object with point geometry in WGS84 coordinate system (EPSG:4326)
 Converts BOLD search results with coordinate data to spatial points (sf object).
 }
 \details{
-This function converts BOLD search results containing coordinate data into spatial points using the Simple Features (sf) package. It processes coordinate strings by extracting and cleaning the values, then creates point geometries in the WGS84 coordinate system (EPSG:4326). The function uses chunking to handle large datasets efficiently, processing coordinates in batches to avoid memory issues. Invalid or missing coordinates are filtered out during processing.
+This function transforms the search results from \code{bold.data.search} into an \code{sf} object. Data chunking  option is available to manage large sizes to avoid memory issues. The function creates point geometries in the WGS84 coordinate system (EPSG:4326). Records that dont have coordinate data are removed during processing.
 }
 \examples{
 \dontrun{
@@ -32,7 +32,7 @@ geography = "Malaysia")
 
 # Get the occurrence matrix
 
-occurrence_data <- get.sf(bold_search, chunk.size = 10000)
+occurrence_data <- get.sf(bold_search, chunk.size = 100000)
 
 }
 

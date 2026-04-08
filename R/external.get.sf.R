@@ -2,7 +2,7 @@
 #'
 #' @description Converts BOLD search results with coordinate data to spatial points (sf object).
 #'
-#' @details This function converts BOLD search results containing coordinate data into spatial points using the Simple Features (sf) package. It processes coordinate strings by extracting and cleaning the values, then creates point geometries in the WGS84 coordinate system (EPSG:4326). The function uses chunking to handle large datasets efficiently, processing coordinates in batches to avoid memory issues. Invalid or missing coordinates are filtered out during processing.
+#' @details This function transforms the search results from `bold.data.search` into an `sf` object. Data chunking  option is available to manage large sizes to avoid memory issues. The function creates point geometries in the WGS84 coordinate system (EPSG:4326). Records that dont have coordinate data are removed during processing.
 #'
 #' @param bold.search.res A tbl_sql object containing BOLD search results
 #' @param chunk.size Number of records to process in each chunk (default: 10000)
@@ -25,12 +25,12 @@
 #'
 #' # Get the occurrence matrix
 #'
-#' occurrence_data <- get.sf(bold_search, chunk.size = 10000)
+#' occurrence_data <- get.sf(bold_search, chunk.size = 100000)
 #'
 #' }
 #'
 #' @export
-get.sf <- function(bold.search.res, chunk.size = 10000) {
+get.sf <- function(bold.search.res, chunk.size = 100000) {
 
   check.tbl.sql(bold.search.res)
 

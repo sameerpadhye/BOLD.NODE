@@ -54,18 +54,13 @@ bold.data.search(
 \item{specific.cols}{Optional character vector of specific columns to return}
 }
 \value{
-A tbl_sql object containing the filtered data
+A tbl_sql object containing the filtered data. Total records in the search are printed on the console.
 }
 \description{
 Search the BOLD dataset release based on various search criteria including taxonomy, geography, institutes etc.
 }
 \details{
-This function loads a Parquet file containing BOLD dataset release data and applies filters based on the provided parameters.
-It supports filtering by taxonomic identifiers (process IDs, sample IDs), taxonomy (from kingdom to species level),
-geography (country/ocean to site level), institutes, identifiers, sequence sources, genetic markers, nucleotide base counts,
-biogeographic categories, dataset/projects, bounding boxes, and ambiguous base cutoffs. The function returns a tbl_sql object
-that represents the filtered data, allowing for efficient querying without loading the entire dataset into memory.
-Users can also specify particular columns to return using the specific.cols parameter.
+This function loads the BOLD dataset release parquet files via duckDB and applies filters based on the provided parameters.It supports filtering by ids (sampleid, processid), taxonomy (from kingdom to species level), geography (country/ocean to site level), BINs, institutes, identifiers, sequence sources, genetic markers, nucleotide base counts,biogeographic categories, dataset/projects, spatial bounding boxes, and ambiguous base percent cutoffs. Users can also specify particular columns to return using the specific.cols parameter. The \code{tbl_sql} object can then be used by any of the \code{get} functions for data transformations or \code{bold.data.collect} to load all the data in memory.
 }
 \examples{
 \dontrun{
