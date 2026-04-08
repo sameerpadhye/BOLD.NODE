@@ -44,10 +44,11 @@ A typical workflow for exploring BOLD data (Steps in *italics* are optional but 
 2. `bold.data.search` (Searches the dataset based on the user criteria and prints the records in the search) 
 3. `bold.concise.summary` *(Provides a detailed summary of the dataset retrieved)*
 4. `bold.data.collect`(Collects the output of the `bold.data.search` in memory for downstream exploration/analyses).  
+
 Details on the BCDM fields (field names and definitions) can be obtained using the `bold.fields.info()` function or on the BCDM GitHub page (<https://github.com/boldsystems-central/BCDM>).
 
 
-### Get the vocabulary for specific fields
+### 1.Get the vocabulary for specific fields
 
 ```{r get_vocab}
 
@@ -57,7 +58,7 @@ Details on the BCDM fields (field names and definitions) can be obtained using t
 
 ```
 
-### Search the dataset
+### 2.Search the dataset
 
 ```{r data_search}
 
@@ -85,7 +86,7 @@ Details on the BCDM fields (field names and definitions) can be obtained using t
 
 ```
 
-### Data summary
+### 3.Data summary
 
 ```{r data_summary}
 
@@ -95,7 +96,7 @@ Details on the BCDM fields (field names and definitions) can be obtained using t
 
 ```
 
-### collect the search data
+### 4.Collect the searched data
 
 ```{r data_collect}
 

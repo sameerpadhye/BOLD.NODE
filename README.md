@@ -50,12 +50,13 @@ optional but useful in some instances):
 3.  `bold.concise.summary` *(Provides a detailed summary of the dataset
     retrieved)*
 4.  `bold.data.collect`(Collects the output of the `bold.data.search` in
-    memory for downstream exploration/analyses).  
-    Details on the BCDM fields (field names and definitions) can be
-    obtained using the `bold.fields.info()` function or on the BCDM
-    GitHub page (<https://github.com/boldsystems-central/BCDM>).
+    memory for downstream exploration/analyses).
 
-### Get the vocabulary for specific fields
+Details on the BCDM fields (field names and definitions) can be obtained
+using the `bold.fields.info()` function or on the BCDM GitHub page
+(<https://github.com/boldsystems-central/BCDM>).
+
+### 1.Get the vocabulary for specific fields
 
 ``` r
 
@@ -64,7 +65,7 @@ optional but useful in some instances):
 # vocab.data <- bold.get.vocab(parquet_file,specific.cols = c("country/ocean"))
 ```
 
-### Search the dataset
+### 2.Search the dataset
 
 ``` r
 
@@ -91,7 +92,7 @@ optional but useful in some instances):
 # basecount = c(500, 660)
 ```
 
-### Data summary
+### 3.Data summary
 
 ``` r
 
@@ -100,7 +101,7 @@ optional but useful in some instances):
 # bold_summary <- get.concise.summary(bold_search_geography)
 ```
 
-### collect the search data
+### 4.Collect the searched data
 
 ``` r
 
