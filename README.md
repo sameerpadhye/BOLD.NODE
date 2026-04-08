@@ -9,10 +9,7 @@ explore BOLD dataset releases
 Data Model (BCDM)** format locally. It uses a **DuckDB** backend to
 query **parquet** files directly in R, enabling fast searches even on
 systems with limited RAM. Data collection is optimized through
-customizable chunk sizes and configurable system pause intervals. The
-package also allows seamless conversion of search results into standard
-R data structures without collecting the data in memory for downstream
-analyses:
+customizable chunk sizes and configurable system pause intervals.
 
 The package also allows seamless conversion of search results into
 standard R data structures without collecting the data in memory for
