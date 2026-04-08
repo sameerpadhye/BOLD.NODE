@@ -19,10 +19,10 @@ The package also allows seamless conversion of search results into standard R da
 
 The package also allows seamless conversion of search results into standard R data structures without collecting the data in memory for downstream analyses:
 
-1) **occurrence matrix** (biodiversity and ecology related analyses)
-2) **sf** (spatial data analyses)
-3) **DNAStringset** (phylogenetic data analyses)
-4) **fasta** (phylogenetic data analyses in third-party tools or in R)
+1. **occurrence matrix** (biodiversity and ecology related analyses)
+2. **sf** (spatial data analyses)
+3. **DNAStringset** (phylogenetic data analyses)
+4. **fasta** (phylogenetic data analyses in third-party tools or in R)
 
 <!-- badges: start -->
 <!-- badges: end -->

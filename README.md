@@ -3,7 +3,7 @@
 
 # BOLD.NODE
 
-**BOLD.NODE** is an R package that offers functionality to efficiently
+**BOLD_NODE** is an R package that offers functionality to efficiently
 explore BOLD dataset releases
 (<https://boldsystems.org/data/data-packages/>) in the **Barcode Core
 Data Model (BCDM)** format locally. It uses a **DuckDB** backend to
@@ -18,10 +18,10 @@ The package also allows seamless conversion of search results into
 standard R data structures without collecting the data in memory for
 downstream analyses:
 
-1)  **occurrence matrix** (biodiversity and ecology related analyses)
-2)  **sf** (spatial data analyses)
-3)  **DNAStringset** (phylogenetic data analyses)
-4)  **fasta** (phylogenetic data analyses in third-party tools or in R)
+1.  **occurrence matrix** (biodiversity and ecology related analyses)
+2.  **sf** (spatial data analyses)
+3.  **DNAStringset** (phylogenetic data analyses)
+4.  **fasta** (phylogenetic data analyses in third-party tools or in R)
 
 <!-- badges: start -->
 
@@ -34,7 +34,7 @@ from the `devtools` package in R (which needs to be installed before)
 
 ``` r
 
-devtools::install_github('https://github.com/sameerpadhye/BOLD.NODE.git')
+# devtools::install_github("https://github.com/boldsystems-central/BOLDconnectR")
 ```
 
 ## Workflow
@@ -66,16 +66,19 @@ using the `bold.fields.info()` function or on the BCDM GitHub page
 
 # parquet_file<-'path where the parquet file from BOLD is downloaded'
 
-# Taxonomy 
+#1 Taxonomy 
+
 # bold_search_taxonomy <- bold.data.search(parquet_path=parquet_file,
 # taxonomy = c("Odonata","Poecilia"))
 
-# Geography
+#2 Geography
+
 # bold_search_geography <- bold.data.search(parquet_path=parquet_file,
 # taxonomy = c("Panthera pardus),
 # geography = c("India"))
 
-# Combination of many search criteria
+#3 Combination of many search criteria
+
 # bold_search_combination <- bold.data.search(
 # parquet_path=parquet_file,
 # taxonomy = "Coleoptera",
@@ -98,6 +101,7 @@ using the `bold.fields.info()` function or on the BCDM GitHub page
 ``` r
 
 # Collect data (no export)
+
 # collected_data<-bold.data.collect(
 # bold_search_geography,
 # chunk.size = 50000,
