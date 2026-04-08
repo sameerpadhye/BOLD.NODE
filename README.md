@@ -34,7 +34,7 @@ from the `devtools` package in R (which needs to be installed before)
 
 ``` r
 
-devtools::install_github("https://github.com/boldsystems-central/BOLDconnectR")
+# devtools::install_github("https://github.com/boldsystems-central/BOLDconnectR")
 ```
 
 ## Workflow
@@ -53,11 +53,65 @@ using the `bold.fields.info()` function or on the BCDM GitHub page
 
 ### Get the vocabulary for specific fields
 
+``` r
+
+# parquet_file<-'path where the parquet file from BOLD is downloaded'
+
+# vocab.data <- bold.get.vocab(parquet_file,specific.cols = c("country/ocean"))
+```
+
 ### Search the dataset
+
+``` r
+
+# parquet_file<-'path where the parquet file from BOLD is downloaded'
+
+# Taxonomy 
+# bold_search_taxonomy <- bold.data.search(parquet_path=parquet_file,
+# taxonomy = c("Odonata","Poecilia"))
+
+# Geography
+# bold_search_geography <- bold.data.search(parquet_path=parquet_file,
+# taxonomy = c("Panthera pardus),
+# geography = c("India"))
+
+# Combination of many search criteria
+# bold_search_combination <- bold.data.search(
+# parquet_path=parquet_file,
+# taxonomy = "Coleoptera",
+# geography = "Canada",
+# marker = "COI-5P",
+# basecount = c(500, 660)
+```
 
 ### Data summary
 
+``` r
+
+# Get the concise summary
+
+# bold_summary <- get.concise.summary(bold_search_geography)
+```
+
 ### collect the search data
+
+``` r
+
+# Collect data (no export)
+# collected_data<-bold.data.collect(
+# bold_search_geography,
+# chunk.size = 50000,
+# export = FALSE)
+
+# Collect data (with parquet export)
+
+# bold.data.collect(
+# bold_search_combination,
+# chunk.size = 50000,
+# export = TRUE,
+# export.type = "parquet",
+# output.path = userdefinedpath)
+```
 
 **Please note** Some queries (e.g., All “Diptera”) may return very large
 datasets. Always check the summary before collecting data to ensure you
