@@ -1,0 +1,105 @@
+#' Convert the BOLD search to a DNAStringSet object
+#'
+#' @description Converts the sequence data from the BOLD search into a DNAStringSet object for downstream multiple sequence alignment with customized headers.
+#'
+#' @details This function processes BOLD search results to extract nucleotide sequences, clean them by removing gap characters, and optionally filter by specific genetic markers. It constructs sequence names from user-specified fields and returns a named DNAStringSet object suitable for multiple sequence alignment or other phylogenetic analyses. The function works directly with tbl_sql objects to handle large datasets efficiently.
+#'
+#' @param bold.search.res A tbl_sql object containing BOLD search results
+#' @param marker Character vector specifying the genetic marker
+#' @param cols_for_seq_names Character vector of field names to include in the header (separated by "|")
+#'
+#' @return A DNAStringSet object
+#'
+#' @importFrom dplyr select filter mutate compute collect all_of %>%
+#' @importFrom dbplyr sql
+#' @importFrom stats setNames
+#'
+#' @examples
+#' \dontrun{
+#'
+#'
+#' # Search the BOLD data
+#' bold_search <- bold.data.search(
+#' parquet_path=parquet_file,
+#' taxonomy = "Coleoptera",
+#' geography = "Canada",
+#' basecount = c(500, 660)
+#' )
+#'
+#' # Get the DNAStringset object
+#'
+#' bold.dnastringset<-get.DNAStringSet(bold_search,
+#' marker="COI-5P",
+#' cols_for_seq_names = c("processid","family")
+#' )
+#'
+#' }
+#'
+#' @export
+get.DNAStringSet <- function(bold.search.res,
+                             marker = NULL,
+                             cols_for_seq_names) {
+
+  # Check if input is a tbl_sql (helper function you already have)
+  check.tbl.sql(bold.search.res)
+
+  # Ensure required columns exist
+  required_cols <- c("nuc", "marker_code",cols_for_seq_names)
+
+  missing_cols <- setdiff(required_cols, colnames(bold.search.res))
+
+  if(length(missing_cols) > 0) {
+    stop("The following required columns are missing from the input: ",
+         paste(missing_cols, collapse = ", "))
+  }
+
+  # Start processing tbl_sql
+  seq.data <- bold.search.res %>%
+    select(
+      .data$nuc,
+      .data$marker_code,
+      all_of(cols_for_seq_names)
+    ) %>%
+    filter(!is.na(.data$nuc)) %>%
+    filter(.data$nuc != "") %>%
+    mutate(nuc = sql("REGEXP_REPLACE(nuc, '-', '')"))
+
+  # Apply marker filter separately
+  if (!is.null(marker)) {
+    seq.data <- seq.data %>%
+      filter(.data$marker_code %in% marker)
+  }
+
+  # Build sequence names from specified columns
+  obtain.seq.from.data <- seq.data %>%
+    select(nuc, all_of(cols_for_seq_names)) %>%
+    mutate(
+      # Quote each column name to avoid SQL keyword issues
+      msa.seq.name = sql(
+        paste0(
+          paste0('"', cols_for_seq_names, '"', collapse = " || '|' || ")
+        )
+      )
+    ) %>%
+    select(msa.seq.name, nuc)
+
+  # Pull into R and convert to named character vector
+  seq.from.data <- obtain.seq.from.data %>%
+    collect() %>%
+    { setNames(as.character(.$nuc), .$msa.seq.name) }
+
+  # # Clean up names if NA
+  # names(seq.from.data) <- ifelse(is.na(names(seq.from.data)),
+  #                                paste0("seq", seq_along(seq.from.data)),
+  #                                names(seq.from.data))
+
+  # Convert to DNAStringSet
+  dna.4.align <- DNAStringSet(seq.from.data)
+
+  return(dna.4.align)
+}
+
+
+
+
+

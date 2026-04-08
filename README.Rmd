@@ -1,0 +1,116 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# BOLD.NODE
+**BOLD_NODE** is an R package that offers functionality to efficiently explore BOLD dataset releases (<https://boldsystems.org/data/data-packages/>) in the **Barcode Core Data Model (BCDM)** format locally. It uses a **DuckDB** backend to query **parquet** files directly in R, enabling fast searches even on systems with limited RAM. Data collection is optimized through customizable chunk sizes and configurable system pause intervals. 
+The package also allows seamless conversion of search results into standard R data structures without collecting the data in memory for downstream analyses:
+
+The package also allows seamless conversion of search results into standard R data structures without collecting the data in memory for downstream analyses:
+
+1) **occurrence matrix** (biodiversity and ecology related analyses)
+2) **sf** (spatial data analyses)
+3) **DNAStringset** (phylogenetic data analyses)
+4) **fasta** (phylogenetic data analyses in third-party tools or in R)
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+## Installation
+
+The package can be installed using `devtools::install_github` function from the `devtools` package in R (which needs to be installed before)
+```{r setup,warning=FALSE,message=F}
+
+devtools::install_github("https://github.com/boldsystems-central/BOLDconnectR")
+
+```
+
+## Workflow
+
+A typical workflow for exploring BOLD data (Steps in *italics* are optional but useful in some instances)
+1) `bold.get.vocab` *(Provides unique terms present in a particular field, making it easier for exploring `bold.data.search` search parameters)*
+2) `bold.data.search` (Searches the dataset based on the user criteria and prints the records in the search) 
+3) `bold.concise.summary` *(Provides a detailed summary of the dataset retrieved)*
+4) `bold.data.collect`(Collects the output of the `bold.data.search` in memory for downstream exploration/analyses).  
+Details on the BCDM fields (field names and definitions) can be obtained using the `bold.fields.info()` function or on the BCDM GitHub page (<https://github.com/boldsystems-central/BCDM>).
+
+
+### Get the vocabulary for specific fields
+
+```{r,echo=FALSE}
+
+# parquet_file<-'path where the parquet file from BOLD is downloaded'
+
+# vocab.data <- bold.get.vocab(parquet_file,specific.cols = c("country/ocean"))
+
+```
+
+### Search the dataset
+
+```{r,echo=FALSE}
+
+# parquet_file<-'path where the parquet file from BOLD is downloaded'
+
+# Taxonomy 
+# bold_search_taxonomy <- bold.data.search(parquet_path=parquet_file,
+# taxonomy = c("Odonata","Poecilia"))
+
+# Geography
+# bold_search_geography <- bold.data.search(parquet_path=parquet_file,
+# taxonomy = c("Panthera pardus),
+# geography = c("India"))
+
+# Combination of many search criteria
+# bold_search_combination <- bold.data.search(
+# parquet_path=parquet_file,
+# taxonomy = "Coleoptera",
+# geography = "Canada",
+# marker = "COI-5P",
+# basecount = c(500, 660)
+
+```
+
+### Data summary
+
+```{r,echo=FALSE}
+
+# Get the concise summary
+
+# bold_summary <- get.concise.summary(bold_search_geography)
+
+```
+
+### collect the search data
+
+```{r,echo=F}
+
+# Collect data (no export)
+# collected_data<-bold.data.collect(
+# bold_search_geography,
+# chunk.size = 50000,
+# export = FALSE)
+
+# Collect data (with parquet export)
+
+# bold.data.collect(
+# bold_search_combination,
+# chunk.size = 50000,
+# export = TRUE,
+# export.type = "parquet",
+# output.path = userdefinedpath)
+
+
+```
+
+**Please note** Some queries (e.g., All "Diptera") may return very large datasets. Always check the summary before collecting data to ensure you don't exceed the available RAM.
