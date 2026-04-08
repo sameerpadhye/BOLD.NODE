@@ -3,12 +3,16 @@
 
 # BOLD.NODE
 
-**BOLD_NODE** is an R package that offers functionality to explore the BOLD data 
-packages efficiently (<https://boldsystems.org/data/data-packages/>) in the
-**Barcode Core Data Model (BCDM)** format locally. 
-It uses a **DuckDB** backend to query **parquet** files directly in R, 
-enabling fast searches even on systems with limited RAM. Data collection 
-is optimized through customizable chunk sizes and configurable system pause intervals.
+**BOLD_NODE** is an R package that offers functionality to efficiently
+explore BOLD dataset releases
+(<https://boldsystems.org/data/data-packages/>) in the **Barcode Core
+Data Model (BCDM)** format locally. It uses a **DuckDB** backend to
+query **parquet** files directly in R, enabling fast searches even on
+systems with limited RAM. Data collection is optimized through
+customizable chunk sizes and configurable system pause intervals. The
+package also allows seamless conversion of search results into standard
+R data structures without collecting the data in memory for downstream
+analyses:
 
 The package also allows seamless conversion of search results into
 standard R data structures without collecting the data in memory for
@@ -25,8 +29,9 @@ downstream analyses:
 
 ## Downloading Data Packages
 
-The users need to log in to BOLD to download the datasets
-
+Users need to log into BOLD
+(<https://bench.boldsystems.org/index.php/Login/page?destination=MAS_Management_UserConsole>)
+to download the datasets.
 
 ## Installation
 
