@@ -6,13 +6,12 @@
 **BOLD_NODE** is an R package that offers functionality to efficiently
 explore BOLD dataset releases
 (<https://boldsystems.org/data/data-packages/>) in the **Barcode Core
-Data Model (BCDM)** format locally. It uses a **DuckDB** backend to
-query **parquet** files directly in R, enabling fast searches even on
-systems with limited RAM. Data collection is optimized through
-customizable chunk sizes and configurable system pause intervals. The
-package also allows seamless conversion of search results into standard
-R data structures without collecting the data in memory for downstream
-analyses:
+Data Model (BCDM)** format (for more information on BCDM please visit
+its GitHub repo <https://github.com/boldsystems-central/BCDM>) locally.
+It uses a **DuckDB** back end to query **parquet** files directly in R,
+enabling fast searches even on systems with limited RAM. Data collection
+is optimized through customized chunk sizes and configurable system
+pause intervals.
 
 The package also allows seamless conversion of search results into
 standard R data structures without collecting the data in memory for
@@ -43,24 +42,46 @@ from the `devtools` package in R (which needs to be installed before)
 devtools::install_github('https://github.com/sameerpadhye/BOLD.NODE.git')
 ```
 
-## Workflow
+## BOLD.NODE has 10 functions:
 
-A typical workflow for exploring BOLD data (Steps in *italics* are
+1.  bold.bcdm.fields
+2.  bold.data.search
+3.  bold.data.collect
+4.  get.concise.summary
+5.  *get.DNAStringset*
+6.  get.DwC
+7.  get.fasta
+8.  get.occ.data
+9.  get.sf
+10. get.vocab
+
+**Note** *Function 5*: *get.DNAStringset* requires the package
+`Biostrings` to be installed and imported in the R session beforehand.
+It can be installed using using `BiocManager` package.
+
+``` r
+
+# if (!requireNamespace("BiocManager", quietly=TRUE))
+#   
+# install.packages("BiocManager")
+# 
+# BiocManager::install("Biostrings")
+```
+
+## Workflow for search and collect (load the search into local memory)
+
+A typical workflow for exploring and BOLD data (Steps in *italics* are
 optional but useful in some instances):
 
 1.  `bold.get.vocab` *(Provides unique terms present in a particular
-    field, making it easier for exploring `bold.data.search` search
+    field, making it easier for exploring* `bold.data.search` *search
     parameters)*
 2.  `bold.data.search` (Searches the dataset based on the user criteria
-    and prints the records in the search)
+    and prints the number of records available)
 3.  `bold.concise.summary` *(Provides a detailed summary of the dataset
     retrieved)*
 4.  `bold.data.collect`(Collects the output of the `bold.data.search` in
     memory for downstream exploration/analyses).
-
-Details on the BCDM fields (field names and definitions) can be obtained
-using the `bold.fields.info()` function or on the BCDM GitHub page
-(<https://github.com/boldsystems-central/BCDM>).
 
 ### 1.Get the vocabulary for specific fields
 
@@ -127,6 +148,12 @@ using the `bold.fields.info()` function or on the BCDM GitHub page
 # export.type = "parquet",
 # output.path = userdefinedpath)
 ```
+
+### The `get.` functionality
+
+The `get.` functions convert the search results from the
+`bold.data.search` into objects used in packages such as `vegan`, `msa`,
+`DECIPHER`, `terra`, `geodata` etc.
 
 **Please note** Some queries (e.g., All “Diptera”) may return very large
 datasets. Always check the summary before collecting data to ensure you
