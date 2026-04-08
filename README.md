@@ -3,7 +3,7 @@
 
 # BOLD.NODE
 
-**BOLD_NODE** is an R package that offers functionality to efficiently
+**BOLD.NODE** is an R package that offers functionality to efficiently
 explore BOLD dataset releases
 (<https://boldsystems.org/data/data-packages/>) in the **Barcode Core
 Data Model (BCDM)** format locally. It uses a **DuckDB** backend to
@@ -34,7 +34,7 @@ from the `devtools` package in R (which needs to be installed before)
 
 ``` r
 
-# devtools::install_github("https://github.com/boldsystems-central/BOLDconnectR")
+devtools::install_github('https://github.com/sameerpadhye/BOLD.NODE.git')
 ```
 
 ## Workflow
