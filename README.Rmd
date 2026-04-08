@@ -38,7 +38,8 @@ The package can be installed using `devtools::install_github` function from the 
 
 ## Workflow
 
-A typical workflow for exploring BOLD data (Steps in *italics* are optional but useful in some instances)
+A typical workflow for exploring BOLD data (Steps in *italics* are optional but useful in some instances):
+
 1. `bold.get.vocab` *(Provides unique terms present in a particular field, making it easier for exploring `bold.data.search` search parameters)*
 2. `bold.data.search` (Searches the dataset based on the user criteria and prints the records in the search) 
 3. `bold.concise.summary` *(Provides a detailed summary of the dataset retrieved)*
