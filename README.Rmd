@@ -62,16 +62,19 @@ Details on the BCDM fields (field names and definitions) can be obtained using t
 
 # parquet_file<-'path where the parquet file from BOLD is downloaded'
 
-# Taxonomy 
+#1 Taxonomy 
+
 # bold_search_taxonomy <- bold.data.search(parquet_path=parquet_file,
 # taxonomy = c("Odonata","Poecilia"))
 
-# Geography
+#2 Geography
+
 # bold_search_geography <- bold.data.search(parquet_path=parquet_file,
 # taxonomy = c("Panthera pardus),
 # geography = c("India"))
 
-# Combination of many search criteria
+#3 Combination of many search criteria
+
 # bold_search_combination <- bold.data.search(
 # parquet_path=parquet_file,
 # taxonomy = "Coleoptera",
@@ -96,6 +99,7 @@ Details on the BCDM fields (field names and definitions) can be obtained using t
 ```{r data_collect}
 
 # Collect data (no export)
+
 # collected_data<-bold.data.collect(
 # bold_search_geography,
 # chunk.size = 50000,
