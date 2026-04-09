@@ -153,6 +153,37 @@ A typical workflow for exploring and  BOLD data (Steps in *italics* are optional
 ### The `get.` functionality
 The `get.` functions convert the search results from the `bold.data.search` into objects used in packages such as `vegan`, `msa`, `DECIPHER`, `terra`, `geodata` etc.
 
+```{r benchmarks_data,include=F,warning=F}
+
+library(ggplot2)
+benchmarks<-read.csv("G:/Research data/CBG_work/APIless_BOLD_datarelease_search/benchmarks_new.csv")
+benchmarks$Category<-factor(benchmarks$Category,levels=c("<1k records", "1k-100k records","100k-1M records","1M-5M records",">5M"))
+
+ggplot(benchmarks,
+       aes(x=Category,
+             y=median_time_collect))+
+  geom_line(linewidth = 1.3, 
+            color = "black") +
+  geom_point(
+    size = 5,
+    pch = 21,
+    fill = 'orangered',
+    color = "black",
+    alpha = 0.7
+  ) +
+  geom_text(aes(label = exact_records), vjust = -0.8, hjust = 0.5)+
+  labs(
+    x = "",
+    y = "Download time in secs",
+    title = "Benchmarks for data collection (download) with BOLD.NODE") +
+  theme_bw(base_size = 15) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_blank(),
+    axis.title = element_text(face = "bold"),
+    plot.title = element_text(face = "bold", hjust = 0.5)) 
+
+```
 
 **Please note** Some queries (e.g., All "Diptera") may return very large datasets. Always check the summary before collecting data to ensure you don't exceed the available RAM.
 
