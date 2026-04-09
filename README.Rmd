@@ -175,17 +175,15 @@ ggplot(benchmarks,
     color = "black",
     alpha = 0.7
   ) +
-  geom_text(aes(label = exact_records), vjust = 0.3, hjust = 1.35)+
+  geom_text(aes(label = exact_records), vjust = 0.3, hjust = 1.45)+
   labs(
     x = "",
     y = "Download time in secs",
     title = "Benchmarks: Data collection (download) with BOLD.NODE") +
   theme_bw(base_size = 10) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 0.5),
     panel.grid.minor = element_blank(),
-    panel.grid.major.x = element_blank(),
-    axis.title = element_text(face = "bold"),
-    plot.title = element_text(face = "bold", hjust = 0.5)) 
+    panel.grid.major.x = element_blank()) 
 
 ```
 **Please note** Some queries (e.g., All "Diptera") may return very large datasets. Always check the summary before collecting data to ensure you don't exceed the available RAM.
