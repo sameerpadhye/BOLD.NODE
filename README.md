@@ -155,9 +155,6 @@ The `get.` functions convert the search results from the
 `bold.data.search` into objects used in packages such as `vegan`, `msa`,
 `DECIPHER`, `terra`, `geodata` etc.
 
-    #> `geom_line()`: Each group consists of only one observation.
-    #> ℹ Do you need to adjust the group aesthetic?
-
 <img src="man/figures/README-benchmark_fig-1.jpeg" width="100%" />
 
 **Please note** Some queries (e.g., All “Diptera”) may return very large

@@ -161,7 +161,7 @@ benchmarks$Category<-factor(benchmarks$Category,levels=c("<1k records", "1k-100k
 
 ```
 
-```{r benchmark_fig,fig.width=6, fig.height=4, dpi=300, dev='jpeg',echo=F,warning=F}
+```{r benchmark_fig,fig.width=6, fig.height=4, dpi=300, dev='jpeg',echo=F,warning=F,message=F}
 
 ggplot(benchmarks,
        aes(x=Category,
