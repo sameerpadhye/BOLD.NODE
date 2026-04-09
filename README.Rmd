@@ -175,7 +175,7 @@ ggplot(benchmarks,
     color = "black",
     alpha = 0.7
   ) +
-  geom_text(aes(label = exact_records), vjust = 0.3, hjust = 1.45)+
+  geom_text(aes(label = exact_records), vjust = 0.3, hjust = 1.5)+
   labs(
     x = "",
     y = "Download time in secs",
