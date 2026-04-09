@@ -161,7 +161,7 @@ benchmarks$Category<-factor(benchmarks$Category,levels=c("<1k records", "1k-100k
 
 ```
 
-```{r benchmark_fig}
+```{r benchmark_fig,fig.width=6, fig.height=4, dpi=300, dev='jpeg'}
 
 ggplot(benchmarks,
        aes(x=Category,
@@ -180,7 +180,7 @@ ggplot(benchmarks,
     x = "",
     y = "Download time in secs",
     title = "Benchmarks: Data collection (download) with BOLD.NODE") +
-  theme_bw(base_size = 13) +
+  theme_bw(base_size = 10) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
     panel.grid.minor = element_blank(),
     panel.grid.major.x = element_blank(),

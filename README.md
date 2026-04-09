@@ -174,7 +174,7 @@ ggplot(benchmarks,
     x = "",
     y = "Download time in secs",
     title = "Benchmarks: Data collection (download) with BOLD.NODE") +
-  theme_bw(base_size = 13) +
+  theme_bw(base_size = 10) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
     panel.grid.minor = element_blank(),
     panel.grid.major.x = element_blank(),
@@ -184,7 +184,7 @@ ggplot(benchmarks,
 #> ℹ Do you need to adjust the group aesthetic?
 ```
 
-<img src="man/figures/README-benchmark_fig-1.png" width="100%" />
+<img src="man/figures/README-benchmark_fig-1.jpeg" width="100%" />
 **Please note** Some queries (e.g., All “Diptera”) may return very large
 datasets. Always check the summary before collecting data to ensure you
 don’t exceed the available RAM.
