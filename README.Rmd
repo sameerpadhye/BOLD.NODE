@@ -159,6 +159,10 @@ library(ggplot2)
 benchmarks<-read.csv("G:/Research data/CBG_work/APIless_BOLD_datarelease_search/benchmarks_new.csv")
 benchmarks$Category<-factor(benchmarks$Category,levels=c("<1k records", "1k-100k records","100k-1M records","1M-5M records",">5M"))
 
+```
+
+```{r benchmark_fig}
+
 ggplot(benchmarks,
        aes(x=Category,
              y=median_time_collect))+
@@ -184,6 +188,5 @@ ggplot(benchmarks,
     plot.title = element_text(face = "bold", hjust = 0.5)) 
 
 ```
-
 **Please note** Some queries (e.g., All "Diptera") may return very large datasets. Always check the summary before collecting data to ensure you don't exceed the available RAM.
 
