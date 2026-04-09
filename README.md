@@ -155,32 +155,8 @@ The `get.` functions convert the search results from the
 `bold.data.search` into objects used in packages such as `vegan`, `msa`,
 `DECIPHER`, `terra`, `geodata` etc.
 
-``` r
-
-ggplot(benchmarks,
-       aes(x=Category,
-             y=median_time_collect))+
-  geom_line(linewidth = 1.3, 
-            color = "black") +
-  geom_point(
-    size = 5,
-    pch = 21,
-    fill = 'orangered',
-    color = "black",
-    alpha = 0.7
-  ) +
-  geom_text(aes(label = exact_records), vjust = 0.3, hjust = 1.5)+
-  labs(
-    x = "",
-    y = "Download time in secs",
-    title = "Benchmarks: Data collection (download) with BOLD.NODE") +
-  theme_bw(base_size = 10) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 0.5),
-    panel.grid.minor = element_blank(),
-    panel.grid.major.x = element_blank()) 
-#> `geom_line()`: Each group consists of only one observation.
-#> ℹ Do you need to adjust the group aesthetic?
-```
+    #> `geom_line()`: Each group consists of only one observation.
+    #> ℹ Do you need to adjust the group aesthetic?
 
 <img src="man/figures/README-benchmark_fig-1.jpeg" width="100%" />
 
