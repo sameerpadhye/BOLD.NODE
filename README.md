@@ -183,6 +183,7 @@ ggplot(benchmarks,
 ```
 
 <img src="man/figures/README-benchmark_fig-1.jpeg" width="100%" />
+
 **Please note** Some queries (e.g., All “Diptera”) may return very large
 datasets. Always check the summary before collecting data to ensure you
 don’t exceed the available RAM.
