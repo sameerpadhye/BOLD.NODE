@@ -13,6 +13,7 @@
 #'
 #' @importFrom dplyr select filter mutate compute collect
 #' @importFrom dbplyr sql
+#' @importFrom DBI dbQuoteIdentifier
 #'
 #' @examples
 #' \dontrun{
@@ -50,8 +51,12 @@ get.fasta <- function(bold.search.res,
   # Ensure user-specified fields exist
   user_specified_fields <- fas.header
 
-  # Build SQL-safe concatenation string for DuckDB
-  fas_headers <- paste(user_specified_fields, collapse = ", '|' ,")
+  quoted_fields <- DBI::dbQuoteIdentifier(
+    dbplyr::remote_con(bold.search.res),
+    user_specified_fields
+  )
+
+  fas_headers <- paste(quoted_fields, collapse = ", '|' ,")
 
   # Prepare sequence data
   seq.data <- bold.search.res %>%

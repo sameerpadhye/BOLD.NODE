@@ -12,6 +12,7 @@
 #' @importFrom dplyr filter mutate select collect
 #' @importFrom sf st_as_sf
 #' @importFrom dbplyr sql
+#' @importFrom dplyr compute
 #'
 #' @examples
 #' \dontrun{
@@ -34,8 +35,15 @@ get.sf <- function(bold.search.res, chunk.size = 100000) {
 
   check.tbl.sql(bold.search.res)
 
+  # establish a temporary connection (for duckdb)
+  con <- dbplyr::remote_con(bold.search.res)
+
+  DBI::dbExecute(con, "PRAGMA disable_progress_bar;")
+
   indices <- get_chunk_indices(input_file = bold.search.res,
                                chunksize = chunk.size)
+
+  DBI::dbExecute(con,"PRAGMA enable_progress_bar;")
 
   # Optional sql query
 
@@ -56,7 +64,8 @@ get.sf <- function(bold.search.res, chunk.size = 100000) {
                     lon = sql("CASE WHEN instr(replace(replace(trim(coord), '[', ''), ']', ''), ',') > 0
           THEN CAST(split_part(replace(replace(trim(coord), '[', ''), ']', ''), ',', 2) AS DOUBLE)
           ELSE NULL END"),
-                    row_num = sql("row_number() over (order by coord)"))
+                    row_num = sql("row_number() over (order by coord)"))%>%
+    dplyr::compute()
 
   sf_data_list <- lapply(indices$chunk_indices, function(i) {
     start <- (i - 1) * indices$chunk_size + 1

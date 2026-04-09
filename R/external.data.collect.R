@@ -85,7 +85,8 @@ bold.data.collect <- function(
   #1 Getting chunks
 
   # Disable progress bar
-  DBI::dbExecute(con, "PRAGMA disable_progress_bar;")
+
+   DBI::dbExecute(con, "PRAGMA disable_progress_bar;")
 
   chunk_info <- get_chunk_indices(
     input_file = bold.search.res,
@@ -145,8 +146,8 @@ bold.data.collect <- function(
 
   res <- res %>%
     dplyr::mutate(coord = gsub("\\[|\\]|\\s", "", coord),
-                  bold_recordset_code_arr = gsub("\\[|\\]|\\'|\\s", "", bold_recordset_code_arr)) %>%
-    dplyr::rename(all_of(c(country.ocean = "country/ocean", province.state = "province/state")))
+                  bold_recordset_code_arr = gsub("\\[|\\]|\\'|\\s", "", bold_recordset_code_arr))
+    #dplyr::rename(all_of(c(country.ocean = "country/ocean", province.state = "province/state")))
 
   # Exporting as a TSV
 

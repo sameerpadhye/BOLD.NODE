@@ -17,7 +17,11 @@ import_parquet_data<-function(path)
   get_parquet_data<-sprintf("Select * from parquet_scan('%s')",path)
 
   parquet_data<-tbl(temp_connection,
-                    sql(get_parquet_data))
+                    sql(get_parquet_data))%>%
+    # change the country and province names for ease of use ('/' against '.')
+    dplyr::rename('country.ocean'='country/ocean',
+                  'province.state'='province/state')
+
 
   return(parquet_data)
 
@@ -116,8 +120,8 @@ bold.search.filters<-function (bold.df,
 
 
     bold.df <- bold.df %>%
-      dplyr::filter(`country/ocean` %in% !!geography |
-                      `province/state`  %in% !!geography |
+      dplyr::filter(country.ocean %in% !!geography |
+                      province.state  %in% !!geography |
                       region %in% !!geography |
                       sector %in% !!geography |
                       site %in% !!geography)

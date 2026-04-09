@@ -11,9 +11,9 @@
 #' @return A DNAStringSet object
 #'
 #' @importFrom dplyr select filter mutate compute collect all_of %>%
-#' @importFrom dbplyr sql
+#' @importFrom dbplyr sql remote_con
 #' @importFrom stats setNames
-#'
+#' @importFrom DBI dbQuoteIdentifier
 #' @examples
 #' \dontrun{
 #'
@@ -69,6 +69,11 @@ get.DNAStringSet <- function(bold.search.res,
     seq.data <- seq.data %>%
       filter(.data$marker_code %in% marker)
   }
+
+  con<-dbplyr::remote_con(seq.data)
+
+  # Quote column names
+  quoted_cols <- DBI::dbQuoteIdentifier(con, cols_for_seq_names)
 
   # Build sequence names from specified columns
   obtain.seq.from.data <- seq.data %>%

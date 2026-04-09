@@ -48,7 +48,12 @@ get.dwc<-function(bold.search.res)
                                                     fill=TRUE,
                                                     tmpdir = tempdir()))%>%
     select(bcdm_field,
-           dwc_field,dwc_type)
+           dwc_field,
+           dwc_type)%>%
+    # change the country and province names for ease of use ('/' against '.')
+    dplyr::mutate(bcdm_field=dplyr::case_when(bcdm_field=="country/ocean"~"country.ocean",
+                                              bcdm_field=="province/state"~"province.state",
+                                              TRUE~bcdm_field))
 
 
   # Only the dwc fields are retained
