@@ -100,19 +100,19 @@ optional but useful in some instances):
 
 #1 Taxonomy 
 
-# bold_search_taxonomy <- bold.data.search(parquet_path=parquet_file,
+# bold_search_taxonomy <- bold.data.search(input.parquet=parquet_file,
 # taxonomy = c("Odonata","Poecilia"))
 
 #2 Geography
 
-# bold_search_geography <- bold.data.search(parquet_path=parquet_file,
+# bold_search_geography <- bold.data.search(input.parquet=parquet_file,
 # taxonomy = c("Panthera pardus),
 # geography = c("India"))
 
 #3 Combination of many search criteria
 
 # bold_search_combination <- bold.data.search(
-# parquet_path=parquet_file,
+# input.parquet=parquet_file,
 # taxonomy = "Coleoptera",
 # geography = "Canada",
 # marker = "COI-5P",
