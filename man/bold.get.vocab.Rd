@@ -35,7 +35,7 @@ This function extracts unique values from one or more specified columns in BOLD 
 
 # Search the BOLD data
 bold_search <- bold.data.search(
-parquet_path=parquet_file,
+input.parquet=parquet_file,
 taxonomy = "Diptera",
 geography = "India",
 marker = "COI-5P")

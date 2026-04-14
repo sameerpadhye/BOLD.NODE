@@ -28,7 +28,7 @@ This function transforms the search results from \code{bold.data.search} into DN
 
 # Search the BOLD data
 bold_search <- bold.data.search(
-parquet_path=parquet_file,
+input.parquet=parquet_file,
 taxonomy = "Coleoptera",
 geography = "Canada",
 basecount = c(500, 660)

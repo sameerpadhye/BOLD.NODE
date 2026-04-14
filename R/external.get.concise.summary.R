@@ -18,7 +18,7 @@
 #'
 #' # Search data
 #' bold_search <- bold.data.search(
-#' parquet_path=parquet_file,
+#' input.parquet=parquet_file,
 #' taxonomy = "Hemiptera",
 #' geography = "India",
 #' marker = "COI-5P"

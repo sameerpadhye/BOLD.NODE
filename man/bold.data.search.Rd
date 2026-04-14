@@ -70,19 +70,19 @@ This function loads the BOLD dataset release parquet files via duckDB and applie
 
 # Taxonomy
 bold_search <- bold.data.search(
-parquet_path=parquet_file,
+input.parquet=parquet_file,
 taxonomy = c("Odonata","Poecilia")
 )
 
 # Geography
 bold_search <- bold.data.search(
-parquet_path=parquet_file,
+input.parquet=parquet_file,
 geography = "Canada"
 )
 
 # Combination of many search criteria
 bold_search <- bold.data.search(
-parquet_path=parquet_file,
+input.parquet=parquet_file,
 taxonomy = "Coleoptera",
 geography = "Canada",
 marker = "COI-5P",

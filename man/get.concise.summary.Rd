@@ -23,7 +23,7 @@ The function provides a concise summary of the search obtained by \code{bold.dat
 
 # Search data
 bold_search <- bold.data.search(
-parquet_path=parquet_file,
+input.parquet=parquet_file,
 taxonomy = "Hemiptera",
 geography = "India",
 marker = "COI-5P"

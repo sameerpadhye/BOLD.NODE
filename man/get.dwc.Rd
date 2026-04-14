@@ -23,7 +23,7 @@ This function maps BCDM (Barcode Core Data Model) fields to their Darwin Core eq
 
 # Search the BOLD data
 bold_search <- bold.data.search(
-parquet_path=parquet_file,
+input.parquet=parquet_file,
 taxonomy = c("Cerambycidae","Meloidae"),
 geography = "Australia"
 )
