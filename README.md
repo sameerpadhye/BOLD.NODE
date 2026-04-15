@@ -48,8 +48,8 @@ devtools::install_github('https://github.com/sameerpadhye/BOLD.NODE.git')
 2.  bold.data.search
 3.  bold.data.collect
 4.  get.concise.summary
-5.  *get.DNAStringset*
-6.  get.DwC
+5.  *get.DNAStringSet*
+6.  get.dwc
 7.  get.fasta
 8.  get.occ.data
 9.  get.sf
