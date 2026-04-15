@@ -61,7 +61,7 @@ get.concise.summary<-function(bold.search.res)
 
       Unique_BINs = n_distinct(bin_uri, na.rm = TRUE),
 
-      Unique_countries = n_distinct(`country/ocean`, na.rm = TRUE),
+      Unique_countries = n_distinct(country.ocean, na.rm = TRUE),
 
       Unique_institutes = n_distinct(inst, na.rm = TRUE),
 

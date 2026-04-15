@@ -39,7 +39,10 @@ bold.bcdm.fields<-function (print.output=FALSE) {
                                           data_type=="number"~"numeric",
                                           data_type=="integer"~"integer",
                                           data_type=="string:date"~"Date"))%>%
-    dplyr::select(-dplyr::matches("data_type",ignore.case=TRUE))
+    dplyr::select(-dplyr::matches("data_type",ignore.case=TRUE))%>%
+    dplyr::mutate(field=case_when(field=='country/ocean'~'country.ocean',
+                                  field=='province/state'~'province.state',
+                                  TRUE~field))
 
 
 
