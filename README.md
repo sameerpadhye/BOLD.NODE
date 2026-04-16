@@ -106,7 +106,7 @@ optional but useful in some instances):
 #2 Geography
 
 # bold_search_geography <- bold.data.search(input.parquet=parquet_file,
-# taxonomy = c("Panthera pardus),
+# taxonomy = c("Panthera pardus"),
 # geography = c("India"))
 
 #3 Combination of many search criteria
@@ -116,7 +116,7 @@ optional but useful in some instances):
 # taxonomy = "Coleoptera",
 # geography = "Canada",
 # marker = "COI-5P",
-# basecount = c(500, 660)
+# basecount = c(500, 660))
 ```
 
 ### 3.Data summary
