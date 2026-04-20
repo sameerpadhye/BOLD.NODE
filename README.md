@@ -3,7 +3,7 @@
 
 # BOLD.NODE
 
-**BOLD.NODE (NO API Offline Data Explorer)** is an R package that offers functionality to efficiently
+**BOLD_NODE** is an R package that offers functionality to efficiently
 explore BOLD dataset releases
 (<https://boldsystems.org/data/data-packages/>) in the **Barcode Core
 Data Model (BCDM)** format (for more information on BCDM please visit
@@ -48,8 +48,8 @@ devtools::install_github('https://github.com/sameerpadhye/BOLD.NODE.git')
 2.  bold.data.search
 3.  bold.data.collect
 4.  get.concise.summary
-5.  *get.DNAStringSet*
-6.  get.dwc
+5.  *get.DNAStringset*
+6.  get.DwC
 7.  get.fasta
 8.  get.occ.data
 9.  get.sf
@@ -100,23 +100,23 @@ optional but useful in some instances):
 
 #1 Taxonomy 
 
-# bold_search_taxonomy <- bold.data.search(input.parquet=parquet_file,
+# bold_search_taxonomy <- bold.data.search(parquet_path=parquet_file,
 # taxonomy = c("Odonata","Poecilia"))
 
 #2 Geography
 
-# bold_search_geography <- bold.data.search(input.parquet=parquet_file,
-# taxonomy = c("Panthera pardus"),
+# bold_search_geography <- bold.data.search(parquet_path=parquet_file,
+# taxonomy = c("Panthera pardus),
 # geography = c("India"))
 
 #3 Combination of many search criteria
 
 # bold_search_combination <- bold.data.search(
-# input.parquet=parquet_file,
+# parquet_path=parquet_file,
 # taxonomy = "Coleoptera",
 # geography = "Canada",
 # marker = "COI-5P",
-# basecount = c(500, 660))
+# basecount = c(500, 660)
 ```
 
 ### 3.Data summary

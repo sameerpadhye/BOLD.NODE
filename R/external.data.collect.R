@@ -144,10 +144,10 @@ bold.data.collect <- function(
 
   # Converting data format to match API-fetched data (from BOLDconnectR)
 
-  res <- res %>%
-    dplyr::mutate(coord = gsub("\\[|\\]|\\s", "", coord),
-                  bold_recordset_code_arr = gsub("\\[|\\]|\\'|\\s", "", bold_recordset_code_arr))
-    #dplyr::rename(all_of(c(country.ocean = "country/ocean", province.state = "province/state")))
+  # res <- res %>%
+  #   dplyr::mutate(coord = gsub("\\[|\\]|\\s", "", coord),
+  #                 bold_recordset_code_arr = gsub("\\[|\\]|\\'|\\s", "", bold_recordset_code_arr))
+  #   #dplyr::rename(all_of(c(country.ocean = "country/ocean", province.state = "province/state")))
 
   # Exporting as a TSV
 

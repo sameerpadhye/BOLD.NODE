@@ -20,7 +20,9 @@ import_parquet_data<-function(path)
                     sql(get_parquet_data))%>%
     # change the country and province names for ease of use ('/' against '.')
     dplyr::rename('country.ocean'='country/ocean',
-                  'province.state'='province/state')
+                  'province.state'='province/state')%>%
+     mutate(coord = sql("replace(replace(trim(coord), '[', ''), ']', '')"),
+    bold_recordset_code_arr = sql("replace(replace(trim(bold_recordset_code_arr), '[', ''), ']', '')"))
 
 
   return(parquet_data)
