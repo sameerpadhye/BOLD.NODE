@@ -153,7 +153,7 @@ A typical workflow for exploring and  BOLD data (Steps in *italics* are optional
 ### The `get.` functionality
 The `get.` functions convert the search results from the `bold.data.search` into objects used in packages such as `vegan`, `msa`, `DECIPHER`, `terra`, `geodata` etc.
 
-```{r get functions,include=F,warning=F}
+```{r get functions,warning=F}
 
 #  Search the data
 

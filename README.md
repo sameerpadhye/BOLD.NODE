@@ -155,6 +155,45 @@ The `get.` functions convert the search results from the
 `bold.data.search` into objects used in packages such as `vegan`, `msa`,
 `DECIPHER`, `terra`, `geodata` etc.
 
+``` r
+
+#  Search the data
+
+# bold_search <- bold.data.search(
+# input.parquet=parquet_file,
+# taxonomy = "Coleoptera",
+# geography = "Canada",
+# marker = "COI-5P",
+# basecount = c(500, 660))
+
+
+#1. Get concise summary of the data
+
+# bold_summary <- get.concise.summary(bold_search)
+
+#2. Get fasta
+
+# get.fasta(
+# bold_search,
+# output.file = "trial.fas",
+# fas.header = c("bin_uri", "processid"))
+
+#3. Get sf
+# sf_res<- get.sf(bold_search, chunk.size = 100000)
+
+#4. Get occurrence data
+# occurrence_data <- get.occ.data(
+#   bold_search,
+#   taxon.rank = "family",
+#   site.cat = "region")
+
+#5. Get DNAStringSet
+
+# bold.dnastringset<-get.DNAStringSet(bold_search,
+# marker="COI-5P",
+# cols_for_seq_names = c("processid","family"))
+```
+
 <img src="man/figures/README-benchmark_fig-1.jpeg" width="100%" />
 
 **Please note** Some queries (e.g., All “Diptera”) may return very large
