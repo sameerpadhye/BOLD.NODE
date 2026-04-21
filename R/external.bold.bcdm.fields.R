@@ -5,12 +5,14 @@
 #' @param print.output Whether the output should be printed in the console. Default is FALSE.
 #'
 #' @details The function downloads the latest field (column) meta data (file type and brief description) for the Barcode Core Data Model (BCDM) from <https://github.com/boldsystems-central/BCDM/blob/main/field_definitions.tsv>; output = TRUE will print the information in the console.
+#' \emph{Important Note}: Two field names 'country/ocean' and 'province/state' have been modified to 'country.ocean' and 'province.state' to match with BOLDconnectR output
 #'
 #' @returns A data frame containing information on all fields (columns).
 #'
 #' @examples
 #'
 #' bold.field.data<-bold.bcdm.fields()
+#'
 #' head(bold.field.data,10)
 #'
 #' @importFrom dplyr matches case_when select mutate %>%

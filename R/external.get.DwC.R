@@ -1,10 +1,10 @@
-#' Convert bold.data.search results in to Darwin Core (DwC) format
+#' Convert bold.data.search results in to a Darwin Core (DwC) format
 #'
-#' @description Converts bold.data.search results from BCDM format to Darwin Core Standard format.
+#' @description Converts `bold.data.search` results from BCDM format to Darwin Core Standard format.
 #'
 #' @details This function maps BCDM (Barcode Core Data Model) fields to their Darwin Core equivalents using the official mapping file from the BCDM repository.
 #'
-#' @param bold.search.res A tbl_sql object containing BOLD search results
+#' @param bold.search.res A `tbl_sql` object containing BOLD search results
 #'
 #' @return A data frame with columns renamed to Darwin Core equivalent fields
 #'
@@ -38,7 +38,9 @@ get.dwc<-function(bold.search.res)
 
   # BOLD to BCDM mapping with certain updates for some field name mappings
 
-  bold.2.bcdm <- suppressMessages(data.table::fread("https://raw.githubusercontent.com/boldsystems-central/BCDM/refs/heads/main/mapping_BCDM_to_DWC.tsv",
+  bcdm_path<-"https://raw.githubusercontent.com/boldsystems-central/BCDM/refs/heads/main/mapping_BCDM_to_DWC.tsv"
+
+  bold.2.bcdm <- suppressMessages(data.table::fread(bcdm_path,
                                                     sep = '\t',
                                                     quote = "",
                                                     check.names = FALSE,

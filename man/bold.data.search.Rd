@@ -31,7 +31,7 @@ bold.data.search(
 
 \item{taxonomy}{Vector of taxonomic names to filter by (can include kingdom, phylum, class, order, family, subfamily, genus, species)}
 
-\item{geography}{Vector of geographic locations to filter by (can include country/ocean, province/state, region, sector, site)}
+\item{geography}{Vector of geographic locations to filter by (can include country.ocean, province.state, region, sector, site)}
 
 \item{institutes}{Vector of institute codes to filter by}
 
@@ -60,7 +60,7 @@ A tbl_sql object containing the filtered data. Total records in the search are p
 Search the BOLD dataset release based on various search criteria including taxonomy, geography, institutes etc.
 }
 \details{
-This function loads the BOLD dataset release parquet files via duckDB and applies filters based on the provided parameters.It supports filtering by ids (sampleid, processid), taxonomy (from kingdom to species level), geography (country/ocean to site level), BINs, institutes, identifiers, sequence sources, genetic markers, nucleotide base counts,biogeographic categories, dataset/projects, spatial bounding boxes, and ambiguous base percent cutoffs. Users can also specify particular columns to return using the specific.cols parameter. The \code{tbl_sql} object can then be used by any of the \code{get} functions for data transformations or \code{bold.data.collect} to load all the data in memory.
+This function loads the BOLD dataset release parquet files via duckDB and applies filters based on the provided parameters.It supports filtering by ids (sampleid, processid), taxonomy (from kingdom to species level), geography (country to site level), BINs, institutes, identifiers, sequence sources, genetic markers, nucleotide base counts,biogeographic categories, dataset or projects, spatial bounding boxes, and ambiguous base percent cutoffs. Users can also specify particular columns to return using the \code{specific.cols} parameter. The \code{tbl_sql} object can then be used by any of the \code{get} functions for data transformations or \code{bold.data.collect} to load all the data in memory.
 }
 \examples{
 \dontrun{

@@ -2,14 +2,14 @@
 #'
 #' @description Extracts distinct values of specified field/s in BOLD parquet data
 #'
-#' @details This function extracts unique values from one or more specified columns in BOLD parquet data. It handles both the parquet file and tbl_sql objects from `bold.data.search` as input. The results can be saved to disk as an RDS file for later use.
+#' @details This function extracts unique values from one or more specified columns in BOLD parquet data. It handles both the parquet file and `tbl_sql` objects from `bold.data.search` as input. The results can be saved to disk as an RDS file for later use.
 #'
 #' @param input.data Path to the input parquet file or the `bold.data.search` result
 #' @param specific.cols Name of the column to extract unique values from
 #' @param save.data Logical indicating whether to save the results to disk as a .rds file (default: FALSE)
 #' @param output.file Path (without extension) for saving results as .rds file (required if save.data = TRUE)
 #'
-#' @return A list containing unique values from the specified column; if `save.data` = T, a rds file exported locally
+#' @return A list containing unique values from the specified column; if `save.data` = T, a `.rds` file exported locally
 #'
 #' @importFrom dplyr filter distinct collect %>%
 #' @importFrom rlang .data

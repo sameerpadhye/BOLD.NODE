@@ -7,7 +7,7 @@
 #' @param bold.search.res A tbl_sql object containing BOLD search results
 #' @param chunk.size Number of records to process in each chunk (default: 10000)
 #'
-#' @return An sf object with point geometry in WGS84 coordinate system (EPSG:4326)
+#' @return An `sf` object with point geometry in WGS84 coordinate system (EPSG:4326)
 #'
 #' @importFrom dplyr filter mutate select collect
 #' @importFrom sf st_as_sf
@@ -47,13 +47,6 @@ get.sf <- function(bold.search.res, chunk.size = 100000) {
 
   # Optional sql query
 
-
-  # coord_clean = regexp_replace(coord, '\\[|\\]|\\s', ''),
-  # lat = sql("split_part(coord_clean, ',', 1)"),
-  # # Extract longitude = second part
-  # lon = sql("replace(split_part(coord_clean, ',', 2), ']', '')"),
-  # row_num = sql("row_number() over (order by coord)")
-  #
   geo_data <- bold.search.res %>%
     dplyr::filter(!is.na(coord)) %>%
     dplyr::mutate(coord_clean = sql("replace(replace(trim(coord), '[', ''), ']', '')"),

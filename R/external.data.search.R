@@ -2,13 +2,13 @@
 #'
 #' @description Search the BOLD dataset release based on various search criteria including taxonomy, geography, institutes etc.
 #'
-#' @details This function loads the BOLD dataset release parquet files via duckDB and applies filters based on the provided parameters.It supports filtering by ids (sampleid, processid), taxonomy (from kingdom to species level), geography (country/ocean to site level), BINs, institutes, identifiers, sequence sources, genetic markers, nucleotide base counts,biogeographic categories, dataset/projects, spatial bounding boxes, and ambiguous base percent cutoffs. Users can also specify particular columns to return using the specific.cols parameter. The `tbl_sql` object can then be used by any of the `get` functions for data transformations or `bold.data.collect` to load all the data in memory.
+#' @details This function loads the BOLD dataset release parquet files via duckDB and applies filters based on the provided parameters.It supports filtering by ids (sampleid, processid), taxonomy (from kingdom to species level), geography (country to site level), BINs, institutes, identifiers, sequence sources, genetic markers, nucleotide base counts,biogeographic categories, dataset or projects, spatial bounding boxes, and ambiguous base percent cutoffs. Users can also specify particular columns to return using the `specific.cols` parameter. The `tbl_sql` object can then be used by any of the `get` functions for data transformations or `bold.data.collect` to load all the data in memory.
 #'
 #' @param input.parquet Path to the input parquet file
 #' @param ids Vector of process IDs or sample IDs to filter by
 #' @param bins Vector of BIN numbers (i.e. URIs) to filter by
 #' @param taxonomy Vector of taxonomic names to filter by (can include kingdom, phylum, class, order, family, subfamily, genus, species)
-#' @param geography Vector of geographic locations to filter by (can include country/ocean, province/state, region, sector, site)
+#' @param geography Vector of geographic locations to filter by (can include country.ocean, province.state, region, sector, site)
 #' @param institutes Vector of institute codes to filter by
 #' @param identified.by Vector of identifiers to filter by
 #' @param seq.source Vector of sequence run sites to filter by

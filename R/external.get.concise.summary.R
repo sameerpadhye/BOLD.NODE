@@ -1,10 +1,10 @@
 #' Generate a concise summary of bold.data.search results
 #'
-#' @description Creates a summary statistics table from the bold.data.search tb_sql object that includes counts of records, sequences, species, BINs, countries, institutes, identifiers, depositories, and amplicon length ranges.
+#' @description Creates a summary statistics table from the `bold.data.search` `tb_sql` object.
 #'
 #' @details The function provides a concise summary of the search obtained by `bold.data.search` that includes details like total records, unique BINs, unique institutes, unique markers and amplicon size range.
 #'
-#' @param bold.search.res A tbl_sql object containing bold.data.search results
+#' @param bold.search.res A `tbl_sql` object containing `bold.data.search` results
 #'
 #' @return A data frame with the summary statistics
 #'
@@ -17,6 +17,9 @@
 #' \dontrun{
 #'
 #' # Search data
+#'
+#' parquet_file<-'user defined path to parquet file'
+#'
 #' bold_search <- bold.data.search(
 #' input.parquet=parquet_file,
 #' taxonomy = "Hemiptera",
@@ -76,6 +79,7 @@ get.concise.summary<-function(bold.search.res)
     collect()
 
   DBI::dbExecute(con, "PRAGMA disable_progress_bar;")
+
   concise_summary = concise_summary %>%
     mutate(
       Unique_markers = paste(unique(bold.search.res %>%
@@ -90,6 +94,7 @@ get.concise.summary<-function(bold.search.res)
       names_to = "Category",
       values_to = "Value"
     )
+
   DBI::dbExecute(con, "PRAGMA enable_progress_bar;")
 
   return(concise_summary)

@@ -13,13 +13,13 @@ get.occ.data(
 )
 }
 \arguments{
-\item{bold.search.res}{A tbl_sql object containing BOLD search results}
+\item{bold.search.res}{A \code{tbl_sql} object containing BOLD search results}
 
 \item{taxon.rank}{Taxonomic rank to aggregate by (kingdom, phylum, class, order, family, genus, or species)}
 
 \item{taxon.name}{Optional vector of specific taxon names to include}
 
-\item{site.cat}{Optional categorical variable to group occurrence data by (e.g., habitat type)}
+\item{site.cat}{Optional categorical variable to group occurrence data by (e.g., region)}
 
 \item{pre.abs}{Logical indicating whether to convert counts to presence/absence (1/0) data (default: FALSE)}
 }
@@ -30,7 +30,7 @@ A data frame with occurrence data (taxon names as columns, site categories or co
 Extracts occurrence data (specimen counts by taxon and location) from BOLD search results.
 }
 \details{
-This function transforms the search results from \code{bold.data.search} into occurrence data matrices used commonly in biodiversity and ecological analyses. It supports aggregation at different taxonomic ranks (from kingdom to species), optional filtering by specific taxon names, and grouping by site categories or geographic coordinates. The function can convert count data to presence/absence (1/0) format.
+This function transforms the search results from \code{bold.data.search} into occurrence data matrices used commonly in biodiversity and ecological analyses by packages like \code{vegan} and \code{betapart}. It supports aggregation at different taxonomic ranks (from kingdom to species), optional filtering by specific taxon names, and grouping by site categories or geographic coordinates. The function can convert count data to presence/absence (1/0) format.
 }
 \examples{
 \dontrun{

@@ -12,7 +12,7 @@ get.sf(bold.search.res, chunk.size = 1e+05)
 \item{chunk.size}{Number of records to process in each chunk (default: 10000)}
 }
 \value{
-An sf object with point geometry in WGS84 coordinate system (EPSG:4326)
+An \code{sf} object with point geometry in WGS84 coordinate system (EPSG:4326)
 }
 \description{
 Converts BOLD search results with coordinate data to spatial points (sf object).

@@ -2,18 +2,18 @@
 % Please edit documentation in R/external.get.DwC.R
 \name{get.dwc}
 \alias{get.dwc}
-\title{Convert bold.data.search results in to Darwin Core (DwC) format}
+\title{Convert bold.data.search results in to a Darwin Core (DwC) format}
 \usage{
 get.dwc(bold.search.res)
 }
 \arguments{
-\item{bold.search.res}{A tbl_sql object containing BOLD search results}
+\item{bold.search.res}{A \code{tbl_sql} object containing BOLD search results}
 }
 \value{
 A data frame with columns renamed to Darwin Core equivalent fields
 }
 \description{
-Converts bold.data.search results from BCDM format to Darwin Core Standard format.
+Converts \code{bold.data.search} results from BCDM format to Darwin Core Standard format.
 }
 \details{
 This function maps BCDM (Barcode Core Data Model) fields to their Darwin Core equivalents using the official mapping file from the BCDM repository.

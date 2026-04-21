@@ -7,13 +7,13 @@
 get.concise.summary(bold.search.res)
 }
 \arguments{
-\item{bold.search.res}{A tbl_sql object containing bold.data.search results}
+\item{bold.search.res}{A \code{tbl_sql} object containing \code{bold.data.search} results}
 }
 \value{
 A data frame with the summary statistics
 }
 \description{
-Creates a summary statistics table from the bold.data.search tb_sql object that includes counts of records, sequences, species, BINs, countries, institutes, identifiers, depositories, and amplicon length ranges.
+Creates a summary statistics table from the \code{bold.data.search} \code{tb_sql} object.
 }
 \details{
 The function provides a concise summary of the search obtained by \code{bold.data.search} that includes details like total records, unique BINs, unique institutes, unique markers and amplicon size range.
@@ -22,6 +22,9 @@ The function provides a concise summary of the search obtained by \code{bold.dat
 \dontrun{
 
 # Search data
+
+parquet_file<-'user defined path to parquet file'
+
 bold_search <- bold.data.search(
 input.parquet=parquet_file,
 taxonomy = "Hemiptera",

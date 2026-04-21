@@ -21,13 +21,13 @@ bold.get.vocab(
 \item{output.file}{Path (without extension) for saving results as .rds file (required if save.data = TRUE)}
 }
 \value{
-A list containing unique values from the specified column; if \code{save.data} = T, a rds file exported locally
+A list containing unique values from the specified column; if \code{save.data} = T, a \code{.rds} file exported locally
 }
 \description{
 Extracts distinct values of specified field/s in BOLD parquet data
 }
 \details{
-This function extracts unique values from one or more specified columns in BOLD parquet data. It handles both the parquet file and tbl_sql objects from \code{bold.data.search} as input. The results can be saved to disk as an RDS file for later use.
+This function extracts unique values from one or more specified columns in BOLD parquet data. It handles both the parquet file and \code{tbl_sql} objects from \code{bold.data.search} as input. The results can be saved to disk as an RDS file for later use.
 }
 \examples{
 \dontrun{
