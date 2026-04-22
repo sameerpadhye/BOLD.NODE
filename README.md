@@ -57,7 +57,7 @@ functions
 3.  bold.data.collect
 4.  get.concise.summary
 5.  *get.DNAStringset*
-6.  get.DwC
+6.  **get.dwc (in development)**
 7.  get.fasta
 8.  get.occ.data
 9.  get.sf
