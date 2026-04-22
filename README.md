@@ -85,14 +85,25 @@ optional but useful in some instances):
 
 ### 1.Get the vocabulary for specific fields
 
+This function can be used for getting unique values of some of the
+categorical fields (e.g. institutes) to make searches easier
+
 ``` r
 
 # parquet_file<-'path where the parquet file from BOLD is downloaded'
 
-# vocab.data <- bold.get.vocab(parquet_file,specific.cols = c("country/ocean"))
+# vocab.data <- bold.get.vocab(parquet_file,specific.cols = c("country.ocean"))
 ```
 
 ### 2.Search the dataset
+
+This function lets users search by more than 10 different search
+parameters including taxonomy (species, genus, family etc.), geography
+(country.ocean, province, region), ids (processid, sampleid) and more.
+The users can just input the search query directly (e.g. put *Canada* as
+a query in the `geography` argument or *Coleoptera* in the `taxonomy`
+argument) with the function searching the query in the relevant fields
+internally
 
 ``` r
 
@@ -119,16 +130,13 @@ optional but useful in some instances):
 # basecount = c(500, 660)
 ```
 
-### 3.Data summary
+### 3.Collect the searched data
 
-``` r
-
-# Get the concise summary
-
-# bold_summary <- get.concise.summary(bold_search_geography)
-```
-
-### 4.Collect the searched data
+The searched data can be collected in memory using this function.
+**Please note** Some queries (e.g., All “Diptera”) may return very large
+datasets. Always check the printed message in the console (shows the
+total records in the search) after search before collecting data to
+ensure you don’t exceed the available RAM.
 
 ``` r
 
@@ -155,6 +163,11 @@ The `get.` functions convert the search results from the
 `bold.data.search` into objects used in packages such as `vegan`, `msa`,
 `DECIPHER`, `terra`, `geodata` etc.
 
+#### `get.concise.summary`
+
+gets a concise summary of the searched data. Search results include
+total records, total countries, amplicon length range and many more
+
 ``` r
 
 #  Search the data
@@ -167,35 +180,105 @@ The `get.` functions convert the search results from the
 # basecount = c(500, 660))
 
 
-#1. Get concise summary of the data
+# Get concise summary of the data
 
 # bold_summary <- get.concise.summary(bold_search)
+```
 
-#2. Get fasta
+#### `get.fasta`
+
+generates a custom header fasta file of the searched data. This can be
+exported for any downstream analytical pipelines
+
+``` r
+
+#  Search the data
+
+# bold_search <- bold.data.search(
+# input.parquet=parquet_file,
+# taxonomy = "Coleoptera",
+# geography = "Canada",
+# marker = "COI-5P",
+# basecount = c(500, 660))
+
+# Get fasta
 
 # get.fasta(
 # bold_search,
 # output.file = "trial.fas",
 # fas.header = c("bin_uri", "processid"))
+```
 
-#3. Get sf
+#### `get.sf`
+
+generates a `sf` object of the searched data for any downstream spatial
+data analyses
+
+``` r
+
+#  Search the data
+
+# bold_search <- bold.data.search(
+# input.parquet=parquet_file,
+# taxonomy = "Coleoptera",
+# geography = "Canada",
+# marker = "COI-5P",
+# basecount = c(500, 660))
+
+# Get sf
+
 # sf_res<- get.sf(bold_search, chunk.size = 100000)
+```
 
-#4. Get occurrence data
+#### `get.occ.data`
+
+creates an occurrence matrix from the searched data based on the
+`taxon.rank`, `taxon.name` (optional) and the `site.cat`
+
+``` r
+
+#  Search the data
+
+# bold_search <- bold.data.search(
+# input.parquet=parquet_file,
+# taxonomy = "Coleoptera",
+# geography = "Canada",
+# marker = "COI-5P",
+# basecount = c(500, 660))
+
+# Get occurrence data
+
 # occurrence_data <- get.occ.data(
 #   bold_search,
 #   taxon.rank = "family",
 #   site.cat = "region")
+```
 
-#5. Get DNAStringSet
+#### `get.DNAStringSet`
+
+generates a `DNAStringSet` (Biostrings object) object of the searched
+data for any downstream sequence alignment and tree generation with
+custom headers. The library `Biostrings` has to be installed and
+imported before using this function
+
+``` r
+
+#  Search the data
+
+# bold_search <- bold.data.search(
+# input.parquet=parquet_file,
+# taxonomy = "Coleoptera",
+# geography = "Canada",
+# marker = "COI-5P",
+# basecount = c(500, 660))
+
+# Get DNAStringSet
 
 # bold.dnastringset<-get.DNAStringSet(bold_search,
 # marker="COI-5P",
 # cols_for_seq_names = c("processid","family"))
 ```
 
-<img src="man/figures/README-benchmark_fig-1.jpeg" width="100%" />
+#### It takes roughly 10 minutes to collect ~10M records on a i7 2.8GHZ 16GB RAM machine
 
-**Please note** Some queries (e.g., All “Diptera”) may return very large
-datasets. Always check the summary before collecting data to ensure you
-don’t exceed the available RAM.
+<img src="man/figures/README-benchmark_fig-1.jpeg" width="100%" />

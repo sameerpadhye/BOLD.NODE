@@ -78,17 +78,19 @@ A typical workflow for exploring and  BOLD data (Steps in *italics* are optional
 3. `bold.concise.summary` *(Provides a detailed summary of the dataset retrieved)*
 4. `bold.data.collect`(Collects the output of the `bold.data.search` in memory for downstream exploration/analyses).  
 
-### 1.Get the vocabulary for specific fields
+### 1.Get the vocabulary for specific fields 
+This function can be used for getting unique values of some of the categorical fields (e.g. institutes) to make searches easier
 
 ```{r get_vocab}
 
 # parquet_file<-'path where the parquet file from BOLD is downloaded'
 
-# vocab.data <- bold.get.vocab(parquet_file,specific.cols = c("country/ocean"))
+# vocab.data <- bold.get.vocab(parquet_file,specific.cols = c("country.ocean"))
 
 ```
 
 ### 2.Search the dataset
+This function lets users search by more than 10 different search parameters including taxonomy (species, genus, family etc.), geography (country.ocean, province, region), ids (processid, sampleid) and more. The users can just input the search query directly (e.g. put *Canada* as a query in the `geography` argument or *Coleoptera* in the `taxonomy` argument) with the function searching the query in the relevant fields internally
 
 ```{r data_search}
 
@@ -116,17 +118,8 @@ A typical workflow for exploring and  BOLD data (Steps in *italics* are optional
 
 ```
 
-### 3.Data summary
-
-```{r data_summary}
-
-# Get the concise summary
-
-# bold_summary <- get.concise.summary(bold_search_geography)
-
-```
-
-### 4.Collect the searched data
+### 3.Collect the searched data
+The searched data can be collected in memory using this function. **Please note** Some queries (e.g., All "Diptera") may return very large datasets. Always check the printed message in the console (shows the total records in the search) after search before collecting data to ensure you don't exceed the available RAM.
 
 ```{r data_collect}
 
@@ -153,7 +146,11 @@ A typical workflow for exploring and  BOLD data (Steps in *italics* are optional
 ### The `get.` functionality
 The `get.` functions convert the search results from the `bold.data.search` into objects used in packages such as `vegan`, `msa`, `DECIPHER`, `terra`, `geodata` etc.
 
-```{r get functions,warning=F}
+
+#### `get.concise.summary` 
+gets a concise summary of the searched data. Search results include total records, total countries, amplicon length range and many more
+
+```{r get.concise.summary,warning=F}
 
 #  Search the data
 
@@ -165,32 +162,97 @@ The `get.` functions convert the search results from the `bold.data.search` into
 # basecount = c(500, 660))
 
 
-#1. Get concise summary of the data
+# Get concise summary of the data
 
 # bold_summary <- get.concise.summary(bold_search)
 
-#2. Get fasta
+```
+
+#### `get.fasta` 
+generates a custom header fasta file of the searched data. This can be exported for any downstream analytical pipelines
+
+```{r get.fasta,warning=F} 
+
+#  Search the data
+
+# bold_search <- bold.data.search(
+# input.parquet=parquet_file,
+# taxonomy = "Coleoptera",
+# geography = "Canada",
+# marker = "COI-5P",
+# basecount = c(500, 660))
+
+# Get fasta
 
 # get.fasta(
 # bold_search,
 # output.file = "trial.fas",
 # fas.header = c("bin_uri", "processid"))
 
-#3. Get sf
+```
+
+#### `get.sf`
+generates a `sf` object of the searched data for any downstream spatial data analyses
+
+```{r get concise_summary,warning=F} 
+
+#  Search the data
+
+# bold_search <- bold.data.search(
+# input.parquet=parquet_file,
+# taxonomy = "Coleoptera",
+# geography = "Canada",
+# marker = "COI-5P",
+# basecount = c(500, 660))
+
+# Get sf
+
 # sf_res<- get.sf(bold_search, chunk.size = 100000)
 
-#4. Get occurrence data
+```
+
+#### `get.occ.data`
+creates an occurrence matrix from the searched data based on the `taxon.rank`, `taxon.name` (optional) and the `site.cat`
+
+```{r get.occ.data,warning=F} 
+
+#  Search the data
+
+# bold_search <- bold.data.search(
+# input.parquet=parquet_file,
+# taxonomy = "Coleoptera",
+# geography = "Canada",
+# marker = "COI-5P",
+# basecount = c(500, 660))
+
+# Get occurrence data
+
 # occurrence_data <- get.occ.data(
 #   bold_search,
 #   taxon.rank = "family",
 #   site.cat = "region")
 
-#5. Get DNAStringSet
+```
+
+#### `get.DNAStringSet` 
+generates a `DNAStringSet` (Biostrings object) object of the searched data for any downstream sequence alignment and tree generation with custom headers. The library `Biostrings` has to be installed and imported before using this function
+
+```{r get.DNAStringSet,warning=F} 
+
+#  Search the data
+
+# bold_search <- bold.data.search(
+# input.parquet=parquet_file,
+# taxonomy = "Coleoptera",
+# geography = "Canada",
+# marker = "COI-5P",
+# basecount = c(500, 660))
+
+# Get DNAStringSet
 
 # bold.dnastringset<-get.DNAStringSet(bold_search,
 # marker="COI-5P",
 # cols_for_seq_names = c("processid","family"))
-
 ```
 
 
@@ -202,6 +264,7 @@ benchmarks$Category<-factor(benchmarks$Category,levels=c("<1k records", "1k-100k
 
 ```
 
+#### It takes roughly 10 minutes to collect ~10M records on a i7 2.8GHZ 16GB RAM machine
 ```{r benchmark_fig,fig.width=6, fig.height=4, dpi=300, dev='jpeg',echo=F,warning=F,message=F}
 
 ggplot(benchmarks,
@@ -229,5 +292,4 @@ ggplot(benchmarks,
 ```
 
 
-**Please note** Some queries (e.g., All "Diptera") may return very large datasets. Always check the summary before collecting data to ensure you don't exceed the available RAM.
 

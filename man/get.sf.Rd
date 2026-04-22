@@ -32,7 +32,7 @@ geography = "Malaysia")
 
 # Get the occurrence matrix
 
-occurrence_data <- get.sf(bold_search, chunk.size = 100000)
+sf_data <- get.sf(bold_search, chunk.size = 100000)
 
 }
 
