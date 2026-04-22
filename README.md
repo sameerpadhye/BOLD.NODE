@@ -30,7 +30,7 @@ downstream analyses:
 
 The user manual for the package can be downloaded from the following
 link
-(<https://github.com/boldsystems-central/BOLDconnectR_examples/blob/main/BOLD.NODE_1.0.0.pdf>)
+(<https://github.com/boldsystems-central/BOLDconnectR_examples/blob/main/BOLD.NODE_0.0.2.pdf>)
 
 ## Installation
 
@@ -124,7 +124,7 @@ collecting or transforming the data.
 #2 Geography
 
 # bold_search_geography <- bold.data.search(parquet_path=parquet_file,
-# taxonomy = c("Panthera pardus),
+# taxonomy = c("Panthera pardus"),
 # geography = c("India"))
 
 #3 Combination of many search criteria
@@ -134,7 +134,7 @@ collecting or transforming the data.
 # taxonomy = "Coleoptera",
 # geography = "Canada",
 # marker = "COI-5P",
-# basecount = c(500, 660)
+# basecount = c(500, 660))
 ```
 
 ### 3.Collect the searched data
@@ -187,7 +187,7 @@ total records, total countries, amplicon length range and many more
 # basecount = c(500, 660))
 
 
-# Get concise summary of the data
+# Get a concise summary of the data
 
 # bold_summary <- get.concise.summary(bold_search)
 ```
@@ -257,6 +257,7 @@ creates an occurrence matrix from the searched data based on the
 
 # occurrence_data <- get.occ.data(
 #   bold_search,
+#   kingdom = "Animalia",
 #   taxon.rank = "family",
 #   site.cat = "region")
 ```
