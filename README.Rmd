@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
 ```
 
 # BOLD.NODE
+
 **BOLD_NODE** is an R package that offers functionality to efficiently explore BOLD dataset releases (<https://boldsystems.org/data/data-packages/>) in the **Barcode Core Data Model (BCDM)** format (for more information on BCDM please visit its GitHub repo <https://github.com/boldsystems-central/BCDM>) locally. It uses a **DuckDB** back end to query **parquet** files directly in R, enabling fast searches even on systems with limited RAM. Data collection is optimized through customized chunk sizes and configurable system pause intervals. 
 
 The package also allows seamless conversion of search results into standard R data structures without collecting the data in memory for downstream analyses:
@@ -26,10 +27,6 @@ The package also allows seamless conversion of search results into standard R da
 <!-- badges: start -->
 <!-- badges: end -->
 
-## Downloading Data Packages
-
-Users need to log into BOLD (<https://bench.boldsystems.org/index.php/Login/page?destination=MAS_Management_UserConsole>) to download the datasets.
-
 ## Installation
 
 The package can be installed using `devtools::install_github` function from the `devtools` package in R (which needs to be installed before)
@@ -38,6 +35,11 @@ The package can be installed using `devtools::install_github` function from the 
 devtools::install_github('https://github.com/sameerpadhye/BOLD.NODE.git')
 
 ```
+
+
+## Downloading Data Packages
+
+Users need to log into BOLD (<https://bench.boldsystems.org/index.php/Login/page?destination=MAS_Management_UserConsole>) to download the datasets in the `parquet` format. The users can then directly use the file as an input for the search and vocabulary functions
 
 
 ## BOLD.NODE has 10 functions:
@@ -66,17 +68,15 @@ devtools::install_github('https://github.com/sameerpadhye/BOLD.NODE.git')
 # 
 # BiocManager::install("Biostrings")
 
-
 ```
 
-## Workflow for search and collect (load the search into local memory)
+## Workflow for search and collect 
 
 A typical workflow for exploring and  BOLD data (Steps in *italics* are optional but useful in some instances):
 
 1. `bold.get.vocab` *(Provides unique terms present in a particular field, making it easier for exploring* `bold.data.search` *search parameters)*
 2. `bold.data.search` (Searches the dataset based on the user criteria and prints the number of records available) 
-3. `bold.concise.summary` *(Provides a detailed summary of the dataset retrieved)*
-4. `bold.data.collect`(Collects the output of the `bold.data.search` in memory for downstream exploration/analyses).  
+3. `bold.data.collect`(Collects the output of the `bold.data.search` in memory for downstream exploration/analyses).  
 
 ### 1.Get the vocabulary for specific fields 
 This function can be used for getting unique values of some of the categorical fields (e.g. institutes) to make searches easier
@@ -90,7 +90,7 @@ This function can be used for getting unique values of some of the categorical f
 ```
 
 ### 2.Search the dataset
-This function lets users search by more than 10 different search parameters including taxonomy (species, genus, family etc.), geography (country.ocean, province, region), ids (processid, sampleid) and more. The users can just input the search query directly (e.g. put *Canada* as a query in the `geography` argument or *Coleoptera* in the `taxonomy` argument) with the function searching the query in the relevant fields internally
+This function lets users search by more than 10 different search parameters including taxonomy (species, genus, family etc.), geography (country.ocean, province, region), ids (processid, sampleid) and more. The users can just input the search query directly (e.g. put *Canada* as a query in the `geography` argument or *Coleoptera* in the `taxonomy` argument) with the function searching the query in the relevant fields internally. The search result is a `tbl_sql` object that is used for collecting or transforming the data.
 
 ```{r data_search}
 
@@ -291,5 +291,4 @@ ggplot(benchmarks,
 
 ```
 
-
-
+*The package is under active development and  functionality is subject to change*

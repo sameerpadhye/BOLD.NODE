@@ -26,12 +26,6 @@ downstream analyses:
 
 <!-- badges: end -->
 
-## Downloading Data Packages
-
-Users need to log into BOLD
-(<https://bench.boldsystems.org/index.php/Login/page?destination=MAS_Management_UserConsole>)
-to download the datasets.
-
 ## Installation
 
 The package can be installed using `devtools::install_github` function
@@ -41,6 +35,14 @@ from the `devtools` package in R (which needs to be installed before)
 
 devtools::install_github('https://github.com/sameerpadhye/BOLD.NODE.git')
 ```
+
+## Downloading Data Packages
+
+Users need to log into BOLD
+(<https://bench.boldsystems.org/index.php/Login/page?destination=MAS_Management_UserConsole>)
+to download the datasets in the `parquet` format. The users can then
+directly use the file as an input for the search and vocabulary
+functions
 
 ## BOLD.NODE has 10 functions:
 
@@ -68,7 +70,7 @@ It can be installed using using `BiocManager` package.
 # BiocManager::install("Biostrings")
 ```
 
-## Workflow for search and collect (load the search into local memory)
+## Workflow for search and collect
 
 A typical workflow for exploring and BOLD data (Steps in *italics* are
 optional but useful in some instances):
@@ -78,9 +80,7 @@ optional but useful in some instances):
     parameters)*
 2.  `bold.data.search` (Searches the dataset based on the user criteria
     and prints the number of records available)
-3.  `bold.concise.summary` *(Provides a detailed summary of the dataset
-    retrieved)*
-4.  `bold.data.collect`(Collects the output of the `bold.data.search` in
+3.  `bold.data.collect`(Collects the output of the `bold.data.search` in
     memory for downstream exploration/analyses).
 
 ### 1.Get the vocabulary for specific fields
@@ -103,7 +103,8 @@ parameters including taxonomy (species, genus, family etc.), geography
 The users can just input the search query directly (e.g. put *Canada* as
 a query in the `geography` argument or *Coleoptera* in the `taxonomy`
 argument) with the function searching the query in the relevant fields
-internally
+internally. The search result is a `tbl_sql` object that is used for
+collecting or transforming the data.
 
 ``` r
 
@@ -282,3 +283,6 @@ imported before using this function
 #### It takes roughly 10 minutes to collect ~10M records on a i7 2.8GHZ 16GB RAM machine
 
 <img src="man/figures/README-benchmark_fig-1.jpeg" width="100%" />
+
+*The package is under active development and functionality is subject to
+change*
