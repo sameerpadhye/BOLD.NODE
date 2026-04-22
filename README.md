@@ -26,6 +26,12 @@ downstream analyses:
 
 <!-- badges: end -->
 
+## User manual
+
+The user manual for the package can be downloaded from the following
+link
+(<https://github.com/boldsystems-central/BOLDconnectR_examples/blob/main/BOLD.NODE_1.0.0.pdf>)
+
 ## Installation
 
 The package can be installed using `devtools::install_github` function
