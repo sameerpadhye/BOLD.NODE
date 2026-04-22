@@ -16,6 +16,8 @@ get.occ.data(
 \arguments{
 \item{bold.search.res}{A \code{tbl_sql} object containing BOLD search results}
 
+\item{kingdom}{Character value specifying the kingdom (default: Animalia)}
+
 \item{taxon.rank}{Taxonomic rank to aggregate by (kingdom, phylum, class, order, family, genus, or species)}
 
 \item{taxon.name}{Optional vector of specific taxon names to include}

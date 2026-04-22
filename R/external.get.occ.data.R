@@ -6,6 +6,7 @@
 #'
 #'
 #' @param bold.search.res A `tbl_sql` object containing BOLD search results
+#' @param kingdom Character value specifying the kingdom (default: Animalia)
 #' @param taxon.rank Taxonomic rank to aggregate by (kingdom, phylum, class, order, family, genus, or species)
 #' @param taxon.name Optional vector of specific taxon names to include
 #' @param site.cat Optional categorical variable to group occurrence data by (e.g., region)
