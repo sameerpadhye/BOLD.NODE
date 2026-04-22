@@ -291,4 +291,4 @@ ggplot(benchmarks,
 
 ```
 
-*The package is under active development and  functionality is subject to change*
+**The package is under active development and the functionality is subject to change**

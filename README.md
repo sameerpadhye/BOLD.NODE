@@ -284,5 +284,5 @@ imported before using this function
 
 <img src="man/figures/README-benchmark_fig-1.jpeg" width="100%" />
 
-*The package is under active development and functionality is subject to
-change*
+**The package is under active development and the functionality is
+subject to change**
