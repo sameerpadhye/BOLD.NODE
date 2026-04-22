@@ -6,6 +6,7 @@
 \usage{
 get.occ.data(
   bold.search.res,
+  kingdom = "Animalia",
   taxon.rank,
   taxon.name = NULL,
   site.cat = NULL,
@@ -30,7 +31,7 @@ A data frame with occurrence data (taxon names as columns, site categories or co
 Extracts occurrence data (specimen counts by taxon and location) from BOLD search results.
 }
 \details{
-This function transforms the search results from \code{bold.data.search} into occurrence data matrices used commonly in biodiversity and ecological analyses by packages like \code{vegan} and \code{betapart}. It supports aggregation at different taxonomic ranks (from kingdom to species), optional filtering by specific taxon names, and grouping by site categories or geographic coordinates. The function can convert count data to presence/absence (1/0) format.
+This function transforms the search results from \code{bold.data.search} into occurrence data matrices used commonly in biodiversity and ecological analyses by packages like \code{vegan} and \code{betapart}. \code{kingdom} argument specifies the taxa kingdom with the default value being \code{Animalia}. The occurrences differ based on the kingdom. For \code{Animalia}, only records having BINs are counted (i.e. records without BINs are removed before calculations), while for other kingdoms, all records having a sequence are counted (i.e. records without sequences are removed before calculations). It supports aggregation at different taxonomic ranks (from kingdom to species) for a single or multiple taxa (also applicable for bin_uri; the difference being that the numbers in each cell would be the number of times that respective BIN is found at a particular \code{site.cat}), optional filtering by specific taxon names. \code{site.cat} can be any of the \code{geography} fields (Meta data on fields can be checked using the \code{bold.bcdm.fields} function). In case where \code{site.cat} = NULL, the column \code{coord} will be used as default. The function can convert count data to presence/absence (1/0) format. In case \code{specific.cols} is used in the \code{bold.data.search} function to obtain only few columns, occurrence matrix wont be generated.
 }
 \examples{
 \dontrun{
@@ -46,6 +47,7 @@ geography = "Thailand")
 
 occurrence_data <- get.occ.data(
   bold_search,
+  kingdom = 'Animalia',
   taxon.rank = "family",
   site.cat = "region"
   )
