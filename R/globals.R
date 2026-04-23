@@ -49,4 +49,10 @@ utils::globalVariables(c(
   'dwc_type',
   'taxon',
   'bin_count',
-  'row_num'))
+  'row_num',
+  ':=',
+  '.SD',
+  '.SDcols',
+  'i',
+  'j',
+  'by'))
