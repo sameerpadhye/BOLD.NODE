@@ -3,7 +3,7 @@
 
 # BOLD.NODE
 
-**BOLD_NODE** is an R package that offers functionality to efficiently
+**BOLD.NODE (No API Offline Data Explorer)** is an R package that offers functionality to efficiently
 explore BOLD dataset releases
 (<https://boldsystems.org/data/data-packages/>) in the **Barcode Core
 Data Model (BCDM)** format (for more information on BCDM please visit
