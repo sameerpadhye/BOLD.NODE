@@ -56,16 +56,17 @@ functions
 2.  bold.data.search
 3.  bold.data.collect
 4.  get.concise.summary
-5.  *get.DNAStringset*
-6.  **get.dwc (in development)**
-7.  get.fasta
-8.  get.occ.data
-9.  get.sf
-10. get.vocab
+5.  get.bin.consensus
+6.  *get.DNAStringset*
+7.  **get.dwc (in development)**
+8.  get.fasta
+9.  get.occ.data
+10.  get.sf
+11. get.vocab
 
 **Note** *Function 5*: *get.DNAStringset* requires the package
 `Biostrings` to be installed and imported in the R session beforehand.
-It can be installed using using `BiocManager` package.
+It can be installed using the `BiocManager` package.
 
 ``` r
 
@@ -89,7 +90,7 @@ optional but useful in some instances):
 3.  `bold.data.collect`(Collects the output of the `bold.data.search` in
     memory for downstream exploration/analyses).
 
-### 1.Get the vocabulary for specific fields
+### 1. Get the vocabulary for specific fields
 
 This function can be used for getting unique values of some of the
 categorical fields (e.g. institutes) to make searches easier
@@ -101,7 +102,7 @@ categorical fields (e.g. institutes) to make searches easier
 # vocab.data <- bold.get.vocab(parquet_file,specific.cols = c("country.ocean"))
 ```
 
-### 2.Search the dataset
+### 2. Search the dataset
 
 This function lets users search by more than 10 different search
 parameters including taxonomy (species, genus, family etc.), geography
@@ -137,7 +138,7 @@ collecting or transforming the data.
 # basecount = c(500, 660))
 ```
 
-### 3.Collect the searched data
+### 3. Collect the searched data
 
 The searched data can be collected in memory using this function.
 **Please note** Some queries (e.g., All “Diptera”) may return very large
