@@ -44,8 +44,8 @@ devtools::install_github('https://github.com/sameerpadhye/BOLD.NODE.git')
 
 ## Downloading Data Packages
 
-Users need to log into BOLD
-(<https://bench.boldsystems.org/index.php/Login/page?destination=MAS_Management_UserConsole>)
+Users need to log in to BOLD
+(<https://bench.boldsystems.org/index.php/datapackages/>)
 to download the datasets in the `parquet` format. The users can then
 directly use the file as an input for the search and vocabulary
 functions
