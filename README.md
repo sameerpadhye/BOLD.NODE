@@ -3,7 +3,7 @@
 
 # BOLD.NODE
 
-**BOLD.NODE (No API Offline Data Explorer)** is an R package that offers functionality to efficiently
+**BOLD_NODE** is an R package that offers functionality to efficiently
 explore BOLD dataset releases
 (<https://boldsystems.org/data/data-packages/>) in the **Barcode Core
 Data Model (BCDM)** format (for more information on BCDM please visit
@@ -30,7 +30,7 @@ downstream analyses:
 
 The user manual for the package can be downloaded from the following
 link
-(<https://github.com/boldsystems-central/BOLDconnectR_examples/blob/main/BOLD.NODE_0.0.2.pdf>)
+(<https://github.com/boldsystems-central/BOLDconnectR_examples/blob/main/BOLD.NODE_1.0.0.pdf>)
 
 ## Installation
 
@@ -44,29 +44,29 @@ devtools::install_github('https://github.com/sameerpadhye/BOLD.NODE.git')
 
 ## Downloading Data Packages
 
-Users need to log in to BOLD
-(<https://bench.boldsystems.org/index.php/datapackages/>)
+Users need to log into BOLD
+(<https://bench.boldsystems.org/index.php/Login/page?destination=MAS_Management_UserConsole>)
 to download the datasets in the `parquet` format. The users can then
 directly use the file as an input for the search and vocabulary
 functions
 
-## BOLD.NODE has 10 functions:
+## BOLD.NODE has 11 functions:
 
 1.  bold.bcdm.fields
 2.  bold.data.search
 3.  bold.data.collect
 4.  get.concise.summary
-5.  get.bin.consensus
-6.  *get.DNAStringset*
-7.  **get.dwc (in development)**
+5.  *get.DNAStringset*
+6.  get.bin.consensus
+7.  get.DwC
 8.  get.fasta
 9.  get.occ.data
-10.  get.sf
+10. get.sf
 11. get.vocab
 
 **Note** *Function 5*: *get.DNAStringset* requires the package
 `Biostrings` to be installed and imported in the R session beforehand.
-It can be installed using the `BiocManager` package.
+It can be installed using using `BiocManager` package.
 
 ``` r
 
@@ -90,7 +90,7 @@ optional but useful in some instances):
 3.  `bold.data.collect`(Collects the output of the `bold.data.search` in
     memory for downstream exploration/analyses).
 
-### 1. Get the vocabulary for specific fields
+### 1.Get the vocabulary for specific fields
 
 This function can be used for getting unique values of some of the
 categorical fields (e.g. institutes) to make searches easier
@@ -102,7 +102,7 @@ categorical fields (e.g. institutes) to make searches easier
 # vocab.data <- bold.get.vocab(parquet_file,specific.cols = c("country.ocean"))
 ```
 
-### 2. Search the dataset
+### 2.Search the dataset
 
 This function lets users search by more than 10 different search
 parameters including taxonomy (species, genus, family etc.), geography
@@ -125,7 +125,7 @@ collecting or transforming the data.
 #2 Geography
 
 # bold_search_geography <- bold.data.search(parquet_path=parquet_file,
-# taxonomy = c("Panthera pardus"),
+# taxonomy = c("Panthera pardus),
 # geography = c("India"))
 
 #3 Combination of many search criteria
@@ -135,10 +135,10 @@ collecting or transforming the data.
 # taxonomy = "Coleoptera",
 # geography = "Canada",
 # marker = "COI-5P",
-# basecount = c(500, 660))
+# basecount = c(500, 660)
 ```
 
-### 3. Collect the searched data
+### 3.Collect the searched data
 
 The searched data can be collected in memory using this function.
 **Please note** Some queries (e.g., All “Diptera”) may return very large
@@ -188,7 +188,7 @@ total records, total countries, amplicon length range and many more
 # basecount = c(500, 660))
 
 
-# Get a concise summary of the data
+# Get concise summary of the data
 
 # bold_summary <- get.concise.summary(bold_search)
 ```
@@ -258,7 +258,6 @@ creates an occurrence matrix from the searched data based on the
 
 # occurrence_data <- get.occ.data(
 #   bold_search,
-#   kingdom = "Animalia",
 #   taxon.rank = "family",
 #   site.cat = "region")
 ```

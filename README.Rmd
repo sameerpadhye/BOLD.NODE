@@ -46,18 +46,19 @@ devtools::install_github('https://github.com/sameerpadhye/BOLD.NODE.git')
 Users need to log into BOLD (<https://bench.boldsystems.org/index.php/Login/page?destination=MAS_Management_UserConsole>) to download the datasets in the `parquet` format. The users can then directly use the file as an input for the search and vocabulary functions
 
 
-## BOLD.NODE has 10 functions:
+## BOLD.NODE has 11 functions:
 
 1. bold.bcdm.fields
 2. bold.data.search
 3. bold.data.collect
 4. get.concise.summary
 5. *get.DNAStringset*
-6. get.DwC
-7. get.fasta
-8. get.occ.data
-9. get.sf
-10. get.vocab
+6. get.bin.consensus
+7. get.DwC
+8. get.fasta
+9. get.occ.data
+10. get.sf
+11. get.vocab
 
 
 **Note**
