@@ -57,32 +57,32 @@ using \code{\link{get.concise.summary}} and proceed with caution.
 
 # Search for BOLD data
 bold_search <- bold.data.search(
-input.parquet = parquet_file,
-taxonomy = "Coleoptera",
-geography = "Canada"
+  input.parquet = parquet_file,
+  taxonomy = "Coleoptera",
+  geography = "Canada"
 )
 
 # Compute strict consensus identifications for BINs in searched data
 strict_consensus <- get.bin.consensus(
-bold.search.res = bold_search,
-threshold = 1.0
+  bold.search.res = bold_search,
+  threshold = 1.0
 )
 
 # Compute identifications concordant among at least 75\% of BIN members,
 # as long as at least three records carry the majority identifications
 # in each BIN.
 bin_ids <- get.bin.consensus(
-bold.search.res = bold_search,
-threshold = 0.75,
-min_ids = 3
+  bold.search.res = bold_search,
+  threshold = 0.75,
+  min.ids = 3
 )
 
 # Include non-scientific names (i.e. interim taxonomy or placeholder names)
 # in consideration of BIN consensus.
 bin_consensus <- get.bin.consensus(
-bold.search.res = bold_search,
-threshold = 0.9,
-enforce.scientific = FALSE
+  bold.search.res = bold_search,
+  threshold = 0.9,
+  enforce.scientific = FALSE
 )
 
 }
