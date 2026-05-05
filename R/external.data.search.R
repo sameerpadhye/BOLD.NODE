@@ -97,7 +97,7 @@ bold.data.search <- function(input.parquet,
                            seq.source=seq.source,
                            marker=marker,
                            basecount=basecount,
-                           biogeo.cat=biogeo.cat,
+                           biogeo_cat=biogeo.cat,
                            dataset.projects=dataset.projects,
                            bounding.box=bounding.box,
                            ambi.base.cutoff=ambi.base.cutoff)
