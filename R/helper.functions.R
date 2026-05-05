@@ -17,13 +17,17 @@ import_parquet_data<-function(path)
   get_parquet_data<-sprintf("Select * from parquet_scan('%s')",path)
 
   parquet_data<-tbl(temp_connection,
-                    sql(get_parquet_data))%>%
+                    sql(get_parquet_data)) %>%
     # change the country and province names for ease of use ('/' against '.')
     dplyr::rename('country.ocean'='country/ocean',
-                  'province.state'='province/state')%>%
-     mutate(coord = sql("replace(replace(trim(coord), '[', ''), ']', '')"),
-    bold_recordset_code_arr = sql("replace(replace(trim(bold_recordset_code_arr), '[', ''), ']', '')"))
-
+                  'province.state'='province/state') %>%
+      mutate(coord = sql("replace(replace(trim(coord), '[', ''), ']', '')"),
+      bold_recordset_code_arr = sql("replace(replace(replace(replace(trim(bold_recordset_code_arr),
+                                    '[', ''),
+                                    ']', ''),
+                                    '''', ''),
+                                    ', ', ',')")
+      )
 
   return(parquet_data)
 
