@@ -1,4 +1,4 @@
-#' Generate a concise summary of bold.data.search results
+#' Generate a concise summary of the search results
 #'
 #' @description Creates a summary statistics table from the `bold.data.search` `tb_sql` object.
 #'

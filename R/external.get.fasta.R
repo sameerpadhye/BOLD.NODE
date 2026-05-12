@@ -48,7 +48,7 @@ get.fasta <- function(bold.search.res,
   # Check if input is a tbl_sql (helper function you already have)
   check.tbl.sql(bold.search.res)
 
-  # Ensure user-specified fields exist
+  # Ensure user specified fields exist
   user_specified_fields <- fas.header
 
   quoted_fields <- DBI::dbQuoteIdentifier(
@@ -66,7 +66,7 @@ get.fasta <- function(bold.search.res,
     ) %>%
     dplyr::filter(!is.na(nuc) & nuc != "") %>%
     dplyr::mutate(
-      # SQL-safe FASTA header
+      # SQL safe FASTA header
       seq.name = sql(paste0("concat('>', ", fas_headers, ")")),
       # Row number for chunking
       row_num  = sql("row_number() over (order by nuc)")
@@ -93,7 +93,7 @@ get.fasta <- function(bold.search.res,
       dplyr::select(seq.name, nuc) %>%
       dplyr::collect()
 
-    # Write FASTA: alternating header and sequence
+    # Write FASTA
     writeLines(as.vector(rbind(chunk$seq.name, chunk$nuc)), con)
   }
 
