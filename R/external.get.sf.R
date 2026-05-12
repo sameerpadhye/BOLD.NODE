@@ -1,4 +1,4 @@
-#' Convert BOLD search results to spatial points
+#' Convert BOLD search results to spatial point dataframe
 #'
 #' @description Converts BOLD search results with coordinate data to spatial points (sf object).
 #'
