@@ -11,7 +11,7 @@
 #' for each rank, if desired (either as a vector of equal length to ranks or as a named list). The function
 #' can also be applied to any other grouping variable by modifying 'groups'.
 #'
-#' \strong{N.B.:} As this function performs operations on the input data, it may be quite slow for very
+#' \emph{Important Note}: As this function performs operations on the input data, it may be quite slow for very
 #' large data sets and/or weaker machines. Please check the size of 'bold.search.res' input objects
 #' using \code{\link{get.concise.summary}} and proceed with caution.
 #'
