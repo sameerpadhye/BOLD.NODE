@@ -2,7 +2,7 @@
 % Please edit documentation in R/external.get.sf.R
 \name{get.sf}
 \alias{get.sf}
-\title{Convert BOLD search results to spatial points}
+\title{Convert BOLD search results to spatial point dataframe}
 \usage{
 get.sf(bold.search.res, chunk.size = 1e+05)
 }

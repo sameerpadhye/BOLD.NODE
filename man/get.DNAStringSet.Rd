@@ -17,7 +17,7 @@ get.DNAStringSet(bold.search.res, marker = NULL, cols_for_seq_names)
 A \code{DNAStringSet} object
 }
 \description{
-Converts the sequence data from the BOLD search into a DNAStringSet object for downstream multiple sequence alignment with customized headers.
+Converts the sequence data from the search result into a DNAStringSet object for downstream multiple sequence alignment with customized headers.
 }
 \details{
 This function transforms the search results from \code{bold.data.search} into a \code{DNAStringSet} object suitable for downstream data analyses. The \code{cols_for_seq_names} argument lets users create custom headers using the BCDM column names.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/external.get.concise.summary.R
 \name{get.concise.summary}
 \alias{get.concise.summary}
-\title{Generate a concise summary of bold.data.search results}
+\title{Generate a concise summary of the search results}
 \usage{
 get.concise.summary(bold.search.res)
 }
