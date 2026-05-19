@@ -2,7 +2,7 @@
 % Please edit documentation in R/external.get.DwC.R
 \name{get.dwc}
 \alias{get.dwc}
-\title{Convert bold.data.search results in to a Darwin Core (DwC) format}
+\title{Convert bold.data.search results in to a Darwin Core (DwC) format data model}
 \usage{
 get.dwc(bold.search.res)
 }
@@ -16,7 +16,8 @@ A data frame with columns renamed to Darwin Core equivalent fields
 Converts \code{bold.data.search} results from BCDM format to Darwin Core Standard format.
 }
 \details{
-This function maps BCDM (Barcode Core Data Model) fields to their Darwin Core equivalents using the official mapping file from the BCDM repository.
+This function maps BCDM (Barcode Core Data Model) fields to their Darwin Core equivalents.
+#' \emph{Important Note}: All fields should be available in the \code{bold.data.search} \code{tbl_sql} object otherwise, the error will throw an error
 }
 \examples{
 \dontrun{
@@ -30,7 +31,7 @@ geography = "Australia"
 
 # Get the DNAStringset object
 
-bold.dwc<-get.DNAStringSet(bold_search)
+bold.dwc<-get.dwc(bold_search)
 
 }
 }

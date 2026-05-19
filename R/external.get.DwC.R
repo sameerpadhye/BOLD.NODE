@@ -1,8 +1,9 @@
-#' Convert bold.data.search results in to a Darwin Core (DwC) format
+#' Convert bold.data.search results in to a Darwin Core (DwC) format data model
 #'
 #' @description Converts `bold.data.search` results from BCDM format to Darwin Core Standard format.
 #'
-#' @details This function maps BCDM (Barcode Core Data Model) fields to their Darwin Core equivalents using the official mapping file from the BCDM repository.
+#' @details This function maps BCDM (Barcode Core Data Model) fields to their Darwin Core equivalents.
+#' #' \emph{Important Note}: All fields should be available in the `bold.data.search` `tbl_sql` object otherwise, the error will throw an error
 #'
 #' @param bold.search.res A `tbl_sql` object containing BOLD search results
 #'
@@ -24,7 +25,7 @@
 #'
 #' # Get the DNAStringset object
 #'
-#' bold.dwc<-get.DNAStringSet(bold_search)
+#' bold.dwc<-get.dwc(bold_search)
 #'
 #' }
 #' @export
@@ -34,7 +35,16 @@ get.dwc<-function(bold.search.res)
 
   {
 
+  # Check if the input is a 'tbl_sql' input
+
   check.tbl.sql(bold.search.res)
+
+  # Check if all BCDM is available
+
+  bcdm_fields<-bold.bcdm.fields()
+
+  if(length(setdiff(bcdm_fields$field,
+                    colnames(bold.search.res)))>0) stop("Please check if all the BCDM fields are present in the data")
 
   # BOLD to BCDM mapping with certain updates for some field name mappings
 
@@ -81,7 +91,9 @@ get.dwc<-function(bold.search.res)
                                              bcdm_field=="primers_forward"~"pcr_primer_forward",
                                              bcdm_field=="primers_reverse"~"pcr_primer_reverse",
                                              bcdm_field=="sovereign_list"~"rightsHolder",
-                                             bcdm_field=='collection_date_end'~'eventDate2',
+                                             # bcdm_field=='collection_date_end'~'eventDate2',
+                                             bcdm_field=='tissue_type'~'materialEntityType',
+                                             bcdm_field=='voucher_type'~'disposition',
                                              TRUE~dwc_field))%>%
     mutate(bcdm_field=case_when(bcdm_field=='recordset_code_arr'~'bold_recordset_code_arr',
                                 TRUE~bcdm_field))%>%
@@ -108,7 +120,8 @@ get.dwc<-function(bold.search.res)
   # Apply the column name changes to the data
 
   dwc_output<-dwc_output%>%
-    rename(!!!rename_vec)
+    rename(!!!rename_vec)%>%
+    rename('country'='country/waterBody')
 
   return(dwc_output)
 
