@@ -139,6 +139,10 @@ bold.search.filters<-function (bold.df,
 
   if (!is.null(bounding.box)) {
 
+    if (!is.numeric(bounding.box) || length(bounding.box) != 4) stop("Error: 'bounding.box' must be a numeric vector of length 4: ",
+           "c(min_lon, max_lon, min_lat, max_lat).")
+
+
     min_lon <- bounding.box[1]
     max_lon <- bounding.box[2]
     min_lat <- bounding.box[3]

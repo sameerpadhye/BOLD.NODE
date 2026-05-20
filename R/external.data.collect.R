@@ -72,9 +72,15 @@ bold.data.collect <- function(
 
     query <- dbplyr::sql_render(bold.search.res)
 
-    DBI::dbExecute(
-      con,
-      paste0("COPY (",query,") TO '",output.path,"'(FORMAT PARQUET, COMPRESSION ZSTD)"))
+    tryCatch(
+      DBI::dbExecute(
+        con,
+        paste0("COPY (",query,") TO '",output.path,"'(FORMAT PARQUET, COMPRESSION ZSTD)")),
+      error = function(e) {
+        stop("Error: Parquet export failed for '", output.path, "'. ",
+             "Details: ", conditionMessage(e))
+      }
+    )
 
     message("Parquet export complete.")
 
@@ -126,7 +132,13 @@ bold.data.collect <- function(
           offset
         )
 
-        out <- DBI::dbGetQuery(con, sql_query)
+        out <- tryCatch(
+          DBI::dbGetQuery(con, sql_query),
+          error = function(e) {
+            stop("Error: Failed to collect chunk ", i, "/", total_chunks, ". ",
+                 "Details: ", conditionMessage(e))
+          }
+        )
 
         gc()
 

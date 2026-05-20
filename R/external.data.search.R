@@ -82,7 +82,15 @@ bold.data.search <- function(input.parquet,
 
   # Import the parquet data
 
-  parquet_data<-import_parquet_data(input.parquet)
+  parquet_data <- tryCatch(
+    import_parquet_data(input.parquet),
+    error = function(e) {
+      stop("Error: Failed to import parquet file '", input.parquet, "'. ",
+           "Details: ", conditionMessage(e))
+    }
+  )
+
+  # Empty parquet data check
 
   if(nrow(parquet_data%>%head(1)%>%collect())==0) stop("Error: Parquet data is empty")
 
@@ -124,6 +132,10 @@ bold.data.search <- function(input.parquet,
 
   if(!is.null(specific.cols))
   {
+
+    bcdm_fields<-bold.bcdm.fields()
+
+    if(any(!specific.cols%in%bcdm_fields$field)) stop("Please re-check the column names")
 
     result = result%>%
       dplyr::select(all_of(specific.cols))

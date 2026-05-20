@@ -22,29 +22,34 @@
 #'
 bold.bcdm.fields<-function (print.output=FALSE) {
 
+    bold.fields.data = suppressMessages(data.table::fread("https://raw.githubusercontent.com/boldsystems-central/BCDM/refs/heads/main/field_definitions.tsv",
+                                                          sep = '\t',
+                                                          quote = "",
+                                                          check.names = FALSE,
+                                                          verbose = FALSE,
+                                                          showProgress = FALSE,
+                                                          data.table = FALSE,
+                                                          fill=TRUE,
+                                                          tmpdir = tempdir()))%>%
+      dplyr::select(dplyr::matches("field",ignore.case=TRUE),
+                    dplyr::matches("definition",ignore.case=TRUE),
+                    dplyr::matches("data_type",ignore.case=TRUE))%>%
+      dplyr::mutate(R_field_types=dplyr::case_when(data_type=="string"~"character",
+                                                   data_type %in% c("char","array") ~"character",
+                                                   data_type=="float"~"numeric",
+                                                   data_type=="number"~"numeric",
+                                                   data_type=="integer"~"integer",
+                                                   data_type=="string:date"~"Date"))%>%
+      dplyr::select(-dplyr::matches("data_type",ignore.case=TRUE))%>%
+      dplyr::mutate(field=case_when(field=='country/ocean'~'country.ocean',
+                                    field=='province/state'~'province.state',
+                                    TRUE~field))
+    # error = function(e) {
+    #   stop("Error: Failed to fetch data.",
+    #        "Please check your internet connection and try again.")
+    # }
 
-  bold.fields.data= suppressMessages(data.table::fread("https://raw.githubusercontent.com/boldsystems-central/BCDM/refs/heads/main/field_definitions.tsv",
-                                                       sep = '\t',
-                                                       quote = "",
-                                                       check.names = FALSE,
-                                                       verbose = FALSE,
-                                                       showProgress = FALSE,
-                                                       data.table = FALSE,
-                                                       fill=TRUE,
-                                                       tmpdir = tempdir()))%>%
-    dplyr::select(dplyr::matches("field",ignore.case=TRUE),
-                  dplyr::matches("definition",ignore.case=TRUE),
-                  dplyr::matches("data_type",ignore.case=TRUE))%>%
-    dplyr::mutate(R_field_types=dplyr::case_when(data_type=="string"~"character",
-                                          data_type %in% c("char","array") ~"character",
-                                          data_type=="float"~"numeric",
-                                          data_type=="number"~"numeric",
-                                          data_type=="integer"~"integer",
-                                          data_type=="string:date"~"Date"))%>%
-    dplyr::select(-dplyr::matches("data_type",ignore.case=TRUE))%>%
-    dplyr::mutate(field=case_when(field=='country/ocean'~'country.ocean',
-                                  field=='province/state'~'province.state',
-                                  TRUE~field))
+
 
 
 

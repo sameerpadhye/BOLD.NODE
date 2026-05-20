@@ -43,6 +43,14 @@ get.DNAStringSet <- function(bold.search.res,
   # Check if input is a tbl_sql (helper function you already have)
   check.tbl.sql(bold.search.res)
 
+  # Check for Biostrings package
+  check_biostrings <- function() {
+    if (!requireNamespace("Biostrings", quietly = TRUE)) {
+      stop("Error: The 'Biostrings' package is required for this function. ",
+           "Please install it with: BiocManager::install('Biostrings')")
+    }
+  }
+
   # Ensure required columns exist
   required_cols <- c("nuc", "marker_code",cols_for_seq_names)
 

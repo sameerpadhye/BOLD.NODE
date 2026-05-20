@@ -133,12 +133,16 @@ get.occ.data <- function(bold.search.res,
 
   # Collect
   occ.data <- occ.data %>%
-    dplyr::collect() %>%
+    dplyr::collect()
+
+  if (is.data.frame(occ.data) && nrow(occ.data) == 0) stop("No data retrieved.Please re-check the search criteria.")
+
+  occ.data <- occ.data %>%
     tidyr::pivot_wider(
       names_from  = taxon,
       values_from = count,
-      values_fill = 0
-    )
+      values_fill = 0)
+
 
   return(occ.data)
 
