@@ -4,28 +4,28 @@
 #' Computes and returns consensus taxonomic identifications for each BIN in search results or a BCDM data frame.
 #'
 #' @details
-#' Consensus is defined as any name that exceeds the specified 'threshold', expressed as a proportion of
+#' Consensus is defined as any name that exceeds the specified `threshold`, expressed as a proportion of
 #' records with a concordant identification (i.e. same name, same rank). The function steps backwards through
-#' the eligible 'ranks' to determine the lowest available concordant identification that meets the criteria
-#' specified by 'threshold', 'min.ids', and 'enforce.scientific'. Different thresholds can be supplied
+#' the eligible `ranks` to determine the lowest available concordant identification that meets the criteria
+#' specified by `threshold`, `min.ids`, and `enforce.scientific`. Different thresholds can be supplied
 #' for each rank, if desired (either as a vector of equal length to ranks or as a named list). The function
-#' can also be applied to any other grouping variable by modifying 'groups'.
+#' can also be applied to any other grouping variable by modifying `groups`.
 #'
 #' \emph{Important Note}: As this function performs operations on the input data, it may be quite slow for very
-#' large data sets and/or weaker machines. Please check the size of 'bold.search.res' input objects
+#' large data sets and/or weaker machines. Please check the size of `bold.search.res` input objects
 #' using \code{\link{get.concise.summary}} and proceed with caution.
 #'
-#' @param bold.search.res A tbl_sql object obtained from 'bold.data.search'. (Optional; one of bold.search.res or bold.df must be provided.)
-#' @param bold.df Data frame in BCDM format, or any data.frame or data table minimally containing bin_uri (or other grouping variable) and taxonomic identifications for all available records. (Optional; one of bold.search.res or bold.df must be provided.)
+#' @param bold.search.res A `tbl_sql` object obtained from \code{\link{bold.data.search}}. (Optional; one of `bold.search.res` or `bold.df` must be provided.)
+#' @param bold.df Data frame in BCDM format, or any data.frame or data table minimally containing `bin_uri` (or other grouping variable) and taxonomic identifications for all available records. (Optional; one of `bold.search.res` or `bold.df` must be provided.)
 #' @param ranks A character vector of ranks to consider for consensus identifications. Defaults to the standard BOLD ranks.
 #' @param threshold Numeric value(s) between 0 and 1 indicating the minimum proportion of records in a BIN that must have a concordant identification in order to establish a consensus. Supply as a single value, a vector of length equal to the number of ranks in consideration, or a named list with names corresponding to ranks. If supplied as a named list, an optional "default" value can be set for any ranks that are not explicitly specified (e.g. \code{threshold = list(species = 0.95, default = 0.75)}). Default value is 1.0 (i.e. strict consensus at all ranks).
 #' @param min.ids Numeric value(s) indicating the minimum number of identifications needed to establish a consensus (names with fewer identifications are still included when calculating proportions). Supply as a single value, a vector of length equal to the number of ranks in consideration, or a named list with names corresponding to ranks. If supplied as a named list, an optional "default" value can be set for any ranks that are not explicitly specified (e.g. \code{min.ids = list(family = 1, default = 2)}). Default value is 2 (i.e. min 2 identifications at any rank).
 #' @param enforce.scientific A logical value indicating whether non-scientific, provisional names should be ignored when determining consensus. Default value is TRUE, meaning non-scientific names are ignored.
 #' @param groups Grouping variable. Default value is "bin_uri".
-#' @param discord.format String indicating the desired output format for the 'discordant_ids' column. Can be one of "text", or "list". If "text" (the default), the output is a string column with comma-separated values in the format "Taxon (proportion)". If "list", the output is a list column with names indicating competing identifications and values indicating proportions of discordant identifications for each taxon.
+#' @param discord.format String indicating the desired output format for the `discordant_ids` column. Can be one of "text", or "list". If "text" (the default), the output is a string column with comma-separated values in the format "Taxon (proportion)". If "list", the output is a list column with names indicating competing identifications and values indicating proportions of discordant identifications for each taxon.
 #'
 #' @returns A table of consensus identifications for each BIN (or other grouping variable), with the following columns:
-#'    bin_uri, member_count, concordant_rank, concordant_id, discordant_rank, discordant_ids.
+#'    `bin_uri`, `member_count`, `concordant_rank`, `concordant_id`, `discordant_rank`, `discordant_ids`.
 #'
 #' @importFrom data.table as.data.table fcase setnames set copy
 #'
