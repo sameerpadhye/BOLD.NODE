@@ -291,5 +291,6 @@ imported before using this function
 
 <img src="man/figures/README-benchmark_fig-1.jpeg" width="100%" />
 
-**The package is under active development and the functionality is
-subject to change**
+**The package is under active development and the functionality is subject to change**
+
+**Funding:** This work was funded by the [New Frontiers in Research Fund (NFRF) - Transformation 2020](https://sshrc-crsh.canada.ca/funding-financement/nfrf-fnfr/transformation/transformation-eng.aspx)
