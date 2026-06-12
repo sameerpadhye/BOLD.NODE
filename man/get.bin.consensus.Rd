@@ -17,9 +17,9 @@ get.bin.consensus(
 )
 }
 \arguments{
-\item{bold.search.res}{A tbl_sql object obtained from 'bold.data.search'. (Optional; one of bold.search.res or bold.df must be provided.)}
+\item{bold.search.res}{A \code{tbl_sql} object obtained from \code{\link{bold.data.search}}. (Optional; one of \code{bold.search.res} or \code{bold.df} must be provided.)}
 
-\item{bold.df}{Data frame in BCDM format, or any data.frame or data table minimally containing bin_uri (or other grouping variable) and taxonomic identifications for all available records. (Optional; one of bold.search.res or bold.df must be provided.)}
+\item{bold.df}{Data frame in BCDM format, or any data.frame or data table minimally containing \code{bin_uri} (or other grouping variable) and taxonomic identifications for all available records. (Optional; one of \code{bold.search.res} or \code{bold.df} must be provided.)}
 
 \item{ranks}{A character vector of ranks to consider for consensus identifications. Defaults to the standard BOLD ranks.}
 
@@ -31,25 +31,25 @@ get.bin.consensus(
 
 \item{groups}{Grouping variable. Default value is "bin_uri".}
 
-\item{discord.format}{String indicating the desired output format for the 'discordant_ids' column. Can be one of "text", or "list". If "text" (the default), the output is a string column with comma-separated values in the format "Taxon (proportion)". If "list", the output is a list column with names indicating competing identifications and values indicating proportions of discordant identifications for each taxon.}
+\item{discord.format}{String indicating the desired output format for the \code{discordant_ids} column. Can be one of "text", or "list". If "text" (the default), the output is a string column with comma-separated values in the format "Taxon (proportion)". If "list", the output is a list column with names indicating competing identifications and values indicating proportions of discordant identifications for each taxon.}
 }
 \value{
 A table of consensus identifications for each BIN (or other grouping variable), with the following columns:
-bin_uri, member_count, concordant_rank, concordant_id, discordant_rank, discordant_ids.
+\code{bin_uri}, \code{member_count}, \code{concordant_rank}, \code{concordant_id}, \code{discordant_rank}, \code{discordant_ids}.
 }
 \description{
 Computes and returns consensus taxonomic identifications for each BIN in search results or a BCDM data frame.
 }
 \details{
-Consensus is defined as any name that exceeds the specified 'threshold', expressed as a proportion of
+Consensus is defined as any name that exceeds the specified \code{threshold}, expressed as a proportion of
 records with a concordant identification (i.e. same name, same rank). The function steps backwards through
-the eligible 'ranks' to determine the lowest available concordant identification that meets the criteria
-specified by 'threshold', 'min.ids', and 'enforce.scientific'. Different thresholds can be supplied
+the eligible \code{ranks} to determine the lowest available concordant identification that meets the criteria
+specified by \code{threshold}, \code{min.ids}, and \code{enforce.scientific}. Different thresholds can be supplied
 for each rank, if desired (either as a vector of equal length to ranks or as a named list). The function
-can also be applied to any other grouping variable by modifying 'groups'.
+can also be applied to any other grouping variable by modifying \code{groups}.
 
 \emph{Important Note}: As this function performs operations on the input data, it may be quite slow for very
-large data sets and/or weaker machines. Please check the size of 'bold.search.res' input objects
+large data sets and/or weaker machines. Please check the size of \code{bold.search.res} input objects
 using \code{\link{get.concise.summary}} and proceed with caution.
 }
 \examples{
