@@ -10,7 +10,7 @@ bold.bcdm.fields(print.output = FALSE)
 \item{print.output}{Whether the output should be printed in the console. Default is FALSE.}
 }
 \value{
-A data frame containing information on all fields (columns).
+A data frame containing defintions for all fields (columns).
 }
 \description{
 Provides information on the field (column) names and their respective data type, all of which are compliant with the Barcode Core Data Model (BCDM).

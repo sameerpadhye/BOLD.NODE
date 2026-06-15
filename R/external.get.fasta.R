@@ -42,7 +42,7 @@
 get.fasta <- function(bold.search.res,
                       output.file,
                       fas.header,
-                      chunk.size = 1e6)
+                      chunk.size = 1000000)
 {
 
   # Check if input is a tbl_sql (helper function you already have)

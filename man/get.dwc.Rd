@@ -10,14 +10,14 @@ get.dwc(bold.search.res)
 \item{bold.search.res}{A \code{tbl_sql} object containing BOLD search results}
 }
 \value{
-A data frame with columns renamed to Darwin Core equivalent fields
+A data frame with columns mapped to Darwin Core equivalent fields
 }
 \description{
 Converts \code{bold.data.search} results from BCDM format to Darwin Core Standard format.
 }
 \details{
 This function maps BCDM (Barcode Core Data Model) fields to their Darwin Core equivalents.
-#' \emph{Important Note}: All fields should be available in the \code{bold.data.search} \code{tbl_sql} object otherwise, the error will throw an error
+\emph{Important Note}: All fields should be available in the \code{bold.data.search} \code{tbl_sql} object otherwise, the function will throw an error
 }
 \examples{
 \dontrun{

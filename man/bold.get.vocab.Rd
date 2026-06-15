@@ -16,7 +16,7 @@ bold.get.vocab(
 
 \item{specific.cols}{Name of the column to extract unique values from}
 
-\item{save.data}{Logical indicating whether to save the results to disk as a .rds file (default: FALSE)}
+\item{save.data}{Logical value indicating whether to save the results to disk as a .rds file (default: FALSE)}
 
 \item{output.file}{Path (without extension) for saving results as .rds file (required if save.data = TRUE)}
 }
@@ -24,7 +24,7 @@ bold.get.vocab(
 A list containing unique values from the specified column; if \code{save.data} = T, a \code{.rds} file exported locally
 }
 \description{
-Extracts distinct values of specified field/s in BOLD parquet data
+Extracts distinct values of specified field/s in BOLD parquet data.
 }
 \details{
 This function extracts unique values from one or more specified columns in BOLD parquet data. It handles both the parquet file and \code{tbl_sql} objects from \code{bold.data.search} as input. The results can be saved to disk as an RDS file for later use.

@@ -18,7 +18,7 @@ An \code{sf} object with point geometry in WGS84 coordinate system (EPSG:4326)
 Converts BOLD search results with coordinate data to spatial points (sf object).
 }
 \details{
-This function transforms the search results from \code{bold.data.search} into an \code{sf} object. Data chunking  option is available to manage large sizes to avoid memory issues. The function creates point geometries in the WGS84 coordinate system (EPSG:4326). Records that dont have coordinate data are removed during processing.
+This function transforms the search results from \code{bold.data.search} into an \code{sf} object. A data chunking  option is available to manage large sizes to avoid memory issues. The function creates point geometries in the WGS84 coordinate system (EPSG:4326). Records that dont have coordinate data are removed during processing.
 }
 \examples{
 \dontrun{

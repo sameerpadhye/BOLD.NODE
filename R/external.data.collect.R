@@ -1,9 +1,9 @@
 #' Collect and export BOLD NODE search results
 #'
-#' @description collects,outputs and exports the tbl_sql 'bold.data.search' results object, processing large datasets in user defined manageable chunks.
+#' @description collects and exports the tbl_sql 'bold.data.search' results object, processing large datasets in user-defined manageable chunks.
 #'
-#' @details This function collects (downloads it in the R session) the search results from `bold.data.search`. Data chunking and system sleep options are available to manage large sizes to avoid memory issues. The function also supports exporting the searches in either TSV or Parquet format. export=FALSE (default) returns the collected data in the R session only. The full output_path has to be provided (along with the intended file name and file extension) when export=TRUE.
-#' \emph{Important Note}: Some data searches (e.g. all Diptera) once collected can get very large and overload the RAM capacity for some machines.
+#' @details This function collects (loads it in the R session) the search results from `bold.data.search`. Data chunking and system sleep options are available to manage large sizes to avoid memory issues. The function also supports exporting the searches in either TSV or Parquet format. export=FALSE (default) returns the collected data in the R session only. The full output_path has to be provided (along with the intended file name and file extension) when export=TRUE.
+#' \emph{Important Note}: Some data searches (e.g. all Diptera) can get very large and overload the RAM capacity for some machines.
 #' @param bold.search.res A `tbl_sql` object obtained from `bold.data.search`
 #' @param chunk.size Maximum number of rows to process in each chunk. Default value is 1e6
 #' @param sys.sleep Time to sleep between chunks in seconds. Default value is 0
@@ -49,7 +49,7 @@
 
 bold.data.collect <- function(
     bold.search.res,
-    chunk.size = 1e6,
+    chunk.size = 1000000,
     sys.sleep = 0,
     export = FALSE,
     export.type = c("tsv", "parquet"),
