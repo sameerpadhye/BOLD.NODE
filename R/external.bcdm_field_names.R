@@ -11,67 +11,56 @@
 #'
 #' @examples
 #'
-#' bold.field.data<-bcdm_field_names()
+#' bold.field.data <- bcdm_field_names()
 #'
-#' head(bold.field.data,10)
+#' head(bold.field.data, 10)
 #'
 #' @importFrom dplyr matches case_when select mutate %>%
 #' @importFrom data.table fread
 #'
 #' @export
 #'
-bcdm_field_names<-function (print.output=FALSE) {
+bcdm_field_names <- function(print.output = FALSE) {
+  bold.fields.data <- suppressMessages(data.table::fread("https://raw.githubusercontent.com/boldsystems-central/BCDM/refs/heads/main/field_definitions.tsv",
+    sep = "\t",
+    quote = "",
+    check.names = FALSE,
+    verbose = FALSE,
+    showProgress = FALSE,
+    data.table = FALSE,
+    fill = TRUE,
+    tmpdir = tempdir()
+  )) %>%
+    dplyr::select(
+      dplyr::matches("field", ignore.case = TRUE),
+      dplyr::matches("definition", ignore.case = TRUE),
+      dplyr::matches("data_type", ignore.case = TRUE)
+    ) %>%
+    dplyr::mutate(R_field_types = dplyr::case_when(
+      data_type == "string" ~ "character",
+      data_type %in% c("char", "array") ~ "character",
+      data_type == "float" ~ "numeric",
+      data_type == "number" ~ "numeric",
+      data_type == "integer" ~ "integer",
+      data_type == "string:date" ~ "Date"
+    )) %>%
+    dplyr::select(-dplyr::matches("data_type", ignore.case = TRUE)) %>%
+    dplyr::mutate(field = case_when(
+      field == "country/ocean" ~ "country.ocean",
+      field == "province/state" ~ "province.state",
+      TRUE ~ field
+    ))
+  # error = function(e) {
+  #   stop("Error: Failed to fetch data.",
+  #        "Please check your internet connection and try again.")
+  # }
 
-    bold.fields.data = suppressMessages(data.table::fread("https://raw.githubusercontent.com/boldsystems-central/BCDM/refs/heads/main/field_definitions.tsv",
-                                                          sep = '\t',
-                                                          quote = "",
-                                                          check.names = FALSE,
-                                                          verbose = FALSE,
-                                                          showProgress = FALSE,
-                                                          data.table = FALSE,
-                                                          fill=TRUE,
-                                                          tmpdir = tempdir()))%>%
-      dplyr::select(dplyr::matches("field",ignore.case=TRUE),
-                    dplyr::matches("definition",ignore.case=TRUE),
-                    dplyr::matches("data_type",ignore.case=TRUE))%>%
-      dplyr::mutate(R_field_types=dplyr::case_when(data_type=="string"~"character",
-                                                   data_type %in% c("char","array") ~"character",
-                                                   data_type=="float"~"numeric",
-                                                   data_type=="number"~"numeric",
-                                                   data_type=="integer"~"integer",
-                                                   data_type=="string:date"~"Date"))%>%
-      dplyr::select(-dplyr::matches("data_type",ignore.case=TRUE))%>%
-      dplyr::mutate(field=case_when(field=='country/ocean'~'country.ocean',
-                                    field=='province/state'~'province.state',
-                                    TRUE~field))
-    # error = function(e) {
-    #   stop("Error: Failed to fetch data.",
-    #        "Please check your internet connection and try again.")
-    # }
 
-
-
-
-
-
-  if(print.output==TRUE)
-
-    {
-
+  if (print.output == TRUE) {
     return(bold.fields.data)
-
-  }
-
-  else
-
-    {
-
+  } else {
     # This is so that the whole output is not printed in the console
 
     invisible(bold.fields.data)
-
-
-
   }
-
 }

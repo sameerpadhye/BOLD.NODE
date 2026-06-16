@@ -35,45 +35,42 @@
 #'
 #' # Taxonomy
 #' bold_search <- bold_parquet_search(
-#' input.parquet=parquet_file,
-#' taxonomy = c("Odonata","Poecilia")
+#'   input.parquet = parquet_file,
+#'   taxonomy = c("Odonata", "Poecilia")
 #' )
 #'
 #' # Geography
 #' bold_search <- bold_parquet_search(
-#' input.parquet=parquet_file,
-#' geography = "Canada"
+#'   input.parquet = parquet_file,
+#'   geography = "Canada"
 #' )
 #'
 #' # Combination of many search criteria
 #' bold_search <- bold_parquet_search(
-#' input.parquet=parquet_file,
-#' taxonomy = "Coleoptera",
-#' geography = "Canada",
-#' marker = "COI-5P",
-#' basecount = c(500, 660)
+#'   input.parquet = parquet_file,
+#'   taxonomy = "Coleoptera",
+#'   geography = "Canada",
+#'   marker = "COI-5P",
+#'   basecount = c(500, 660)
 #' )
-#'
-#'
 #' }
 #'
 #' @export
 bold_parquet_search <- function(input.parquet,
-                             ids=NULL,
-                             bins=NULL,
-                             taxonomy=NULL,
-                             geography=NULL,
-                             institutes=NULL,
-                             identified.by=NULL,
-                             seq.source=NULL,
-                             marker=NULL,
-                             basecount=NULL,
-                             biogeo.cat=NULL,
-                             dataset.projects=NULL,
-                             bounding.box=NULL,
-                             ambi.base.cutoff = NULL,
-                             specific.cols=NULL)
-{
+                                ids = NULL,
+                                bins = NULL,
+                                taxonomy = NULL,
+                                geography = NULL,
+                                institutes = NULL,
+                                identified.by = NULL,
+                                seq.source = NULL,
+                                marker = NULL,
+                                basecount = NULL,
+                                biogeo.cat = NULL,
+                                dataset.projects = NULL,
+                                bounding.box = NULL,
+                                ambi.base.cutoff = NULL,
+                                specific.cols = NULL) {
   # Condition to check the file extension
 
   if (tolower(tools::file_ext(input.parquet)) != "parquet") {
@@ -85,79 +82,79 @@ bold_parquet_search <- function(input.parquet,
   parquet_data <- tryCatch(
     import_parquet_data(input.parquet),
     error = function(e) {
-      stop("Error: Failed to import parquet file '", input.parquet, "'. ",
-           "Details: ", conditionMessage(e))
+      stop(
+        "Error: Failed to import parquet file '", input.parquet, "'. ",
+        "Details: ", conditionMessage(e)
+      )
     }
   )
 
   # Empty parquet data check
 
-  if(nrow(parquet_data%>%head(1)%>%collect())==0) stop("Error: Parquet data is empty")
+  if (nrow(parquet_data %>% head(1) %>% collect()) == 0) stop("Error: Parquet data is empty")
 
   # mapping the fetch.filter arguments with the bold.search function arguments
 
-  bold.search.args <- list(ids=ids,
-                           bins = bins,
-                           taxonomy = taxonomy,
-                           geography = geography,
-                           institutes = institutes,
-                           identified.by=identified.by,
-                           seq.source=seq.source,
-                           marker=marker,
-                           basecount=basecount,
-                           biogeo_cat=biogeo.cat,
-                           dataset.projects=dataset.projects,
-                           bounding.box=bounding.box,
-                           ambi.base.cutoff=ambi.base.cutoff)
+  bold.search.args <- list(
+    ids = ids,
+    bins = bins,
+    taxonomy = taxonomy,
+    geography = geography,
+    institutes = institutes,
+    identified.by = identified.by,
+    seq.source = seq.source,
+    marker = marker,
+    basecount = basecount,
+    biogeo_cat = biogeo.cat,
+    dataset.projects = dataset.projects,
+    bounding.box = bounding.box,
+    ambi.base.cutoff = ambi.base.cutoff
+  )
 
   # Filter out NULL values and get their values
 
   # Null arguments
 
-  null_args=sapply(bold.search.args,
-                   is.null)
+  null_args <- sapply(
+    bold.search.args,
+    is.null
+  )
 
   # Selecting the non null arguments
 
-  non_null_args = bold.search.args[!null_args]
+  non_null_args <- bold.search.args[!null_args]
 
   # add the parquet data to the list
 
   non_null_args$bold.df <- parquet_data
 
   # Apply all the search filters on the non null arguments
-  result <- do.call(bold.search.filters,
-                    non_null_args)
+  result <- do.call(
+    bold.search.filters,
+    non_null_args
+  )
 
 
-  if(!is.null(specific.cols))
-  {
+  if (!is.null(specific.cols)) {
+    bcdm_fields <- bcdm_field_names()
 
-    bcdm_fields<-bcdm_field_names()
+    if (any(!specific.cols %in% bcdm_fields$field)) stop("Please re-check the column names")
 
-    if(any(!specific.cols%in%bcdm_fields$field)) stop("Please re-check the column names")
-
-    result = result%>%
+    result <- result %>%
       dplyr::select(all_of(specific.cols))
 
     result
-
-
-  }
-
-  else
-  {
+  } else {
     result
   }
 
 
-  tot_records=result%>%
-    summarise(Total_records = n())%>%
+  tot_records <- result %>%
+    summarise(Total_records = n()) %>%
     collect()
 
-  message(paste("The search has",tot_records,"records in the dataset",sep=" "))
+  message(paste("The search has", tot_records, "records in the dataset", sep = " "))
 
 
   return(invisible(result))
-
 }

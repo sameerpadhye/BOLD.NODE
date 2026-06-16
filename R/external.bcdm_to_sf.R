@@ -20,19 +20,18 @@
 #'
 #' # Search the BOLD data
 #' bold_search <- bold_parquet_search(
-#' input.parquet=parquet_file,
-#' taxonomy = "Odonata",
-#' geography = "Malaysia")
+#'   input.parquet = parquet_file,
+#'   taxonomy = "Odonata",
+#'   geography = "Malaysia"
+#' )
 #'
 #' # Get the occurrence matrix
 #'
 #' sf_data <- bcdm_to_sf(bold_search, chunk.size = 100000)
-#'
 #' }
 #'
 #' @export
 bcdm_to_sf <- function(bold.search.res, chunk.size = 100000) {
-
   check.tbl.sql(bold.search.res)
 
   if (!"coord" %in% colnames(bold.search.res)) {
@@ -44,37 +43,41 @@ bcdm_to_sf <- function(bold.search.res, chunk.size = 100000) {
 
   DBI::dbExecute(con, "PRAGMA disable_progress_bar;")
 
-  indices <- get_chunk_indices(input_file = bold.search.res,
-                               chunksize = chunk.size)
+  indices <- get_chunk_indices(
+    input_file = bold.search.res,
+    chunksize = chunk.size
+  )
 
-  DBI::dbExecute(con,"PRAGMA enable_progress_bar;")
+  DBI::dbExecute(con, "PRAGMA enable_progress_bar;")
 
   # Optional sql query
 
   geo_data <- bold.search.res %>%
     dplyr::filter(!is.na(coord)) %>%
-    dplyr::mutate(coord_clean = sql("replace(replace(trim(coord), '[', ''), ']', '')"),
-                    # instr here gives the position of the substring. Here it checks that the string contains a comma before splitting and casting as a double
-                    lat = sql("CASE WHEN instr(replace(replace(trim(coord), '[', ''), ']', ''), ',') > 0
+    dplyr::mutate(
+      coord_clean = sql("replace(replace(trim(coord), '[', ''), ']', '')"),
+      # instr here gives the position of the substring. Here it checks that the string contains a comma before splitting and casting as a double
+      lat = sql("CASE WHEN instr(replace(replace(trim(coord), '[', ''), ']', ''), ',') > 0
           THEN CAST(split_part(replace(replace(trim(coord), '[', ''), ']', ''), ',', 1) AS DOUBLE)
           ELSE NULL END"),
-                    lon = sql("CASE WHEN instr(replace(replace(trim(coord), '[', ''), ']', ''), ',') > 0
+      lon = sql("CASE WHEN instr(replace(replace(trim(coord), '[', ''), ']', ''), ',') > 0
           THEN CAST(split_part(replace(replace(trim(coord), '[', ''), ']', ''), ',', 2) AS DOUBLE)
           ELSE NULL END"),
-                    row_num = sql("row_number() over (order by coord)"))%>%
+      row_num = sql("row_number() over (order by coord)")
+    ) %>%
     dplyr::compute()
 
   sf_data_list <- lapply(indices$chunk_indices, function(i) {
     start <- (i - 1) * indices$chunk_size + 1
-    end   <- min(i * indices$chunk_size, indices$total_rows)
+    end <- min(i * indices$chunk_size, indices$total_rows)
 
     geo_data %>%
       dplyr::filter(row_num >= start & row_num <= end) %>%
       dplyr::select(-row_num, coord_clean) %>%
-      filter(!is.na(coord_clean))%>%
+      filter(!is.na(coord_clean)) %>%
       dplyr::collect() %>%
-      dplyr::filter(!is.na(lat)|!is.na(lon))%>%
-      st_as_sf(coords = c("lon","lat"), crs = 4326, remove = FALSE)
+      dplyr::filter(!is.na(lat) | !is.na(lon)) %>%
+      st_as_sf(coords = c("lon", "lat"), crs = 4326, remove = FALSE)
   })
 
   sf_data <- dplyr::bind_rows(sf_data_list)

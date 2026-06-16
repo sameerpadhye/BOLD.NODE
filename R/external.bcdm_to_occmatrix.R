@@ -24,39 +24,39 @@
 #'
 #' # Search the BOLD data
 #' bold_search <- bold_parquet_search(
-#' input.parquet=parquet_file,
-#' taxonomy = "Odonata",
-#' geography = "Thailand")
+#'   input.parquet = parquet_file,
+#'   taxonomy = "Odonata",
+#'   geography = "Thailand"
+#' )
 #'
 #' # Get the occurrence matrix
 #'
 #' occurrence_data <- bcdm_to_occmatrix(
 #'   bold_search,
-#'   kingdom = 'Animalia',
+#'   kingdom = "Animalia",
 #'   taxon.rank = "family",
 #'   site.cat = "region"
-#'   )
-#'
+#' )
 #' }
 #' @export
 bcdm_to_occmatrix <- function(bold.search.res,
-                         kingdom="Animalia",
-                         taxon.rank,
-                         taxon.name = NULL,
-                         site.cat = NULL,
-                         pre.abs = FALSE)
-{
-
+                              kingdom = "Animalia",
+                              taxon.rank,
+                              taxon.name = NULL,
+                              site.cat = NULL,
+                              pre.abs = FALSE) {
   check.tbl.sql(bold.search.res)
 
-  rank_map <- c(kingdom = "kingdom",
-                phylum = "phylum",
-                class   = "class",
-                order   = "order",
-                family  = "family",
-                genus   = "genus",
-                species = "species",
-                bin_uri = 'bin_uri')
+  rank_map <- c(
+    kingdom = "kingdom",
+    phylum = "phylum",
+    class = "class",
+    order = "order",
+    family = "family",
+    genus = "genus",
+    species = "species",
+    bin_uri = "bin_uri"
+  )
 
   taxon.rank <- rank_map[[tolower(taxon.rank)]]
 
@@ -65,51 +65,42 @@ bcdm_to_occmatrix <- function(bold.search.res,
     stop("Invalid taxonomic rank supplied.")
   }
 
-  cols_to_select <- Filter(Negate(is.null),
-                           site.cat)
+  cols_to_select <- Filter(
+    Negate(is.null),
+    site.cat
+  )
 
 
-  if(kingdom=='Animalia')
-
-  {
-
+  if (kingdom == "Animalia") {
     occ.data <- bold.search.res %>%
       dplyr::select(
         bin_uri = matches("bin_uri$", ignore.case = TRUE),
         coord   = matches("coord$", ignore.case = TRUE),
         taxon   = !!rlang::sym(taxon.rank),
-        dplyr::all_of(cols_to_select)) %>%
-      dplyr::filter(!is.na(bin_uri),bin_uri!='')%>%
+        dplyr::all_of(cols_to_select)
+      ) %>%
+      dplyr::filter(!is.na(bin_uri), bin_uri != "") %>%
       dplyr::filter(!is.na(taxon))
-
-
-
-  } else if (kingdom%in%c('Plantae','Protista','Fungi','Mixture', 'Bacteria'))
-
-  {
-
+  } else if (kingdom %in% c("Plantae", "Protista", "Fungi", "Mixture", "Bacteria")) {
     occ.data <- bold.search.res %>%
       dplyr::select(
         nuc = matches("nuc$", ignore.case = TRUE),
-        coord   = matches("coord$", ignore.case = TRUE),
-        taxon   = !!rlang::sym(taxon.rank),
-        dplyr::all_of(cols_to_select)) %>%
-      dplyr::filter(!is.na(nuc),nuc!='')%>%
+        coord = matches("coord$", ignore.case = TRUE),
+        taxon = !!rlang::sym(taxon.rank),
+        dplyr::all_of(cols_to_select)
+      ) %>%
+      dplyr::filter(!is.na(nuc), nuc != "") %>%
       dplyr::filter(!is.na(taxon))
-
   }
 
 
   if (!is.null(taxon.name)) {
-
     occ.data <- occ.data %>%
       dplyr::filter(taxon %in% taxon.name)
-
   }
 
 
   if (!is.null(site.cat)) {
-
     occ.data <- occ.data %>%
       dplyr::filter(!is.na(.data[[site.cat]])) %>%
       dplyr::count(
@@ -117,9 +108,7 @@ bcdm_to_occmatrix <- function(bold.search.res,
         taxon,
         name = "count"
       )
-
   } else {
-
     occ.data <- occ.data %>%
       dplyr::filter(!is.na(coord)) %>%
       dplyr::count(
@@ -127,7 +116,6 @@ bcdm_to_occmatrix <- function(bold.search.res,
         taxon,
         name = "count"
       )
-
   }
 
 
@@ -141,10 +129,9 @@ bcdm_to_occmatrix <- function(bold.search.res,
     tidyr::pivot_wider(
       names_from  = taxon,
       values_from = count,
-      values_fill = 0)
+      values_fill = 0
+    )
 
 
   return(occ.data)
-
-
 }

@@ -23,38 +23,39 @@
 #'
 #' # Search the BOLD data
 #' bold_search <- bold_parquet_search(
-#' input.parquet=parquet_file,
-#' taxonomy = "Coleoptera",
-#' geography = "Canada",
-#' marker = "COI-5P",
-#' basecount = c(500, 660)
+#'   input.parquet = parquet_file,
+#'   taxonomy = "Coleoptera",
+#'   geography = "Canada",
+#'   marker = "COI-5P",
+#'   basecount = c(500, 660)
 #' )
 #'
 #' # Collect the data  (no export)
 #' bold_search_collect(
-#' bold_search,
-#' chunk.size = 50000,
-#' export = FALSE)
+#'   bold_search,
+#'   chunk.size = 50000,
+#'   export = FALSE
+#' )
 #'
 #' # Collect and export
 #' bold_search_collect(
-#' bold_search,
-#' chunk.size = 50000,
-#' export = TRUE,
-#' export.type = "parquet",
-#' output.path = 'userdefinedpath')
-#'
-#'}
+#'   bold_search,
+#'   chunk.size = 50000,
+#'   export = TRUE,
+#'   export.type = "parquet",
+#'   output.path = "userdefinedpath"
+#' )
+#' }
 #' @export
 
 bold_search_collect <- function(
-    bold.search.res,
-    chunk.size = 1000000,
-    sys.sleep = 0,
-    export = FALSE,
-    export.type = c("tsv", "parquet"),
-    output.path = NULL)
-  {
+  bold.search.res,
+  chunk.size = 1000000,
+  sys.sleep = 0,
+  export = FALSE,
+  export.type = c("tsv", "parquet"),
+  output.path = NULL
+) {
   # Match the type of file for export
   export.type <- match.arg(export.type)
 
@@ -75,10 +76,13 @@ bold_search_collect <- function(
     tryCatch(
       DBI::dbExecute(
         con,
-        paste0("COPY (",query,") TO '",output.path,"'(FORMAT PARQUET, COMPRESSION ZSTD)")),
+        paste0("COPY (", query, ") TO '", output.path, "'(FORMAT PARQUET, COMPRESSION ZSTD)")
+      ),
       error = function(e) {
-        stop("Error: Parquet export failed for '", output.path, "'. ",
-             "Details: ", conditionMessage(e))
+        stop(
+          "Error: Parquet export failed for '", output.path, "'. ",
+          "Details: ", conditionMessage(e)
+        )
       }
     )
 
@@ -88,11 +92,11 @@ bold_search_collect <- function(
   }
 
   # TSV export needs chunking of data for collection before export
-  #1 Getting chunks
+  # 1 Getting chunks
 
   # Disable progress bar
 
-   DBI::dbExecute(con, "PRAGMA disable_progress_bar;")
+  DBI::dbExecute(con, "PRAGMA disable_progress_bar;")
 
   chunk_info <- get_chunk_indices(
     input_file = bold.search.res,
@@ -135,8 +139,10 @@ bold_search_collect <- function(
         out <- tryCatch(
           DBI::dbGetQuery(con, sql_query),
           error = function(e) {
-            stop("Error: Failed to collect chunk ", i, "/", total_chunks, ". ",
-                 "Details: ", conditionMessage(e))
+            stop(
+              "Error: Failed to collect chunk ", i, "/", total_chunks, ". ",
+              "Details: ", conditionMessage(e)
+            )
           }
         )
 

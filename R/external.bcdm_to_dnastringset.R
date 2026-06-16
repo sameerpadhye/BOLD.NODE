@@ -20,45 +20,47 @@
 #'
 #' # Search the BOLD data
 #' bold_search <- bold_parquet_search(
-#' input.parquet=parquet_file,
-#' taxonomy = "Coleoptera",
-#' geography = "Canada",
-#' basecount = c(500, 660)
+#'   input.parquet = parquet_file,
+#'   taxonomy = "Coleoptera",
+#'   geography = "Canada",
+#'   basecount = c(500, 660)
 #' )
 #'
 #' # Get the DNAStringset object
 #'
-#' bold.dnastringset<-bcdm_to_dnastringset(bold_search,
-#' marker="COI-5P",
-#' cols_for_seq_names = c("processid","family")
+#' bold.dnastringset <- bcdm_to_dnastringset(bold_search,
+#'   marker = "COI-5P",
+#'   cols_for_seq_names = c("processid", "family")
 #' )
-#'
 #' }
 #'
 #' @export
 bcdm_to_dnastringset <- function(bold.search.res,
-                             marker = NULL,
-                             cols_for_seq_names) {
-
+                                 marker = NULL,
+                                 cols_for_seq_names) {
   # Check if input is a tbl_sql (helper function you already have)
   check.tbl.sql(bold.search.res)
 
   # Check for Biostrings package
   check_biostrings <- function() {
     if (!requireNamespace("Biostrings", quietly = TRUE)) {
-      stop("Error: The 'Biostrings' package is required for this function. ",
-           "Please install it with: BiocManager::install('Biostrings')")
+      stop(
+        "Error: The 'Biostrings' package is required for this function. ",
+        "Please install it with: BiocManager::install('Biostrings')"
+      )
     }
   }
 
   # Ensure required columns exist
-  required_cols <- c("nuc", "marker_code",cols_for_seq_names)
+  required_cols <- c("nuc", "marker_code", cols_for_seq_names)
 
   missing_cols <- setdiff(required_cols, colnames(bold.search.res))
 
-  if(length(missing_cols) > 0) {
-    stop("The following required columns are missing from the input: ",
-         paste(missing_cols, collapse = ", "))
+  if (length(missing_cols) > 0) {
+    stop(
+      "The following required columns are missing from the input: ",
+      paste(missing_cols, collapse = ", ")
+    )
   }
 
   # Start processing tbl_sql
@@ -78,7 +80,7 @@ bcdm_to_dnastringset <- function(bold.search.res,
       filter(.data$marker_code %in% marker)
   }
 
-  con<-dbplyr::remote_con(seq.data)
+  con <- dbplyr::remote_con(seq.data)
 
   # Quote column names
   quoted_cols <- DBI::dbQuoteIdentifier(con, cols_for_seq_names)
@@ -99,7 +101,9 @@ bcdm_to_dnastringset <- function(bold.search.res,
   # Pull into R and convert to named character vector
   seq.from.data <- obtain.seq.from.data %>%
     collect() %>%
-    { setNames(as.character(.$nuc), .$msa.seq.name) }
+    {
+      setNames(as.character(.$nuc), .$msa.seq.name)
+    }
 
 
   # Convert to DNAStringSet
@@ -107,8 +111,3 @@ bcdm_to_dnastringset <- function(bold.search.res,
 
   return(dna.4.align)
 }
-
-
-
-
-

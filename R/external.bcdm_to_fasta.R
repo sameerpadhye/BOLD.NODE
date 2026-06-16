@@ -21,30 +21,26 @@
 #'
 #' # Search the BOLD data
 #' bold_search <- bold_parquet_search(
-#' input.parquet=parquet_file,
-#' taxonomy = "Coleoptera",
-#' geography = "Canada",
-#' marker = "COI-5P",
-#' basecount = c(500, 660)
+#'   input.parquet = parquet_file,
+#'   taxonomy = "Coleoptera",
+#'   geography = "Canada",
+#'   marker = "COI-5P",
+#'   basecount = c(500, 660)
 #' )
 #'
 #' # Get a fasta file
 #' bcdm_to_fasta(
-#' bold_search,
-#' output.file = "trial2.fas",
-#' fas.header = c("bin_uri", "processid")
-#')
-#'
-#'
+#'   bold_search,
+#'   output.file = "trial2.fas",
+#'   fas.header = c("bin_uri", "processid")
+#' )
 #' }
 #'
 #' @export
 bcdm_to_fasta <- function(bold.search.res,
-                      output.file,
-                      fas.header,
-                      chunk.size = 1000000)
-{
-
+                          output.file,
+                          fas.header,
+                          chunk.size = 1000000) {
   # Check if input is a tbl_sql (helper function you already have)
   check.tbl.sql(bold.search.res)
 
@@ -71,10 +67,12 @@ bcdm_to_fasta <- function(bold.search.res,
       # Row number for chunking
       row_num  = sql("row_number() over (order by nuc)")
     ) %>%
-    dplyr::compute()  # temporary table, safe for repeated runs
+    dplyr::compute() # temporary table, safe for repeated runs
 
   # Count total rows
-  total_rows <- seq.data %>% summarise(n = sql("count(*)")) %>% pull(n)
+  total_rows <- seq.data %>%
+    summarise(n = sql("count(*)")) %>%
+    pull(n)
 
   # Determine chunk indices
   num_chunks <- ceiling(total_rows / chunk.size)
@@ -86,7 +84,7 @@ bcdm_to_fasta <- function(bold.search.res,
   # Loop through chunks
   for (i in seq_len(num_chunks)) {
     start <- (i - 1) * chunk.size + 1
-    end   <- min(i * chunk.size, total_rows)
+    end <- min(i * chunk.size, total_rows)
 
     chunk <- seq.data %>%
       dplyr::filter(row_num >= start & row_num <= end) %>%
