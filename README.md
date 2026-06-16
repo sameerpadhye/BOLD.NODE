@@ -3,7 +3,7 @@
 
 # BOLD.NODE
 
-**BOLD.NODE** **(No API Offline Data Explorer)** is an R package that offers functionality to efficiently
+**BOLD.NODE** is an R package that offers functionality to efficiently
 explore BOLD dataset releases
 (<https://boldsystems.org/data/data-packages/>) in the **Barcode Core
 Data Model (BCDM)** format (for more information on BCDM please visit
@@ -30,7 +30,7 @@ downstream analyses:
 
 The user manual for the package can be downloaded from the following
 link
-(<https://github.com/boldsystems-central/BOLDconnectR_examples/blob/main/BOLD.NODE_0.0.2.pdf>)
+(<https://github.com/boldsystems-central/BOLDconnectR_examples/blob/main/BOLD.NODE_1.0.0.pdf>)
 
 ## Installation
 
@@ -38,8 +38,7 @@ The package can be installed using `devtools::install_github` function
 from the `devtools` package in R (which needs to be installed before)
 
 ``` r
-
-devtools::install_github('https://github.com/sameerpadhye/BOLD.NODE.git')
+devtools::install_github("https://github.com/sameerpadhye/BOLD.NODE.git")
 ```
 
 ## Downloading Data Packages
@@ -52,28 +51,27 @@ functions
 
 ## BOLD.NODE has 11 functions:
 
-1.  bold.bcdm.fields
-2.  bold.data.search
-3.  bold.data.collect
-4.  get.concise.summary
-5.  *get.DNAStringset*
-6.  get.bin.consensus
-7.  get.DwC
-8.  get.fasta
-9.  get.occ.data
-10. get.sf
-11. get.vocab
+1.  bcdm_field_names
+2.  bcdm_field_values
+3.  bold_parquet_search
+4.  bold_search_collect
+5.  get_bin_consensus
+6.  get_concise_summary
+7.  *bcdm_to_dnastringset*
+8.  bcdm_to_dwc
+9.  bcdm_to_fasta
+10. bcdm_to_occmatrix
+11. bcdm_to_sf
 
-**Note** *Function 5*: *get.DNAStringset* requires the package
+**Note** *Function 7*: *bcdm_to_dnastringset* requires the package
 `Biostrings` to be installed and imported in the R session beforehand.
 It can be installed using using `BiocManager` package.
 
 ``` r
-
 # if (!requireNamespace("BiocManager", quietly=TRUE))
-#   
+#
 # install.packages("BiocManager")
-# 
+#
 # BiocManager::install("Biostrings")
 ```
 
@@ -82,13 +80,17 @@ It can be installed using using `BiocManager` package.
 A typical workflow for exploring and BOLD data (Steps in *italics* are
 optional but useful in some instances):
 
-1.  `bold.get.vocab` *(Provides unique terms present in a particular
-    field, making it easier for exploring* `bold.data.search` *search
+1.  `bcdm_field_values` and `bcdm_field_values` *(Provide the names of
+    different BCDM fields and unique terms present in a particular
+    field, making it easier for exploring* `bold_parquet_search` *search
     parameters)*
-2.  `bold.data.search` (Searches the dataset based on the user criteria
-    and prints the number of records available)
-3.  `bold.data.collect`(Collects the output of the `bold.data.search` in
-    memory for downstream exploration/analyses).
+2.  `bold_parquet_search` (Searches the dataset based on the user
+    criteria and prints the number of records available)
+3.  `bold_search_collect`(Collects the output of the
+    `bold_parquet_search` in memory for downstream
+    exploration/analyses).
+4.  *Optional*: Transform the searched data into a `fasta` or `sf` or
+    `DNAStringset` or an `occurrence matrix` for downstream analyses
 
 ### 1.Get the vocabulary for specific fields
 
@@ -96,10 +98,9 @@ This function can be used for getting unique values of some of the
 categorical fields (e.g. institutes) to make searches easier
 
 ``` r
-
 # parquet_file<-'path where the parquet file from BOLD is downloaded'
 
-# vocab.data <- bold.get.vocab(parquet_file,specific.cols = c("country.ocean"))
+# vocab.data <- bcdm_field_values(parquet_file,specific.cols = c("country.ocean"))
 ```
 
 ### 2.Search the dataset
@@ -114,28 +115,27 @@ internally. The search result is a `tbl_sql` object that is used for
 collecting or transforming the data.
 
 ``` r
-
 # parquet_file<-'path where the parquet file from BOLD is downloaded'
 
-#1 Taxonomy 
+# 1 Taxonomy
 
-# bold_search_taxonomy <- bold.data.search(parquet_path=parquet_file,
+# bold_search_taxonomy <- bold_parquet_search(parquet_path=parquet_file,
 # taxonomy = c("Odonata","Poecilia"))
 
-#2 Geography
+# 2 Geography
 
-# bold_search_geography <- bold.data.search(parquet_path=parquet_file,
-# taxonomy = c("Panthera pardus),
+# bold_search_geography <- bold_parquet_search(parquet_path=parquet_file,
+# taxonomy = c("Panthera pardus"),
 # geography = c("India"))
 
-#3 Combination of many search criteria
+# 3 Combination of many search criteria
 
-# bold_search_combination <- bold.data.search(
+# bold_search_combination <- bold_parquet_search(
 # parquet_path=parquet_file,
 # taxonomy = "Coleoptera",
 # geography = "Canada",
 # marker = "COI-5P",
-# basecount = c(500, 660)
+# basecount = c(500, 660))
 ```
 
 ### 3.Collect the searched data
@@ -147,40 +147,133 @@ total records in the search) after search before collecting data to
 ensure you don’t exceed the available RAM.
 
 ``` r
-
 # Collect data (no export)
 
-# collected_data<-bold.data.collect(
+# bold_search_geography <- bold_parquet_search(parquet_path=parquet_file,
+# taxonomy = c("Panthera pardus"),
+# geography = c("India"))
+
+# collected_data<-bold_search_collect(
 # bold_search_geography,
 # chunk.size = 50000,
 # export = FALSE)
 
 # Collect data (with parquet export)
 
-# bold.data.collect(
-# bold_search_combination,
+# bold_search_collect(
+# bold_search_geography,
 # chunk.size = 50000,
 # export = TRUE,
 # export.type = "parquet",
 # output.path = userdefinedpath)
 ```
 
-### The `get.` functionality
+### The `bcdm_to_` functionality
 
-The `get.` functions convert the search results from the
-`bold.data.search` into objects used in packages such as `vegan`, `msa`,
-`DECIPHER`, `terra`, `geodata` etc.
+The `bcdm_to_` functions convert the search results from the
+`bold_parquet_search` into objects used in packages such as `vegan`,
+`msa`, `DECIPHER`, `terra`, `geodata` etc.
 
-#### `get.concise.summary`
+#### `bcdm_to_fasta`
+
+Creates a fasta file with customized headers of the searched data. This
+can be exported locally for any downstream analytical pipelines in third
+party tools
+
+``` r
+#  Search the data
+
+# bold_search <- bold_parquet_search(
+# input.parquet=parquet_file,
+# taxonomy = "Coleoptera",
+# geography = "Canada",
+# marker = "COI-5P",
+# basecount = c(500, 660))
+
+# Get fasta
+
+# bcdm_to_fasta(
+# bold_search,
+# output.file = "trial.fas",
+# fas.header = c("bin_uri", "processid"))
+```
+
+#### `bcdm_to_sf`
+
+generates a `sf` object of the searched data for any downstream spatial
+data analyses
+
+``` r
+#  Search the data
+
+# bold_search <- bold_parquet_search(
+# input.parquet=parquet_file,
+# taxonomy = "Coleoptera",
+# geography = "Canada",
+# marker = "COI-5P",
+# basecount = c(500, 660))
+
+# Get sf
+
+# sf_res <- bcdm_to_sf(bold_search, chunk.size = 100000)
+```
+
+#### `bcdm_to_occmatrix`
+
+creates an occurrence matrix from the searched data based on the
+`taxon.rank`, `taxon.name` (optional) and the `site.cat`
+
+``` r
+#  Search the data
+
+# bold_search <- bold_parquet_search(
+# input.parquet=parquet_file,
+# taxonomy = "Coleoptera",
+# geography = "Canada",
+# marker = "COI-5P",
+# basecount = c(500, 660))
+
+# Get occurrence data
+
+# occurrence_data <- bcdm_to_occmatrix(
+#   bold_search,
+#   taxon.rank = "family",
+#   site.cat = "region")
+```
+
+#### `bcdm_to_dnastringset`
+
+generates a `DNAStringSet` (Biostrings object) object of the searched
+data for any downstream sequence alignment and tree generation with
+custom headers. The library `Biostrings` has to be installed and
+imported before using this function
+
+``` r
+#  Search the data
+
+# bold_search <- bold_parquet_search(
+# input.parquet=parquet_file,
+# taxonomy = "Coleoptera",
+# geography = "Canada",
+# marker = "COI-5P",
+# basecount = c(500, 660))
+
+# Get DNAStringSet
+
+# bold.dnastringset<-bcdm_to_dnastringset(bold_search,
+# marker="COI-5P",
+# cols_for_seq_names = c("processid","family"))
+```
+
+#### `get_concise_summary`
 
 gets a concise summary of the searched data. Search results include
 total records, total countries, amplicon length range and many more
 
 ``` r
-
 #  Search the data
 
-# bold_search <- bold.data.search(
+# bold_search <- bold_parquet_search(
 # input.parquet=parquet_file,
 # taxonomy = "Coleoptera",
 # geography = "Canada",
@@ -190,107 +283,18 @@ total records, total countries, amplicon length range and many more
 
 # Get concise summary of the data
 
-# bold_summary <- get.concise.summary(bold_search)
-```
-
-#### `get.fasta`
-
-generates a custom header fasta file of the searched data. This can be
-exported for any downstream analytical pipelines
-
-``` r
-
-#  Search the data
-
-# bold_search <- bold.data.search(
-# input.parquet=parquet_file,
-# taxonomy = "Coleoptera",
-# geography = "Canada",
-# marker = "COI-5P",
-# basecount = c(500, 660))
-
-# Get fasta
-
-# get.fasta(
-# bold_search,
-# output.file = "trial.fas",
-# fas.header = c("bin_uri", "processid"))
-```
-
-#### `get.sf`
-
-generates a `sf` object of the searched data for any downstream spatial
-data analyses
-
-``` r
-
-#  Search the data
-
-# bold_search <- bold.data.search(
-# input.parquet=parquet_file,
-# taxonomy = "Coleoptera",
-# geography = "Canada",
-# marker = "COI-5P",
-# basecount = c(500, 660))
-
-# Get sf
-
-# sf_res<- get.sf(bold_search, chunk.size = 100000)
-```
-
-#### `get.occ.data`
-
-creates an occurrence matrix from the searched data based on the
-`taxon.rank`, `taxon.name` (optional) and the `site.cat`
-
-``` r
-
-#  Search the data
-
-# bold_search <- bold.data.search(
-# input.parquet=parquet_file,
-# taxonomy = "Coleoptera",
-# geography = "Canada",
-# marker = "COI-5P",
-# basecount = c(500, 660))
-
-# Get occurrence data
-
-# occurrence_data <- get.occ.data(
-#   bold_search,
-#   taxon.rank = "family",
-#   site.cat = "region")
-```
-
-#### `get.DNAStringSet`
-
-generates a `DNAStringSet` (Biostrings object) object of the searched
-data for any downstream sequence alignment and tree generation with
-custom headers. The library `Biostrings` has to be installed and
-imported before using this function
-
-``` r
-
-#  Search the data
-
-# bold_search <- bold.data.search(
-# input.parquet=parquet_file,
-# taxonomy = "Coleoptera",
-# geography = "Canada",
-# marker = "COI-5P",
-# basecount = c(500, 660))
-
-# Get DNAStringSet
-
-# bold.dnastringset<-get.DNAStringSet(bold_search,
-# marker="COI-5P",
-# cols_for_seq_names = c("processid","family"))
+# bold_summary <- get_concise_summary(bold_search)
 ```
 
 #### It takes roughly 10 minutes to collect ~10M records on a i7 2.8GHZ 16GB RAM machine
 
-<img src="man/figures/README-benchmark_fig-1.jpeg" width="100%" />
+<img src="man/figures/README-benchmark_fig-1.jpeg" alt="" width="100%" />
 
-**The package is under active development and the functionality is subject to change**
+**The package is under active development and the functionality is
+subject to change**
 
-**Funding:** This work was funded by the [New Frontiers in Research Fund (NFRF) - Transformation 2020](https://sshrc-crsh.canada.ca/funding-financement/nfrf-fnfr/transformation/transformation-eng.aspx)
+#### Funding
+
+This work was funded by the [New Frontiers in Research Fund (NFRF) -
+Transformation
+2020](https://sshrc-crsh.canada.ca/funding-financement/nfrf-fnfr/transformation/transformation-eng.aspx)
