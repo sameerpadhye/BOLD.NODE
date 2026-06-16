@@ -1,13 +1,13 @@
-#' Export BOLD search results to FASTA format
+#' Export the BOLD parquet search to FASTA format
 #'
 #' @description Exports nucleotide sequences from BOLD search results to a FASTA file with customizable headers.
 #'
-#' @details This function transforms the search results from `bold.data.search` into a FASTA file. Data chunking  option is available to manage large sizes to avoid memory issues. The `fas.header` argument lets users create custom headers using the BCDM column names.
+#' @details This function transforms the search results from `bold_parquet_search` into a FASTA file. Data chunking  option is available to manage large sizes to avoid memory issues. The `fas.header` argument lets users create custom headers using the BCDM field names (Metadata on fields can be checked using the `bcdm_field_names` function).
 #'
 #' @param bold.search.res A tbl_sql object containing BOLD search results
 #' @param output.file Path to the output FASTA file
 #' @param fas.header Character vector of field names to include in the FASTA header (separated by "|")
-#' @param chunk.size Number of records to process in each chunk (default: 1e6)
+#' @param chunk.size Number of records to process in each chunk (default: 1000000)
 #'
 #' @return writes a FASTA file to disk with custom headers as specified by the user
 #'
@@ -20,7 +20,7 @@
 #'
 #'
 #' # Search the BOLD data
-#' bold_search <- bold.data.search(
+#' bold_search <- bold_parquet_search(
 #' input.parquet=parquet_file,
 #' taxonomy = "Coleoptera",
 #' geography = "Canada",
@@ -29,7 +29,7 @@
 #' )
 #'
 #' # Get a fasta file
-#' get.fasta(
+#' bcdm_to_fasta(
 #' bold_search,
 #' output.file = "trial2.fas",
 #' fas.header = c("bin_uri", "processid")
@@ -39,7 +39,7 @@
 #' }
 #'
 #' @export
-get.fasta <- function(bold.search.res,
+bcdm_to_fasta <- function(bold.search.res,
                       output.file,
                       fas.header,
                       chunk.size = 1000000)

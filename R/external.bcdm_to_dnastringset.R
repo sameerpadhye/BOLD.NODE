@@ -1,8 +1,8 @@
-#' Convert the BOLD search to a DNAStringSet object
+#' Convert the BOLD parquet search into a DNAStringSet object
 #'
 #' @description Converts the sequence data from the search result into a DNAStringSet object for downstream multiple sequence alignment with customized headers.
 #'
-#' @details This function transforms the search results from `bold.data.search` into a `DNAStringSet` object suitable for downstream data analyses. The `cols_for_seq_names` argument lets users create custom headers using the BCDM column names.
+#' @details This function transforms the search results from `bold_parquet_search` into a `DNAStringSet` object suitable for downstream data analyses. The `cols_for_seq_names` argument lets users create custom headers using the BCDM column names.
 #'
 #' @param bold.search.res A `tbl_sql` object containing BOLD search results
 #' @param marker Character vector specifying the genetic marker
@@ -19,7 +19,7 @@
 #'
 #'
 #' # Search the BOLD data
-#' bold_search <- bold.data.search(
+#' bold_search <- bold_parquet_search(
 #' input.parquet=parquet_file,
 #' taxonomy = "Coleoptera",
 #' geography = "Canada",
@@ -28,7 +28,7 @@
 #'
 #' # Get the DNAStringset object
 #'
-#' bold.dnastringset<-get.DNAStringSet(bold_search,
+#' bold.dnastringset<-bcdm_to_dnastringset(bold_search,
 #' marker="COI-5P",
 #' cols_for_seq_names = c("processid","family")
 #' )
@@ -36,7 +36,7 @@
 #' }
 #'
 #' @export
-get.DNAStringSet <- function(bold.search.res,
+bcdm_to_dnastringset <- function(bold.search.res,
                              marker = NULL,
                              cols_for_seq_names) {
 

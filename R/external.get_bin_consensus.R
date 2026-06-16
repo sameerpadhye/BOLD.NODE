@@ -13,9 +13,9 @@
 #'
 #' \emph{Important Note}: As this function performs operations on the input data, it may be quite slow for very
 #' large data sets and/or weaker machines. Please check the size of `bold.search.res` input objects
-#' using \code{\link{get.concise.summary}} and proceed with caution.
+#' using \code{\link{get_concise_summary}} and proceed with caution.
 #'
-#' @param bold.search.res A `tbl_sql` object obtained from \code{\link{bold.data.search}}. (Optional; one of `bold.search.res` or `bold.df` must be provided.)
+#' @param bold.search.res A `tbl_sql` object obtained from \code{\link{bold_parquet_search}}. (Optional; one of `bold.search.res` or `bold.df` must be provided.)
 #' @param bold.df Data frame in BCDM format, or any data.frame or data table minimally containing `bin_uri` (or other grouping variable) and taxonomic identifications for all available records. (Optional; one of `bold.search.res` or `bold.df` must be provided.)
 #' @param ranks A character vector of ranks to consider for consensus identifications. Defaults to the standard BOLD ranks.
 #' @param threshold Numeric value(s) between 0 and 1 indicating the minimum proportion of records in a BIN that must have a concordant identification in order to establish a consensus. Supply as a single value, a vector of length equal to the number of ranks in consideration, or a named list with names corresponding to ranks. If supplied as a named list, an optional "default" value can be set for any ranks that are not explicitly specified (e.g. \code{threshold = list(species = 0.95, default = 0.75)}). Default value is 1.0 (i.e. strict consensus at all ranks).
@@ -33,14 +33,14 @@
 #' \dontrun{
 #'
 #' # Search for BOLD data
-#' bold_search <- bold.data.search(
+#' bold_search <- bold_parquet_search(
 #'   input.parquet = parquet_file,
 #'   taxonomy = "Coleoptera",
 #'   geography = "Canada"
 #' )
 #'
 #' # Compute strict consensus identifications for BINs in searched data
-#' strict_consensus <- get.bin.consensus(
+#' strict_consensus <- get_bin_consensus(
 #'   bold.search.res = bold_search,
 #'   threshold = 1.0
 #' )
@@ -48,7 +48,7 @@
 #' # Compute identifications concordant among at least 75% of BIN members,
 #' # as long as at least three records carry the majority identifications
 #' # in each BIN.
-#' bin_ids <- get.bin.consensus(
+#' bin_ids <- get_bin_consensus(
 #'   bold.search.res = bold_search,
 #'   threshold = 0.75,
 #'   min.ids = 3
@@ -56,7 +56,7 @@
 #'
 #' # Include non-scientific names (i.e. interim taxonomy or placeholder names)
 #' # in consideration of BIN consensus.
-#' bin_consensus <- get.bin.consensus(
+#' bin_consensus <- get_bin_consensus(
 #'   bold.search.res = bold_search,
 #'   threshold = 0.9,
 #'   enforce.scientific = FALSE
@@ -65,7 +65,7 @@
 #' }
 #'
 #' @export
-get.bin.consensus <- function(
+get_bin_consensus <- function(
     bold.search.res = NULL,
     bold.df = NULL,
     ranks = c("kingdom", "phylum", "class", "order", "family", "subfamily", "tribe", "genus", "species", "subspecies"),

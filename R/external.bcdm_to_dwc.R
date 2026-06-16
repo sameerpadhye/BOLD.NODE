@@ -1,9 +1,10 @@
-#' Convert bold.data.search results in to a Darwin Core (DwC) format data model
+#' Convert the BOLD parquet search in to a Darwin Core (DwC) format data model
 #'
-#' @description Converts `bold.data.search` results from BCDM format to Darwin Core Standard format.
+#' @description Converts `bold_parquet_search` results from BCDM format to Darwin Core Standard format.
 #'
 #' @details This function maps BCDM (Barcode Core Data Model) fields to their Darwin Core equivalents.
-#' \emph{Important Note}: All fields should be available in the `bold.data.search` `tbl_sql` object otherwise, the function will throw an error
+#'
+#' \emph{Important Note}: All fields should be available in the `bold_parquet_search` `tbl_sql` object otherwise, the function will throw an error
 #'
 #' @param bold.search.res A `tbl_sql` object containing BOLD search results
 #'
@@ -17,7 +18,7 @@
 #' \dontrun{
 #'
 #' # Search the BOLD data
-#' bold_search <- bold.data.search(
+#' bold_search <- bold_parquet_search(
 #' input.parquet=parquet_file,
 #' taxonomy = c("Cerambycidae","Meloidae"),
 #' geography = "Australia"
@@ -25,12 +26,12 @@
 #'
 #' # Get the DNAStringset object
 #'
-#' bold.dwc<-get.dwc(bold_search)
+#' bold.dwc<-bcdm_to_dwc(bold_search)
 #'
 #' }
 #' @export
 
-get.dwc<-function(bold.search.res)
+bcdm_to_dwc<-function(bold.search.res)
 
 
   {
@@ -41,7 +42,7 @@ get.dwc<-function(bold.search.res)
 
   # Check if all BCDM is available
 
-  bcdm_fields<-bold.bcdm.fields()
+  bcdm_fields<-bcdm_field_names()
 
   if(length(setdiff(bcdm_fields$field,
                     colnames(bold.search.res)))>0) stop("Please check if all the BCDM fields are present in the data")

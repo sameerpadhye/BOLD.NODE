@@ -1,10 +1,10 @@
 #' Generate a concise summary of the search results
 #'
-#' @description Creates a summary statistics table from the `bold.data.search` `tb_sql` object.
+#' @description Creates a summary statistics table from the `bold_parquet_search` `tb_sql` object.
 #'
-#' @details The function provides a concise summary of the search obtained by `bold.data.search` that includes details like total records, unique BINs, unique institutes, unique markers and amplicon size range.
+#' @details The function provides a concise summary of the search obtained by `bold_parquet_search` that includes details like total records, unique BINs, unique institutes, unique markers and amplicon size range.
 #'
-#' @param bold.search.res A `tbl_sql` object containing `bold.data.search` results
+#' @param bold.search.res A `tbl_sql` object containing `bold_parquet_search` results
 #'
 #' @return A data frame with the summary statistics
 #'
@@ -20,19 +20,19 @@
 #'
 #' parquet_file<-'user defined path to parquet file'
 #'
-#' bold_search <- bold.data.search(
+#' bold_search <- bold_parquet_search(
 #' input.parquet=parquet_file,
 #' taxonomy = "Hemiptera",
 #' geography = "India",
 #' marker = "COI-5P"
 #' )
 #' # Get the concise summary
-#' bold_summary <- get.concise.summary(bold_search)
+#' bold_summary <- get_concise_summary(bold_search)
 #'
 #' }
 #' @export
 
-get.concise.summary<-function(bold.search.res)
+get_concise_summary<-function(bold.search.res)
 
   {
 
@@ -40,7 +40,7 @@ get.concise.summary<-function(bold.search.res)
 
   bold.search.res.cols=bold.search.res%>%colnames()
 
-  bold_field_data = bold.bcdm.fields(print.output = F)%>%
+  bold_field_data = bcdm_field_names(print.output = F)%>%
     dplyr::select(field)
 
   if (!all(bold_field_data$field %in% bold.search.res.cols)) {

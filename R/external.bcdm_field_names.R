@@ -7,11 +7,11 @@
 #' @details The function downloads the latest field (column) meta data (file type and brief description) for the Barcode Core Data Model (BCDM) from <https://github.com/boldsystems-central/BCDM/blob/main/field_definitions.tsv>; output = TRUE will print the information in the console.
 #' \emph{Important Note}: Two field names 'country/ocean' and 'province/state' have been modified to 'country.ocean' and 'province.state' to match with BOLDconnectR output and for operational ease.
 #'
-#' @returns A data frame containing defintions for all fields (columns).
+#' @returns A data frame containing definitions for all fields (columns).
 #'
 #' @examples
 #'
-#' bold.field.data<-bold.bcdm.fields()
+#' bold.field.data<-bcdm_field_names()
 #'
 #' head(bold.field.data,10)
 #'
@@ -20,7 +20,7 @@
 #'
 #' @export
 #'
-bold.bcdm.fields<-function (print.output=FALSE) {
+bcdm_field_names<-function (print.output=FALSE) {
 
     bold.fields.data = suppressMessages(data.table::fread("https://raw.githubusercontent.com/boldsystems-central/BCDM/refs/heads/main/field_definitions.tsv",
                                                           sep = '\t',

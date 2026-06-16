@@ -1,14 +1,14 @@
-#' Search BOLD dataset release parquet data
+#' Search the BOLD public data packages available in parquet format
 #'
-#' @description Search the BOLD dataset release based on various search criteria including taxonomy, geography, institutes etc.
+#' @description Search the BOLD public data packages available in the parquet format based on various search criteria including taxonomy, geography, institutes etc.
 #'
-#' @details This function loads the BOLD dataset release parquet files via duckDB and applies filters based on the provided parameters. It supports filtering by ids (sampleid, processid), taxonomy (from kingdom to species level), geography (country to site level; biome to ecoregion level), BINs, institutes, identifiers, sequence sources, genetic markers, nucleotide base counts,biogeographic categories, dataset or projects, spatial bounding boxes, and ambiguous base percent cutoffs. Users can also specify particular columns to return using the `specific.cols` parameter (column names can be checked using the `bold.bcdm.fields` function). The `tbl_sql` object can then be used by any of the `get` functions for data transformations or `bold.data.collect` to load all the data in memory.
+#' @details This function loads the BOLD public data packages parquet files (<https://boldsystems.org/data/data-packages/>) via duckDB and applies filters based on the provided parameters. It supports filtering by ids (sampleid, processid), taxonomy (from kingdom to species level), geography (country to site level), biogeography (biome to ecoregion level), BINs, institutes, identifiers, sequence sources, genetic markers, nucleotide base counts,dataset or projects, spatial bounding boxes, and ambiguous base percent cutoffs. Users can also specify particular columns to return using the `specific.cols` parameter (column names can be checked using the `bcdm_field_names` function). The `tbl_sql` object can then be used by any of the `bcdm_to_*` functions for data transformations or `bold_search_collect` to load all the data in memory.
 #'
 #' @param input.parquet Path to the input parquet file
 #' @param ids Vector of process IDs or sample IDs to filter by
 #' @param bins Vector of BIN numbers (i.e. URIs) to filter by
 #' @param taxonomy Vector of taxonomic names to filter by (can include kingdom, phylum, class, order, family, subfamily, genus, species)
-#' @param geography Vector of geographic locations to filter by (can include country.ocean, province.state, region, sector, site, realm, biome, ecoregion)
+#' @param geography Vector of geographic locations to filter by (can include country.ocean, province.state, region, sector, site)
 #' @param institutes Vector of institute codes to filter by
 #' @param identified.by Vector of identifiers to filter by
 #' @param seq.source Vector of sequence run sites to filter by
@@ -34,19 +34,19 @@
 #' # Search the BOLD data
 #'
 #' # Taxonomy
-#' bold_search <- bold.data.search(
+#' bold_search <- bold_parquet_search(
 #' input.parquet=parquet_file,
 #' taxonomy = c("Odonata","Poecilia")
 #' )
 #'
 #' # Geography
-#' bold_search <- bold.data.search(
+#' bold_search <- bold_parquet_search(
 #' input.parquet=parquet_file,
 #' geography = "Canada"
 #' )
 #'
 #' # Combination of many search criteria
-#' bold_search <- bold.data.search(
+#' bold_search <- bold_parquet_search(
 #' input.parquet=parquet_file,
 #' taxonomy = "Coleoptera",
 #' geography = "Canada",
@@ -58,7 +58,7 @@
 #' }
 #'
 #' @export
-bold.data.search <- function(input.parquet,
+bold_parquet_search <- function(input.parquet,
                              ids=NULL,
                              bins=NULL,
                              taxonomy=NULL,
@@ -133,7 +133,7 @@ bold.data.search <- function(input.parquet,
   if(!is.null(specific.cols))
   {
 
-    bcdm_fields<-bold.bcdm.fields()
+    bcdm_fields<-bcdm_field_names()
 
     if(any(!specific.cols%in%bcdm_fields$field)) stop("Please re-check the column names")
 
