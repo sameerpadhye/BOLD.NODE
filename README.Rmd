@@ -30,7 +30,7 @@ The package also allows seamless conversion of search results into standard R da
 
 ## User manual
 
-The user manual for the package can be downloaded from the following link (<https://github.com/boldsystems-central/BOLDconnectR_examples/blob/main/BOLD.NODE_1.0.0.pdf>)
+The user manual for the package can be downloaded from the following link (<https://github.com/boldsystems-central/BOLDconnectR_examples/blob/main/BOLD.NODE_0.0.3.pdf>)
 
 ## Installation
 
