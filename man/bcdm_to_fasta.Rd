@@ -30,21 +30,19 @@ This function transforms the search results from \code{bold_parquet_search} into
 
 # Search the BOLD data
 bold_search <- bold_parquet_search(
-input.parquet=parquet_file,
-taxonomy = "Coleoptera",
-geography = "Canada",
-marker = "COI-5P",
-basecount = c(500, 660)
+  input.parquet = parquet_file,
+  taxonomy = "Coleoptera",
+  geography = "Canada",
+  marker = "COI-5P",
+  basecount = c(500, 660)
 )
 
 # Get a fasta file
 bcdm_to_fasta(
-bold_search,
-output.file = "trial2.fas",
-fas.header = c("bin_uri", "processid")
+  bold_search,
+  output.file = "trial2.fas",
+  fas.header = c("bin_uri", "processid")
 )
-
-
 }
 
 }

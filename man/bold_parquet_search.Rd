@@ -70,26 +70,24 @@ This function loads the BOLD public data packages parquet files (\url{https://bo
 
 # Taxonomy
 bold_search <- bold_parquet_search(
-input.parquet=parquet_file,
-taxonomy = c("Odonata","Poecilia")
+  input.parquet = parquet_file,
+  taxonomy = c("Odonata", "Poecilia")
 )
 
 # Geography
 bold_search <- bold_parquet_search(
-input.parquet=parquet_file,
-geography = "Canada"
+  input.parquet = parquet_file,
+  geography = "Canada"
 )
 
 # Combination of many search criteria
 bold_search <- bold_parquet_search(
-input.parquet=parquet_file,
-taxonomy = "Coleoptera",
-geography = "Canada",
-marker = "COI-5P",
-basecount = c(500, 660)
+  input.parquet = parquet_file,
+  taxonomy = "Coleoptera",
+  geography = "Canada",
+  marker = "COI-5P",
+  basecount = c(500, 660)
 )
-
-
 }
 
 }

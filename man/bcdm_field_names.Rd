@@ -21,8 +21,8 @@ The function downloads the latest field (column) meta data (file type and brief 
 }
 \examples{
 
-bold.field.data<-bcdm_field_names()
+bold.field.data <- bcdm_field_names()
 
-head(bold.field.data,10)
+head(bold.field.data, 10)
 
 }

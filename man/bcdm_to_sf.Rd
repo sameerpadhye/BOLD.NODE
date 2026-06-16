@@ -26,14 +26,14 @@ This function transforms the search results from \code{bold_parquet_search} into
 
 # Search the BOLD data
 bold_search <- bold_parquet_search(
-input.parquet=parquet_file,
-taxonomy = "Odonata",
-geography = "Malaysia")
+  input.parquet = parquet_file,
+  taxonomy = "Odonata",
+  geography = "Malaysia"
+)
 
 # Get the occurrence matrix
 
 sf_data <- bcdm_to_sf(bold_search, chunk.size = 100000)
-
 }
 
 }

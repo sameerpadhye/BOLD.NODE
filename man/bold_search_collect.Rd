@@ -42,26 +42,27 @@ This function collects (loads it in the R session) the search results from \code
 
 # Search the BOLD data
 bold_search <- bold_parquet_search(
-input.parquet=parquet_file,
-taxonomy = "Coleoptera",
-geography = "Canada",
-marker = "COI-5P",
-basecount = c(500, 660)
+  input.parquet = parquet_file,
+  taxonomy = "Coleoptera",
+  geography = "Canada",
+  marker = "COI-5P",
+  basecount = c(500, 660)
 )
 
 # Collect the data  (no export)
 bold_search_collect(
-bold_search,
-chunk.size = 50000,
-export = FALSE)
+  bold_search,
+  chunk.size = 50000,
+  export = FALSE
+)
 
 # Collect and export
 bold_search_collect(
-bold_search,
-chunk.size = 50000,
-export = TRUE,
-export.type = "parquet",
-output.path = 'userdefinedpath')
-
+  bold_search,
+  chunk.size = 50000,
+  export = TRUE,
+  export.type = "parquet",
+  output.path = "userdefinedpath"
+)
 }
 }

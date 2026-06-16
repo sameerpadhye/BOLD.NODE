@@ -41,18 +41,18 @@ This function transforms the search results from \code{bold_parquet_search} into
 
 # Search the BOLD data
 bold_search <- bold_parquet_search(
-input.parquet=parquet_file,
-taxonomy = "Odonata",
-geography = "Thailand")
+  input.parquet = parquet_file,
+  taxonomy = "Odonata",
+  geography = "Thailand"
+)
 
 # Get the occurrence matrix
 
 occurrence_data <- bcdm_to_occmatrix(
   bold_search,
-  kingdom = 'Animalia',
+  kingdom = "Animalia",
   taxon.rank = "family",
   site.cat = "region"
-  )
-
+)
 }
 }

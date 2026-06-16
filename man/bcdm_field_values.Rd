@@ -35,14 +35,14 @@ This function extracts unique values from one or more specified columns in BOLD 
 
 # Search the BOLD data
 bold_search <- bold_parquet_search(
-input.parquet=parquet_file,
-taxonomy = "Diptera",
-geography = "India",
-marker = "COI-5P")
+  input.parquet = parquet_file,
+  taxonomy = "Diptera",
+  geography = "India",
+  marker = "COI-5P"
+)
 
 # Get the field values
 
-vocab.data <- bcdm_field_values(bold_search,bold_search,specific.cols = c("inst","identified.by"))
-
+vocab.data <- bcdm_field_values(bold_search, bold_search, specific.cols = c("inst", "identified.by"))
 }
 }

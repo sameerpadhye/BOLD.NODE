@@ -84,7 +84,6 @@ bin_consensus <- get_bin_consensus(
   threshold = 0.9,
   enforce.scientific = FALSE
 )
-
 }
 
 }

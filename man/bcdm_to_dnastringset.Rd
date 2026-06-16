@@ -28,19 +28,18 @@ This function transforms the search results from \code{bold_parquet_search} into
 
 # Search the BOLD data
 bold_search <- bold_parquet_search(
-input.parquet=parquet_file,
-taxonomy = "Coleoptera",
-geography = "Canada",
-basecount = c(500, 660)
+  input.parquet = parquet_file,
+  taxonomy = "Coleoptera",
+  geography = "Canada",
+  basecount = c(500, 660)
 )
 
 # Get the DNAStringset object
 
-bold.dnastringset<-bcdm_to_dnastringset(bold_search,
-marker="COI-5P",
-cols_for_seq_names = c("processid","family")
+bold.dnastringset <- bcdm_to_dnastringset(bold_search,
+  marker = "COI-5P",
+  cols_for_seq_names = c("processid", "family")
 )
-
 }
 
 }
