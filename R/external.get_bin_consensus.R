@@ -1,11 +1,11 @@
-#' Compute consensus BIN taxonomy for BOLD data
+#' Compute consensus BIN taxonomy for BOLD data package
 #'
 #' @description
 #' Computes and returns consensus taxonomic identifications for each BIN in search results or a BCDM data frame.
 #'
 #' @details
 #' Consensus is defined as any name that exceeds the specified `threshold`, expressed as a proportion of
-#' records with a concordant identification (i.e. same name, same rank). The function steps backwards through
+#' records with a concordant identification (i.e., same name, same rank). The function steps backwards through
 #' the eligible `ranks` to determine the lowest available concordant identification that meets the criteria
 #' specified by `threshold`, `min.ids`, and `enforce.scientific`. Different thresholds can be supplied
 #' for each rank, if desired (either as a vector of equal length to ranks or as a named list). The function
@@ -15,11 +15,11 @@
 #' large data sets and/or weaker machines. Please check the size of `bold.search.res` input objects
 #' using \code{\link{get_concise_summary}} and proceed with caution.
 #'
-#' @param bold.search.res A `tbl_sql` object obtained from \code{\link{bold_parquet_search}}. (Optional; one of `bold.search.res` or `bold.df` must be provided.)
-#' @param bold.df Data frame in BCDM format, or any data.frame or data table minimally containing `bin_uri` (or other grouping variable) and taxonomic identifications for all available records. (Optional; one of `bold.search.res` or `bold.df` must be provided.)
+#' @param bold.search.res A `tbl_sql` object obtained from \code{\link{bold_parquet_search}}. Optional: one of `bold.search.res` or `bold.df` must be provided.
+#' @param bold.df Data frame in BCDM format, or any data.frame or data.table minimally containing `bin_uri` (or other grouping variable) and taxonomic identifications for all available records. Optional: one of `bold.search.res` or `bold.df` must be provided.
 #' @param ranks A character vector of ranks to consider for consensus identifications. Defaults to the standard BOLD ranks.
-#' @param threshold Numeric value(s) between 0 and 1 indicating the minimum proportion of records in a BIN that must have a concordant identification in order to establish a consensus. Supply as a single value, a vector of length equal to the number of ranks in consideration, or a named list with names corresponding to ranks. If supplied as a named list, an optional "default" value can be set for any ranks that are not explicitly specified (e.g. \code{threshold = list(species = 0.95, default = 0.75)}). Default value is 1.0 (i.e. strict consensus at all ranks).
-#' @param min.ids Numeric value(s) indicating the minimum number of identifications needed to establish a consensus (names with fewer identifications are still included when calculating proportions). Supply as a single value, a vector of length equal to the number of ranks in consideration, or a named list with names corresponding to ranks. If supplied as a named list, an optional "default" value can be set for any ranks that are not explicitly specified (e.g. \code{min.ids = list(family = 1, default = 2)}). Default value is 2 (i.e. min 2 identifications at any rank).
+#' @param threshold Numeric value(s) between 0 and 1 indicating the minimum proportion of records in a BIN that must have a concordant identification in order to establish a consensus. Supply as a single value, a vector of length equal to the number of ranks in consideration, or a named list with names corresponding to ranks. If supplied as a named list, an optional "default" value can be set for any ranks that are not explicitly specified (e.g., \code{threshold = list(species = 0.95, default = 0.75)}). Default value is 1.0 (i.e., strict consensus at all ranks).
+#' @param min.ids Numeric value(s) indicating the minimum number of identifications needed to establish a consensus (names with fewer identifications are still included when calculating proportions). Supply as a single value, a vector of length equal to the number of ranks in consideration, or a named list with names corresponding to ranks. If supplied as a named list, an optional "default" value can be set for any ranks that are not explicitly specified (e.g., \code{min.ids = list(family = 1, default = 2)}). Default value is 2 (i.e., min 2 identifications at any rank).
 #' @param enforce.scientific A logical value indicating whether non-scientific, provisional names should be ignored when determining consensus. Default value is TRUE, meaning non-scientific names are ignored.
 #' @param groups Grouping variable. Default value is "bin_uri".
 #' @param discord.format String indicating the desired output format for the `discordant_ids` column. Can be one of "text", or "list". If "text" (the default), the output is a string column with comma-separated values in the format "Taxon (proportion)". If "list", the output is a list column with names indicating competing identifications and values indicating proportions of discordant identifications for each taxon.
@@ -32,7 +32,7 @@
 #' @examples
 #' \dontrun{
 #'
-#' # Search for BOLD data
+#' # Search for BOLD data package
 #' bold_search <- bold_parquet_search(
 #'   input.parquet = parquet_file,
 #'   taxonomy = "Coleoptera",
@@ -54,7 +54,7 @@
 #'   min.ids = 3
 #' )
 #'
-#' # Include non-scientific names (i.e. interim taxonomy or placeholder names)
+#' # Include non-scientific names (i.e., interim taxonomy or placeholder names)
 #' # in consideration of BIN consensus.
 #' bin_consensus <- get_bin_consensus(
 #'   bold.search.res = bold_search,
@@ -89,7 +89,7 @@ get_bin_consensus <- function(
   stopifnot(
     "One or more provided `ranks` is/are missing from `bold.df`." = all(ranks %in% names(bold.df)),
     "Provided `groups` column is missing from `bold.df`." = (groups %in% names(bold.df)),
-    "`threshold` value(s) must be one or more real numbers (i.e. doubles) between 0 and 1." = is.double(unlist(threshold)) & all(unlist(threshold) >= 0) & all(unlist(threshold) <= 1),
+    "`threshold` value(s) must be one or more real numbers (i.e., doubles) between 0 and 1." = is.double(unlist(threshold)) & all(unlist(threshold) >= 0) & all(unlist(threshold) <= 1),
     "`threshold` must be either a single number, a vector of unnamed numbers equal in length to `ranks`, or a named list or vector of numbers with names corresponding to ranks." = ((length(threshold) == 1) | (length(threshold) == length(ranks)) | (!is.null(names(threshold)))),
     "`min.ids` value(s) must be one or more whole numbers greater than zero." = is.numeric(unlist(min.ids)) & all(unlist(min.ids) > 0) & all(unlist(min.ids) %% 1 == 0),
     "`min.ids` must be either a single number, a vector of unnamed numbers equal in length to `ranks`, or a named list or vector of numbers with names corresponding to ranks." = ((length(min.ids) == 1) | (length(min.ids) == length(ranks)) | (!is.null(names(min.ids)))),

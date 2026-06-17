@@ -1,17 +1,17 @@
-#' Collect and export BOLD NODE search results
+#' Collect and export parquet search results
 #'
-#' @description collects and exports the tbl_sql `bold_parquet_search` results object, processing large datasets in user defined manageable chunks.
+#' @description collects, outputs and exports the tbl_sql `bold_parquet_search` results object, processing large datasets in user defined manageable chunks.
 #'
 #' @details This function collects (loads it in the R session) the search results from `bold_parquet_search`. Data chunking and system sleep options are available to manage large sizes to avoid memory issues. The function also supports exporting the searches in either TSV or Parquet format. export=FALSE (default) returns the collected data in the R session only. The full output_path has to be provided (along with the intended file name and file extension) when export=TRUE.
-#' \emph{Important Note}: Some data searches (e.g. all Diptera) can get very large and overload the RAM capacity for some machines.
-#' @param bold.search.res A `tbl_sql` object obtained from `bold_parquet_search`
-#' @param chunk.size Maximum number of rows to process in each chunk. Default value is 1e6
-#' @param sys.sleep Time to sleep between chunks in seconds. Default value is 0
-#' @param export Logical value that allows user to export the output locally. Default value is FALSE
-#' @param export.type Character string specifying the data type of the exported file (tsv or parquet)
-#' @param output.path Character string specifying the local path for data export along with the file name and extension
+#' \emph{Important Note}: Some data searches (e.g., all Diptera) can get very large and overload the RAM capacity on some machines.
+#' @param bold.search.res A `tbl_sql` object obtained from `bold_parquet_search`.
+#' @param chunk.size Maximum number of rows to process in each chunk. Default value is 1e6.
+#' @param sys.sleep Time to sleep between chunks in seconds. Default value is 0.
+#' @param export Logical value that allows user to export the output locally. Default value is FALSE.
+#' @param export.type Character string specifying the data type of the exported file (tsv or parquet).
+#' @param output.path Character string specifying the local path for data export along with the file name and extension.
 #'
-#' @return A data frame containing all collected results; if export = TRUE, either a TSV or parquet file exported locally
+#' @return A data frame containing all collected results; if export = TRUE, either a TSV or parquet file exported locally.
 #'
 #' @importFrom dplyr summarise collect pull bind_rows %>%
 #' @importFrom DBI dbExecute
@@ -21,7 +21,7 @@
 #' \dontrun{
 #'
 #'
-#' # Search the BOLD data
+#' # Search the BOLD data package
 #' bold_search <- bold_parquet_search(
 #'   input.parquet = parquet_file,
 #'   taxonomy = "Coleoptera",

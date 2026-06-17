@@ -7,10 +7,10 @@
 get_concise_summary(bold.search.res)
 }
 \arguments{
-\item{bold.search.res}{A \code{tbl_sql} object containing \code{bold_parquet_search} results}
+\item{bold.search.res}{A \code{tbl_sql} object containing \code{bold_parquet_search} results.}
 }
 \value{
-A data frame with the summary statistics
+A data frame with the summary statistics.
 }
 \description{
 Creates a summary statistics table from the \code{bold_parquet_search} \code{tb_sql} object.
@@ -21,7 +21,7 @@ The function provides a concise summary of the search obtained by \code{bold_par
 \examples{
 \dontrun{
 
-# Search data
+# Search the BOLD data package
 
 parquet_file <- "user defined path to parquet file"
 

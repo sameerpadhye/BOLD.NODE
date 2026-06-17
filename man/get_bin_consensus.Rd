@@ -2,7 +2,7 @@
 % Please edit documentation in R/external.get_bin_consensus.R
 \name{get_bin_consensus}
 \alias{get_bin_consensus}
-\title{Compute consensus BIN taxonomy for BOLD data}
+\title{Compute consensus BIN taxonomy for BOLD data package}
 \usage{
 get_bin_consensus(
   bold.search.res = NULL,
@@ -17,15 +17,15 @@ get_bin_consensus(
 )
 }
 \arguments{
-\item{bold.search.res}{A \code{tbl_sql} object obtained from \code{\link{bold_parquet_search}}. (Optional; one of \code{bold.search.res} or \code{bold.df} must be provided.)}
+\item{bold.search.res}{A \code{tbl_sql} object obtained from \code{\link{bold_parquet_search}}. Optional: one of \code{bold.search.res} or \code{bold.df} must be provided.}
 
-\item{bold.df}{Data frame in BCDM format, or any data.frame or data table minimally containing \code{bin_uri} (or other grouping variable) and taxonomic identifications for all available records. (Optional; one of \code{bold.search.res} or \code{bold.df} must be provided.)}
+\item{bold.df}{Data frame in BCDM format, or any data.frame or data.table minimally containing \code{bin_uri} (or other grouping variable) and taxonomic identifications for all available records. Optional: one of \code{bold.search.res} or \code{bold.df} must be provided.}
 
 \item{ranks}{A character vector of ranks to consider for consensus identifications. Defaults to the standard BOLD ranks.}
 
-\item{threshold}{Numeric value(s) between 0 and 1 indicating the minimum proportion of records in a BIN that must have a concordant identification in order to establish a consensus. Supply as a single value, a vector of length equal to the number of ranks in consideration, or a named list with names corresponding to ranks. If supplied as a named list, an optional "default" value can be set for any ranks that are not explicitly specified (e.g. \code{threshold = list(species = 0.95, default = 0.75)}). Default value is 1.0 (i.e. strict consensus at all ranks).}
+\item{threshold}{Numeric value(s) between 0 and 1 indicating the minimum proportion of records in a BIN that must have a concordant identification in order to establish a consensus. Supply as a single value, a vector of length equal to the number of ranks in consideration, or a named list with names corresponding to ranks. If supplied as a named list, an optional "default" value can be set for any ranks that are not explicitly specified (e.g., \code{threshold = list(species = 0.95, default = 0.75)}). Default value is 1.0 (i.e., strict consensus at all ranks).}
 
-\item{min.ids}{Numeric value(s) indicating the minimum number of identifications needed to establish a consensus (names with fewer identifications are still included when calculating proportions). Supply as a single value, a vector of length equal to the number of ranks in consideration, or a named list with names corresponding to ranks. If supplied as a named list, an optional "default" value can be set for any ranks that are not explicitly specified (e.g. \code{min.ids = list(family = 1, default = 2)}). Default value is 2 (i.e. min 2 identifications at any rank).}
+\item{min.ids}{Numeric value(s) indicating the minimum number of identifications needed to establish a consensus (names with fewer identifications are still included when calculating proportions). Supply as a single value, a vector of length equal to the number of ranks in consideration, or a named list with names corresponding to ranks. If supplied as a named list, an optional "default" value can be set for any ranks that are not explicitly specified (e.g., \code{min.ids = list(family = 1, default = 2)}). Default value is 2 (i.e., min 2 identifications at any rank).}
 
 \item{enforce.scientific}{A logical value indicating whether non-scientific, provisional names should be ignored when determining consensus. Default value is TRUE, meaning non-scientific names are ignored.}
 
@@ -42,7 +42,7 @@ Computes and returns consensus taxonomic identifications for each BIN in search 
 }
 \details{
 Consensus is defined as any name that exceeds the specified \code{threshold}, expressed as a proportion of
-records with a concordant identification (i.e. same name, same rank). The function steps backwards through
+records with a concordant identification (i.e., same name, same rank). The function steps backwards through
 the eligible \code{ranks} to determine the lowest available concordant identification that meets the criteria
 specified by \code{threshold}, \code{min.ids}, and \code{enforce.scientific}. Different thresholds can be supplied
 for each rank, if desired (either as a vector of equal length to ranks or as a named list). The function
@@ -55,7 +55,7 @@ using \code{\link{get_concise_summary}} and proceed with caution.
 \examples{
 \dontrun{
 
-# Search for BOLD data
+# Search for BOLD data package
 bold_search <- bold_parquet_search(
   input.parquet = parquet_file,
   taxonomy = "Coleoptera",
@@ -77,7 +77,7 @@ bin_ids <- get_bin_consensus(
   min.ids = 3
 )
 
-# Include non-scientific names (i.e. interim taxonomy or placeholder names)
+# Include non-scientific names (i.e., interim taxonomy or placeholder names)
 # in consideration of BIN consensus.
 bin_consensus <- get_bin_consensus(
   bold.search.res = bold_search,

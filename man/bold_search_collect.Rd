@@ -2,7 +2,7 @@
 % Please edit documentation in R/external.bold_search_collect.R
 \name{bold_search_collect}
 \alias{bold_search_collect}
-\title{Collect and export BOLD NODE search results}
+\title{Collect and export parquet search results}
 \usage{
 bold_search_collect(
   bold.search.res,
@@ -14,33 +14,33 @@ bold_search_collect(
 )
 }
 \arguments{
-\item{bold.search.res}{A \code{tbl_sql} object obtained from \code{bold_parquet_search}}
+\item{bold.search.res}{A \code{tbl_sql} object obtained from \code{bold_parquet_search}.}
 
-\item{chunk.size}{Maximum number of rows to process in each chunk. Default value is 1e6}
+\item{chunk.size}{Maximum number of rows to process in each chunk. Default value is 1e6.}
 
-\item{sys.sleep}{Time to sleep between chunks in seconds. Default value is 0}
+\item{sys.sleep}{Time to sleep between chunks in seconds. Default value is 0.}
 
-\item{export}{Logical value that allows user to export the output locally. Default value is FALSE}
+\item{export}{Logical value that allows user to export the output locally. Default value is FALSE.}
 
-\item{export.type}{Character string specifying the data type of the exported file (tsv or parquet)}
+\item{export.type}{Character string specifying the data type of the exported file (tsv or parquet).}
 
-\item{output.path}{Character string specifying the local path for data export along with the file name and extension}
+\item{output.path}{Character string specifying the local path for data export along with the file name and extension.}
 }
 \value{
-A data frame containing all collected results; if export = TRUE, either a TSV or parquet file exported locally
+A data frame containing all collected results; if export = TRUE, either a TSV or parquet file exported locally.
 }
 \description{
-collects and exports the tbl_sql \code{bold_parquet_search} results object, processing large datasets in user defined manageable chunks.
+collects, outputs and exports the tbl_sql \code{bold_parquet_search} results object, processing large datasets in user defined manageable chunks.
 }
 \details{
 This function collects (loads it in the R session) the search results from \code{bold_parquet_search}. Data chunking and system sleep options are available to manage large sizes to avoid memory issues. The function also supports exporting the searches in either TSV or Parquet format. export=FALSE (default) returns the collected data in the R session only. The full output_path has to be provided (along with the intended file name and file extension) when export=TRUE.
-\emph{Important Note}: Some data searches (e.g. all Diptera) can get very large and overload the RAM capacity for some machines.
+\emph{Important Note}: Some data searches (e.g., all Diptera) can get very large and overload the RAM capacity on some machines.
 }
 \examples{
 \dontrun{
 
 
-# Search the BOLD data
+# Search the BOLD data package
 bold_search <- bold_parquet_search(
   input.parquet = parquet_file,
   taxonomy = "Coleoptera",

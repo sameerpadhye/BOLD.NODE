@@ -4,10 +4,10 @@
 #'
 #' @details This function transforms the search results from `bold_parquet_search` into an `sf` object. A data chunking  option is available to manage large sizes to avoid memory issues. The function creates point geometries in the WGS84 coordinate system (EPSG:4326). Records that don't have coordinate data are removed during processing.
 #'
-#' @param bold.search.res A tbl_sql object containing BOLD search results
-#' @param chunk.size Number of records to process in each chunk (default: 100000)
+#' @param bold.search.res A tbl_sql object containing BOLD search results.
+#' @param chunk.size Number of records to process in each chunk (default: 100000).
 #'
-#' @return An `sf` object with point geometry in WGS84 coordinate system (EPSG:4326)
+#' @return An `sf` object with point geometry in WGS84 coordinate system (EPSG:4326).
 #'
 #' @importFrom dplyr filter mutate select collect
 #' @importFrom sf st_as_sf
@@ -18,7 +18,7 @@
 #' \dontrun{
 #'
 #'
-#' # Search the BOLD data
+#' # Search the BOLD data package
 #' bold_search <- bold_parquet_search(
 #'   input.parquet = parquet_file,
 #'   taxonomy = "Odonata",

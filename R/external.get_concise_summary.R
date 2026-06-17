@@ -4,9 +4,9 @@
 #'
 #' @details The function provides a concise summary of the search obtained by `bold_parquet_search` that includes details like total records, unique BINs, unique institutes, unique markers and amplicon size range.
 #'
-#' @param bold.search.res A `tbl_sql` object containing `bold_parquet_search` results
+#' @param bold.search.res A `tbl_sql` object containing `bold_parquet_search` results.
 #'
-#' @return A data frame with the summary statistics
+#' @return A data frame with the summary statistics.
 #'
 #' @importFrom dplyr summarise n n_distinct case_when pull mutate across select collect %>% everything
 #' @importFrom tidyr pivot_longer
@@ -16,7 +16,7 @@
 #' @examples
 #' \dontrun{
 #'
-#' # Search data
+#' # Search the BOLD data package
 #'
 #' parquet_file <- "user defined path to parquet file"
 #'

@@ -7,12 +7,12 @@
 bcdm_to_sf(bold.search.res, chunk.size = 1e+05)
 }
 \arguments{
-\item{bold.search.res}{A tbl_sql object containing BOLD search results}
+\item{bold.search.res}{A tbl_sql object containing BOLD search results.}
 
-\item{chunk.size}{Number of records to process in each chunk (default: 100000)}
+\item{chunk.size}{Number of records to process in each chunk (default: 100000).}
 }
 \value{
-An \code{sf} object with point geometry in WGS84 coordinate system (EPSG:4326)
+An \code{sf} object with point geometry in WGS84 coordinate system (EPSG:4326).
 }
 \description{
 Converts BOLD search results with coordinate data to spatial points (sf object).
@@ -24,7 +24,7 @@ This function transforms the search results from \code{bold_parquet_search} into
 \dontrun{
 
 
-# Search the BOLD data
+# Search the BOLD data package
 bold_search <- bold_parquet_search(
   input.parquet = parquet_file,
   taxonomy = "Odonata",

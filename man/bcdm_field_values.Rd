@@ -2,7 +2,7 @@
 % Please edit documentation in R/external.bcdm_field_values.R
 \name{bcdm_field_values}
 \alias{bcdm_field_values}
-\title{Extract unique values of different BCDM fields from the BOLD dataset}
+\title{Extract unique values of different BCDM fields from the BOLD data package}
 \usage{
 bcdm_field_values(
   input.data,
@@ -12,28 +12,28 @@ bcdm_field_values(
 )
 }
 \arguments{
-\item{input.data}{Path to the input parquet file or the \code{bold_parquet_search} result}
+\item{input.data}{Path to the input parquet file or the \code{bold_parquet_search} result.}
 
-\item{specific.cols}{Name of the column to extract unique values from}
+\item{specific.cols}{Name of the column to extract unique values from.}
 
-\item{save.data}{Logical value indicating whether to save the results to disk as a .rds file (default: FALSE)}
+\item{save.data}{Logical value indicating whether to save the results to disk as a .rds file (default: FALSE).}
 
-\item{output.file}{Path (without extension) for saving results as .rds file (required if save.data = TRUE)}
+\item{output.file}{Path (without extension) for saving results as .rds file (required if save.data = TRUE).}
 }
 \value{
-A list containing unique values from the specified column; if \code{save.data} = T, a \code{.rds} file exported locally
+A list containing unique values from the specified column. if \code{save.data} = T, a \code{.rds} file is exported locally.
 }
 \description{
 Extracts distinct values of specified field/s in the BOLD parquet data.
 }
 \details{
-This function extracts unique values from one or more specified columns in BOLD parquet data. It handles both the parquet file and \code{tbl_sql} objects from \code{bold_parquet_search} as input. The results can be saved to disk as an RDS file for later use.
+This function extracts unique values from one or more specified columns in BOLD parquet data. It handles both the parquet file and \code{tbl_sql} objects from \code{bold_parquet_search} as input. The results can be saved to disk as an \code{.rds} file for later use.
 }
 \examples{
 \dontrun{
 
 
-# Search the BOLD data
+# Search the BOLD data package
 bold_search <- bold_parquet_search(
   input.parquet = parquet_file,
   taxonomy = "Diptera",
@@ -43,6 +43,7 @@ bold_search <- bold_parquet_search(
 
 # Get the field values
 
-vocab.data <- bcdm_field_values(bold_search, bold_search, specific.cols = c("inst", "identified.by"))
+vocab.data <- bcdm_field_values(bold_search, bold_search,
+specific.cols = c("inst", "identified.by"))
 }
 }

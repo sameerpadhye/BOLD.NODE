@@ -23,35 +23,35 @@ bold_parquet_search(
 )
 }
 \arguments{
-\item{input.parquet}{Path to the input parquet file}
+\item{input.parquet}{Path to the input parquet file.}
 
-\item{ids}{Vector of process IDs or sample IDs to filter by}
+\item{ids}{Vector of process IDs or sample IDs to filter by.}
 
-\item{bins}{Vector of BIN numbers (i.e. URIs) to filter by}
+\item{bins}{Vector of BIN numbers (i.e., URIs) to filter by.}
 
-\item{taxonomy}{Vector of taxonomic names to filter by (can include kingdom, phylum, class, order, family, subfamily, genus, species)}
+\item{taxonomy}{Vector of taxonomic names to filter by (can include kingdom, phylum, class, order, family, subfamily, genus, species).}
 
-\item{geography}{Vector of geographic locations to filter by (can include country.ocean, province.state, region, sector, site)}
+\item{geography}{Vector of geographic locations to filter by (can include country.ocean, province.state, region, sector, site).}
 
-\item{institutes}{Vector of institute codes to filter by}
+\item{institutes}{Vector of institute codes to filter by.}
 
-\item{identified.by}{Vector of identifiers to filter by}
+\item{identified.by}{Vector of identifiers to filter by.}
 
-\item{seq.source}{Vector of sequence run sites to filter by}
+\item{seq.source}{Vector of sequence run sites to filter by.}
 
-\item{marker}{Vector of marker codes to filter by}
+\item{marker}{Vector of marker codes to filter by.}
 
-\item{basecount}{Nucleotide base count filter - either a single value or a vector of two values for a range}
+\item{basecount}{Nucleotide base count filter - either a single value or a vector of two values for a range.}
 
-\item{biogeo.cat}{Vector of biogeographic/ecological categories to filter by (biome, realm, or ecoregion)}
+\item{biogeo.cat}{Vector of biogeographic/ecological categories to filter by (biome, realm, or ecoregion).}
 
-\item{dataset.projects}{Vector of dataset/project codes to filter by}
+\item{dataset.projects}{Vector of dataset/project codes to filter by.}
 
-\item{bounding.box}{Numeric vector of length 4: c(min_lon, max_lon, min_lat, max_lat)}
+\item{bounding.box}{Numeric vector of length 4: c(min_lon, max_lon, min_lat, max_lat).}
 
-\item{ambi.base.cutoff}{Character value for filtering data based proportion of ambiguous bases (IUPAC codes).Three values currently available ("<1\%", "1-5\%", or ">5\%"); Default value is NULL}
+\item{ambi.base.cutoff}{Character value for filtering data based proportion of ambiguous bases (IUPAC codes). Three values currently available ("<1\%", "1-5\%", or ">5\%"). Default value is NULL.}
 
-\item{specific.cols}{Optional character vector of specific columns to return}
+\item{specific.cols}{Optional character vector of specific columns to return.}
 }
 \value{
 A \code{tbl_sql} object containing the filtered data. Total records in the search are printed on the console.
@@ -60,13 +60,13 @@ A \code{tbl_sql} object containing the filtered data. Total records in the searc
 Search the BOLD public data packages available in the parquet format based on various search criteria including taxonomy, geography, institutes etc.
 }
 \details{
-This function loads the BOLD public data packages parquet files (\url{https://boldsystems.org/data/data-packages/}) via duckDB and applies filters based on the provided parameters. It supports filtering by ids (sampleid, processid), taxonomy (from kingdom to species level), geography (country to site level), biogeography (biome to ecoregion level), BINs, institutes, identifiers, sequence sources, genetic markers, nucleotide base counts,dataset or projects, spatial bounding boxes, and ambiguous base percent cutoffs. Users can also specify particular columns to return using the \code{specific.cols} parameter (column names can be checked using the \code{bcdm_field_names} function). The \code{tbl_sql} object can then be used by any of the \verb{bcdm_to_*} functions for data transformations or \code{bold_search_collect} to load all the data in memory.
+This function loads the BOLD public data packages parquet files (\url{https://boldsystems.org/data/data-packages/}) via DuckDB and applies filters based on the provided parameters. It supports filtering by ids (sampleid, processid), taxonomy (from kingdom to species level), geography (country to site level), biogeography (biome to ecoregion level), BINs, institutes, identifiers, sequence sources, genetic markers, nucleotide base counts, dataset or projects, spatial bounding boxes, and ambiguous base percent cutoffs. Users can also specify particular columns to return using the \code{specific.cols} parameter (column names can be checked using the \code{bcdm_field_names} function). The \code{tbl_sql} object can then be used by any of the \verb{bcdm_to_*} functions for data transformations or \code{bold_search_collect} to load all the data in memory.
 }
 \examples{
 \dontrun{
 
 
-# Search the BOLD data
+# Search the BOLD data package
 
 # Taxonomy
 bold_search <- bold_parquet_search(

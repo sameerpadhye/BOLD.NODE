@@ -1,10 +1,10 @@
-#' Retrieve metadata of the BOLD data fields
+#' Retrieve metadata of the BOLD BCDM data fields
 #'
 #' @description Provides information on the field (column) names and their respective data type, all of which are compliant with the Barcode Core Data Model (BCDM).
 #'
 #' @param print.output Whether the output should be printed in the console. Default is FALSE.
 #'
-#' @details The function downloads the latest field (column) meta data (file type and brief description) for the Barcode Core Data Model (BCDM) from <https://github.com/boldsystems-central/BCDM/blob/main/field_definitions.tsv>; output = TRUE will print the information in the console.
+#' @details The function downloads the latest field (column) metadata (file type and brief description) for the Barcode Core Data Model (BCDM) from <https://github.com/boldsystems-central/BCDM/blob/main/field_definitions.tsv>; output = TRUE will print the information in the console.
 #' \emph{Important Note}: Two field names 'country/ocean' and 'province/state' have been modified to 'country.ocean' and 'province.state' to match with BOLDconnectR output and for operational ease.
 #'
 #' @returns A data frame containing definitions for all fields (columns).

@@ -2,7 +2,7 @@
 % Please edit documentation in R/external.bcdm_field_names.R
 \name{bcdm_field_names}
 \alias{bcdm_field_names}
-\title{Retrieve metadata of the BOLD data fields}
+\title{Retrieve metadata of the BOLD BCDM data fields}
 \usage{
 bcdm_field_names(print.output = FALSE)
 }
@@ -16,7 +16,7 @@ A data frame containing definitions for all fields (columns).
 Provides information on the field (column) names and their respective data type, all of which are compliant with the Barcode Core Data Model (BCDM).
 }
 \details{
-The function downloads the latest field (column) meta data (file type and brief description) for the Barcode Core Data Model (BCDM) from \url{https://github.com/boldsystems-central/BCDM/blob/main/field_definitions.tsv}; output = TRUE will print the information in the console.
+The function downloads the latest field (column) metadata (file type and brief description) for the Barcode Core Data Model (BCDM) from \url{https://github.com/boldsystems-central/BCDM/blob/main/field_definitions.tsv}; output = TRUE will print the information in the console.
 \emph{Important Note}: Two field names 'country/ocean' and 'province/state' have been modified to 'country.ocean' and 'province.state' to match with BOLDconnectR output and for operational ease.
 }
 \examples{

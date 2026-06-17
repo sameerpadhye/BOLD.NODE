@@ -2,23 +2,23 @@
 #'
 #' @description Search the BOLD public data packages available in the parquet format based on various search criteria including taxonomy, geography, institutes etc.
 #'
-#' @details This function loads the BOLD public data packages parquet files (<https://boldsystems.org/data/data-packages/>) via duckDB and applies filters based on the provided parameters. It supports filtering by ids (sampleid, processid), taxonomy (from kingdom to species level), geography (country to site level), biogeography (biome to ecoregion level), BINs, institutes, identifiers, sequence sources, genetic markers, nucleotide base counts,dataset or projects, spatial bounding boxes, and ambiguous base percent cutoffs. Users can also specify particular columns to return using the `specific.cols` parameter (column names can be checked using the `bcdm_field_names` function). The `tbl_sql` object can then be used by any of the `bcdm_to_*` functions for data transformations or `bold_search_collect` to load all the data in memory.
+#' @details This function loads the BOLD public data packages parquet files (<https://boldsystems.org/data/data-packages/>) via DuckDB and applies filters based on the provided parameters. It supports filtering by ids (sampleid, processid), taxonomy (from kingdom to species level), geography (country to site level), biogeography (biome to ecoregion level), BINs, institutes, identifiers, sequence sources, genetic markers, nucleotide base counts, dataset or projects, spatial bounding boxes, and ambiguous base percent cutoffs. Users can also specify particular columns to return using the `specific.cols` parameter (column names can be checked using the `bcdm_field_names` function). The `tbl_sql` object can then be used by any of the `bcdm_to_*` functions for data transformations or `bold_search_collect` to load all the data in memory.
 #'
-#' @param input.parquet Path to the input parquet file
-#' @param ids Vector of process IDs or sample IDs to filter by
-#' @param bins Vector of BIN numbers (i.e. URIs) to filter by
-#' @param taxonomy Vector of taxonomic names to filter by (can include kingdom, phylum, class, order, family, subfamily, genus, species)
-#' @param geography Vector of geographic locations to filter by (can include country.ocean, province.state, region, sector, site)
-#' @param institutes Vector of institute codes to filter by
-#' @param identified.by Vector of identifiers to filter by
-#' @param seq.source Vector of sequence run sites to filter by
-#' @param marker Vector of marker codes to filter by
-#' @param basecount Nucleotide base count filter - either a single value or a vector of two values for a range
-#' @param biogeo.cat Vector of biogeographic/ecological categories to filter by (biome, realm, or ecoregion)
-#' @param dataset.projects Vector of dataset/project codes to filter by
-#' @param bounding.box Numeric vector of length 4: c(min_lon, max_lon, min_lat, max_lat)
-#' @param ambi.base.cutoff Character value for filtering data based proportion of ambiguous bases (IUPAC codes).Three values currently available ("<1%", "1-5%", or ">5%"); Default value is NULL
-#' @param specific.cols Optional character vector of specific columns to return
+#' @param input.parquet Path to the input parquet file.
+#' @param ids Vector of process IDs or sample IDs to filter by.
+#' @param bins Vector of BIN numbers (i.e., URIs) to filter by.
+#' @param taxonomy Vector of taxonomic names to filter by (can include kingdom, phylum, class, order, family, subfamily, genus, species).
+#' @param geography Vector of geographic locations to filter by (can include country.ocean, province.state, region, sector, site).
+#' @param institutes Vector of institute codes to filter by.
+#' @param identified.by Vector of identifiers to filter by.
+#' @param seq.source Vector of sequence run sites to filter by.
+#' @param marker Vector of marker codes to filter by.
+#' @param basecount Nucleotide base count filter - either a single value or a vector of two values for a range.
+#' @param biogeo.cat Vector of biogeographic/ecological categories to filter by (biome, realm, or ecoregion).
+#' @param dataset.projects Vector of dataset/project codes to filter by.
+#' @param bounding.box Numeric vector of length 4: c(min_lon, max_lon, min_lat, max_lat).
+#' @param ambi.base.cutoff Character value for filtering data based proportion of ambiguous bases (IUPAC codes). Three values currently available ("<1%", "1-5%", or ">5%"). Default value is NULL.
+#' @param specific.cols Optional character vector of specific columns to return.
 #'
 #' @return A `tbl_sql` object containing the filtered data. Total records in the search are printed on the console.
 #'
@@ -31,7 +31,7 @@
 #' \dontrun{
 #'
 #'
-#' # Search the BOLD data
+#' # Search the BOLD data package
 #'
 #' # Taxonomy
 #' bold_search <- bold_parquet_search(

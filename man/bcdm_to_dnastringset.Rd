@@ -7,14 +7,14 @@
 bcdm_to_dnastringset(bold.search.res, marker = NULL, cols_for_seq_names)
 }
 \arguments{
-\item{bold.search.res}{A \code{tbl_sql} object containing BOLD search results}
+\item{bold.search.res}{A \code{tbl_sql} object containing BOLD search results.}
 
-\item{marker}{Character vector specifying the genetic marker}
+\item{marker}{Character vector specifying the genetic marker.}
 
-\item{cols_for_seq_names}{Character vector of field names to include in the header (separated by "|")}
+\item{cols_for_seq_names}{Character vector of field names to include in the header.}
 }
 \value{
-A \code{DNAStringSet} object
+A \code{DNAStringSet} object.
 }
 \description{
 Converts the sequence data from the search result into a DNAStringSet object for downstream multiple sequence alignment with customized headers.
@@ -26,7 +26,7 @@ This function transforms the search results from \code{bold_parquet_search} into
 \dontrun{
 
 
-# Search the BOLD data
+# Search the BOLD data package
 bold_search <- bold_parquet_search(
   input.parquet = parquet_file,
   taxonomy = "Coleoptera",

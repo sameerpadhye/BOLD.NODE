@@ -2,14 +2,14 @@
 #'
 #' @description Exports nucleotide sequences from BOLD search results to a FASTA file with customizable headers.
 #'
-#' @details This function transforms the search results from `bold_parquet_search` into a FASTA file. Data chunking  option is available to manage large sizes to avoid memory issues. The `fas.header` argument lets users create custom headers using the BCDM field names (Metadata on fields can be checked using the `bcdm_field_names` function).
+#' @details This function transforms the search results from `bold_parquet_search` into a FASTA file. A data chunking  option is available to manage large sizes to avoid memory issues. The `fas.header` argument lets users create custom headers using the BCDM field names (Metadata on fields can be checked using the `bcdm_field_names` function).
 #'
-#' @param bold.search.res A tbl_sql object containing BOLD search results
-#' @param output.file Path to the output FASTA file
-#' @param fas.header Character vector of field names to include in the FASTA header (separated by "|")
-#' @param chunk.size Number of records to process in each chunk (default: 1000000)
+#' @param bold.search.res A tbl_sql object containing BOLD search results.
+#' @param output.file Path to the output FASTA file.
+#' @param fas.header Character vector of field names to include in the FASTA header.
+#' @param chunk.size Number of records to process in each chunk (default: 1000000).
 #'
-#' @return writes a FASTA file to disk with custom headers as specified by the user
+#' @return writes a FASTA file to disk with custom headers as specified by the user.
 #'
 #' @importFrom dplyr select filter mutate compute collect
 #' @importFrom dbplyr sql
@@ -19,7 +19,7 @@
 #' \dontrun{
 #'
 #'
-#' # Search the BOLD data
+#' # Search the BOLD data package
 #' bold_search <- bold_parquet_search(
 #'   input.parquet = parquet_file,
 #'   taxonomy = "Coleoptera",

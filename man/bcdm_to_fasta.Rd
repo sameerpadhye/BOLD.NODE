@@ -7,28 +7,28 @@
 bcdm_to_fasta(bold.search.res, output.file, fas.header, chunk.size = 1e+06)
 }
 \arguments{
-\item{bold.search.res}{A tbl_sql object containing BOLD search results}
+\item{bold.search.res}{A tbl_sql object containing BOLD search results.}
 
-\item{output.file}{Path to the output FASTA file}
+\item{output.file}{Path to the output FASTA file.}
 
-\item{fas.header}{Character vector of field names to include in the FASTA header (separated by "|")}
+\item{fas.header}{Character vector of field names to include in the FASTA header.}
 
-\item{chunk.size}{Number of records to process in each chunk (default: 1000000)}
+\item{chunk.size}{Number of records to process in each chunk (default: 1000000).}
 }
 \value{
-writes a FASTA file to disk with custom headers as specified by the user
+writes a FASTA file to disk with custom headers as specified by the user.
 }
 \description{
 Exports nucleotide sequences from BOLD search results to a FASTA file with customizable headers.
 }
 \details{
-This function transforms the search results from \code{bold_parquet_search} into a FASTA file. Data chunking  option is available to manage large sizes to avoid memory issues. The \code{fas.header} argument lets users create custom headers using the BCDM field names (Metadata on fields can be checked using the \code{bcdm_field_names} function).
+This function transforms the search results from \code{bold_parquet_search} into a FASTA file. A data chunking  option is available to manage large sizes to avoid memory issues. The \code{fas.header} argument lets users create custom headers using the BCDM field names (Metadata on fields can be checked using the \code{bcdm_field_names} function).
 }
 \examples{
 \dontrun{
 
 
-# Search the BOLD data
+# Search the BOLD data package
 bold_search <- bold_parquet_search(
   input.parquet = parquet_file,
   taxonomy = "Coleoptera",

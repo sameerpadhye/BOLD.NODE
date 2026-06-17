@@ -7,10 +7,10 @@
 bcdm_to_dwc(bold.search.res)
 }
 \arguments{
-\item{bold.search.res}{A \code{tbl_sql} object containing BOLD search results}
+\item{bold.search.res}{A \code{tbl_sql} object containing BOLD search results.}
 }
 \value{
-A data frame with columns mapped to Darwin Core equivalent fields
+A data frame with columns mapped to Darwin Core equivalent fields.
 }
 \description{
 Converts \code{bold_parquet_search} results from BCDM format to Darwin Core Standard format.
@@ -18,12 +18,12 @@ Converts \code{bold_parquet_search} results from BCDM format to Darwin Core Stan
 \details{
 This function maps BCDM (Barcode Core Data Model) fields to their Darwin Core equivalents.
 
-\emph{Important Note}: All fields should be available in the \code{bold_parquet_search} \code{tbl_sql} object otherwise, the function will throw an error
+\emph{Important Note}: All fields should be available in the \code{bold_parquet_search} \code{tbl_sql} object otherwise, the function will throw an error.
 }
 \examples{
 \dontrun{
 
-# Search the BOLD data
+# Search the BOLD data package
 bold_search <- bold_parquet_search(
   input.parquet = parquet_file,
   taxonomy = c("Cerambycidae", "Meloidae"),

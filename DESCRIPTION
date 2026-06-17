@@ -7,10 +7,10 @@ Authors@R: c(
     person("Dirk", "Steinke", , "dsteinke@uoguelph.ca", role = "aut")
   )
 Description: Provides efficient tools for exploring and transforming
-    the Barcode of Life Data Systems (BOLD) dataset releases on local
-    machines. It enables fast search across the entire dataset and
-    seamless conversion of results into formats compatible with widely
-    used R packages and third party tools.
+    the Barcode of Life Data Systems (BOLD) data packages on local
+    machines. It enables fast local querying of the data packages without 
+    relying on live API calls. Results can be easily converted into formats
+    compatible with widely used R packages and third party tools.
 License: CC BY 4.0
 Encoding: UTF-8
 LazyData: true

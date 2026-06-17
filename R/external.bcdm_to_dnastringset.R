@@ -4,11 +4,11 @@
 #'
 #' @details This function transforms the search results from `bold_parquet_search` into a `DNAStringSet` object suitable for downstream data analyses. The `cols_for_seq_names` argument lets users create custom headers using the BCDM column names.
 #'
-#' @param bold.search.res A `tbl_sql` object containing BOLD search results
-#' @param marker Character vector specifying the genetic marker
-#' @param cols_for_seq_names Character vector of field names to include in the header (separated by "|")
+#' @param bold.search.res A `tbl_sql` object containing BOLD search results.
+#' @param marker Character vector specifying the genetic marker.
+#' @param cols_for_seq_names Character vector of field names to include in the header.
 #'
-#' @return A `DNAStringSet` object
+#' @return A `DNAStringSet` object.
 #'
 #' @importFrom dplyr select filter mutate compute collect all_of %>%
 #' @importFrom dbplyr sql remote_con
@@ -18,7 +18,7 @@
 #' \dontrun{
 #'
 #'
-#' # Search the BOLD data
+#' # Search the BOLD data package
 #' bold_search <- bold_parquet_search(
 #'   input.parquet = parquet_file,
 #'   taxonomy = "Coleoptera",

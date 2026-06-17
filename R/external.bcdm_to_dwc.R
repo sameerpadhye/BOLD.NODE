@@ -4,11 +4,11 @@
 #'
 #' @details This function maps BCDM (Barcode Core Data Model) fields to their Darwin Core equivalents.
 #'
-#' \emph{Important Note}: All fields should be available in the `bold_parquet_search` `tbl_sql` object otherwise, the function will throw an error
+#' \emph{Important Note}: All fields should be available in the `bold_parquet_search` `tbl_sql` object otherwise, the function will throw an error.
 #'
-#' @param bold.search.res A `tbl_sql` object containing BOLD search results
+#' @param bold.search.res A `tbl_sql` object containing BOLD search results.
 #'
-#' @return A data frame with columns mapped to Darwin Core equivalent fields
+#' @return A data frame with columns mapped to Darwin Core equivalent fields.
 #'
 #' @importFrom dplyr select mutate case_when filter rename collect any_of
 #' @importFrom data.table fread
@@ -17,7 +17,7 @@
 #' @examples
 #' \dontrun{
 #'
-#' # Search the BOLD data
+#' # Search the BOLD data package
 #' bold_search <- bold_parquet_search(
 #'   input.parquet = parquet_file,
 #'   taxonomy = c("Cerambycidae", "Meloidae"),
