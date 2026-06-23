@@ -15,7 +15,7 @@
 #'
 #' @return A data frame with occurrence data (taxon names as columns, site categories or coordinates as rows).
 #'
-#' @importFrom dplyr select filter mutate collect count
+#' @importFrom dplyr select filter mutate collect count across
 #' @importFrom rlang sym
 #' @importFrom tidyr pivot_wider
 #'
@@ -46,8 +46,9 @@ bcdm_to_occmatrix <- function(bold.search.res,
                               taxon.name = NULL,
                               site.cat = NULL,
                               pre.abs = FALSE) {
+  # checking the data type
   check.tbl.sql(bold.search.res)
-
+  # create a map of taxonomic hierarchy
   rank_map <- c(
     kingdom = "kingdom",
     phylum = "phylum",
@@ -58,20 +59,16 @@ bcdm_to_occmatrix <- function(bold.search.res,
     species = "species",
     bin_uri = "bin_uri"
   )
-
   taxon.rank <- rank_map[[tolower(taxon.rank)]]
-
-
+  # If wrong taxon rank is provided
   if (is.null(taxon.rank)) {
     stop("Invalid taxonomic rank supplied.")
   }
-
   cols_to_select <- Filter(
     Negate(is.null),
     site.cat
   )
-
-
+  # To avoid some instances where names are same between animals and other kingdoms
   if (kingdom == "Animalia") {
     occ.data <- bold.search.res %>%
       dplyr::select(
@@ -93,17 +90,16 @@ bcdm_to_occmatrix <- function(bold.search.res,
       dplyr::filter(!is.na(nuc), nuc != "") %>%
       dplyr::filter(!is.na(taxon))
   }
-
-
+  # If taxon name is also provided
   if (!is.null(taxon.name)) {
     occ.data <- occ.data %>%
       dplyr::filter(taxon %in% taxon.name)
   }
-
-
+  # If site.cat is provided
   if (!is.null(site.cat)) {
     occ.data <- occ.data %>%
       dplyr::filter(!is.na(.data[[site.cat]])) %>%
+      dplyr::filter(.data[[site.cat]] != "") %>%
       dplyr::count(
         .data[[site.cat]],
         taxon,
@@ -118,21 +114,27 @@ bcdm_to_occmatrix <- function(bold.search.res,
         name = "count"
       )
   }
-
-
   # Collect
   occ.data <- occ.data %>%
     dplyr::collect()
-
+  # If result is an empty dataframe
   if (is.data.frame(occ.data) && nrow(occ.data) == 0) stop("No data retrieved.Please re-check the search criteria.")
-
+  # Long to wide conversion
   occ.data <- occ.data %>%
     tidyr::pivot_wider(
       names_from  = taxon,
       values_from = count,
       values_fill = 0
     )
-
-
+  # if pre.abs = T
+  if (pre.abs) {
+    occ.data.wide <- occ.data.wide %>%
+      dplyr::mutate(
+        dplyr::across(
+          -1,
+          ~ as.integer(.x >= 1)
+        )
+      )
+  }
   return(occ.data)
 }

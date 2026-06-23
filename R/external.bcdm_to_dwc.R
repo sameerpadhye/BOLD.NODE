@@ -32,22 +32,16 @@
 
 bcdm_to_dwc <- function(bold.search.res) {
   # Check if the input is a 'tbl_sql' input
-
   check.tbl.sql(bold.search.res)
-
   # Check if all BCDM is available
-
   bcdm_fields <- bcdm_field_names()
-
   if (length(setdiff(
     bcdm_fields$field,
     colnames(bold.search.res)
   )) > 0) {
     stop("Please check if all the BCDM fields are present in the data")
   }
-
   # BOLD to BCDM mapping with certain updates for some field name mappings
-
   bcdm_path <- "https://raw.githubusercontent.com/boldsystems-central/BCDM/refs/heads/main/mapping_BCDM_to_DWC.tsv"
 
   bold.2.bcdm <- suppressMessages(data.table::fread(bcdm_path,
@@ -71,10 +65,7 @@ bcdm_to_dwc <- function(bold.search.res) {
       bcdm_field == "province/state" ~ "province.state",
       TRUE ~ bcdm_field
     ))
-
-
   # Only the dwc fields are retained
-
   bold.2.bcdm <- bold.2.bcdm %>%
     dplyr::mutate(dwc_field = dplyr::case_when(
       bcdm_field == "processid" ~ "recordNumber",
@@ -97,7 +88,6 @@ bcdm_to_dwc <- function(bold.search.res) {
       bcdm_field == "primers_forward" ~ "pcr_primer_forward",
       bcdm_field == "primers_reverse" ~ "pcr_primer_reverse",
       bcdm_field == "sovereign_list" ~ "rightsHolder",
-      # bcdm_field=='collection_date_end'~'eventDate2',
       bcdm_field == "tissue_type" ~ "materialEntityType",
       bcdm_field == "voucher_type" ~ "disposition",
       TRUE ~ dwc_field
@@ -107,8 +97,7 @@ bcdm_to_dwc <- function(bold.search.res) {
       TRUE ~ bcdm_field
     )) %>%
     dplyr::filter(dwc_field != "")
-
-
+  # Adding the latitude, longitude data from BCDM's coord field
   dwc_output <- bold.search.res %>%
     select(any_of(bold.2.bcdm$bcdm_field)) %>%
     mutate(
@@ -120,44 +109,15 @@ bcdm_to_dwc <- function(bold.search.res) {
     select(-c(coord)) %>%
     collect() %>%
     select(-coord_clean)
-
+  # match the names
   rename_vec <- setNames(bold.2.bcdm$bcdm_field, bold.2.bcdm$dwc_field)
-
   # Remove the coord name from the rename vector as lat and lon are already created above
   coord_col <- which(rename_vec == "coord")
-
+  # Create a vector of renamed names
   rename_vec <- rename_vec[-c(coord_col[[1]])]
-
   # Apply the column name changes to the data
-
   dwc_output <- dwc_output %>%
     rename(!!!rename_vec) %>%
     rename("country" = "country/waterBody")
-
   return(dwc_output)
-
-
-  #
-  # add_fields<-data.frame(bcdm_field=c("biome","ecoregion","realm"),
-  #                        dwc_field=rep('occurrenceRemarks',3),
-  #                        dwc_type=rep("string",3))
-  #
-  # bold.2.bcdm <- bind_rows(bold.2.bcdm,add_fields)
-
-
-  # occurrenceRemarks=paste0('ecoregion: ',ecoregion,'|','biome: ',biome,'|','realm: ',realm)
-
-  #    rename(!!!rename_vec)%>%
-  # collect()
-
-  # select(-c(coord,coord_clean,biome,ecoregion,realm))%>%
-
-
-  # occ_remark_cols<-which(names(rename_vec)=='occurrenceRemarks')
-  #
-  # occ_remark_cols
-
-  # 2,3,4 here represent the columns for ecoregions.biome and realm from bcdm. The same name is used for all three and hence this has to be removed as column names need to be unique
-
-  # rename_vec<-rename_vec[-c(occ_remark_cols)]
 }

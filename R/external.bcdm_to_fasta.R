@@ -43,17 +43,14 @@ bcdm_to_fasta <- function(bold.search.res,
                           chunk.size = 1000000) {
   # Check if input is a tbl_sql (helper function you already have)
   check.tbl.sql(bold.search.res)
-
   # Ensure user specified fields exist
   user_specified_fields <- fas.header
-
+  # For FASTA headers
   quoted_fields <- DBI::dbQuoteIdentifier(
     dbplyr::remote_con(bold.search.res),
     user_specified_fields
   )
-
   fas_headers <- paste(quoted_fields, collapse = ", '|' ,")
-
   # Prepare sequence data
   seq.data <- bold.search.res %>%
     dplyr::select(
@@ -68,29 +65,23 @@ bcdm_to_fasta <- function(bold.search.res,
       row_num  = sql("row_number() over (order by nuc)")
     ) %>%
     dplyr::compute() # temporary table, safe for repeated runs
-
   # Count total rows
   total_rows <- seq.data %>%
     summarise(n = sql("count(*)")) %>%
     pull(n)
-
   # Determine chunk indices
   num_chunks <- ceiling(total_rows / chunk.size)
-
   # Open FASTA file
   con <- file(output.file, open = "wt", encoding = "UTF-8")
   on.exit(close(con), add = TRUE)
-
   # Loop through chunks
   for (i in seq_len(num_chunks)) {
     start <- (i - 1) * chunk.size + 1
     end <- min(i * chunk.size, total_rows)
-
     chunk <- seq.data %>%
       dplyr::filter(row_num >= start & row_num <= end) %>%
       dplyr::select(seq.name, nuc) %>%
       dplyr::collect()
-
     # Write FASTA
     writeLines(as.vector(rbind(chunk$seq.name, chunk$nuc)), con)
   }

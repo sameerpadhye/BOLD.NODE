@@ -50,17 +50,11 @@ bcdm_field_names <- function(print.output = FALSE) {
       field == "province/state" ~ "province.state",
       TRUE ~ field
     ))
-  # error = function(e) {
-  #   stop("Error: Failed to fetch data.",
-  #        "Please check your internet connection and try again.")
-  # }
-
-
+# Print the fields info in console
   if (print.output == TRUE) {
     return(bold.fields.data)
   } else {
     # This is so that the whole output is not printed in the console
-
     invisible(bold.fields.data)
   }
 }

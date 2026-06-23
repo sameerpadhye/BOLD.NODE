@@ -32,19 +32,18 @@
 #' @export
 
 get_concise_summary <- function(bold.search.res) {
+  # checking the data type
   check.tbl.sql(bold.search.res)
-
   bold.search.res.cols <- bold.search.res %>% colnames()
-
+  # Getting all the BCDM field column names
   bold_field_data <- bcdm_field_names(print.output = F) %>%
     dplyr::select(field)
-
+  # Check to see if all BCDM fields are present in the input data
   if (!all(bold_field_data$field %in% bold.search.res.cols)) {
     stop("Error: Concise summary requires all BCDM fields. Please re-check the search criteria.")
   }
-
   con <- dbplyr::remote_con(bold.search.res)
-
+  # A SQL like query to get the concise summary
   concise_summary <- bold.search.res %>%
     summarise(
       Total_records = n(),
@@ -63,9 +62,8 @@ get_concise_summary <- function(bold.search.res) {
       max_amplicon = max(nuc_basecount, na.rm = TRUE)
     ) %>%
     collect()
-
   DBI::dbExecute(con, "PRAGMA disable_progress_bar;")
-
+  # Further edits in the collected data
   concise_summary <- concise_summary %>%
     mutate(
       Unique_markers = paste(unique(bold.search.res %>%
@@ -81,8 +79,6 @@ get_concise_summary <- function(bold.search.res) {
       names_to = "Category",
       values_to = "Value"
     )
-
   DBI::dbExecute(con, "PRAGMA enable_progress_bar;")
-
   return(concise_summary)
 }

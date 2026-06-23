@@ -40,7 +40,6 @@ bcdm_to_dnastringset <- function(bold.search.res,
                                  cols_for_seq_names) {
   # Check if input is a tbl_sql (helper function you already have)
   check.tbl.sql(bold.search.res)
-
   # Check for Biostrings package
   check_biostrings <- function() {
     if (!requireNamespace("Biostrings", quietly = TRUE)) {
@@ -50,19 +49,16 @@ bcdm_to_dnastringset <- function(bold.search.res,
       )
     }
   }
-
   # Ensure required columns exist
   required_cols <- c("nuc", "marker_code", cols_for_seq_names)
-
   missing_cols <- setdiff(required_cols, colnames(bold.search.res))
-
+  # To check if minimum columns needed for creating a DNAstringset are available
   if (length(missing_cols) > 0) {
     stop(
       "The following required columns are missing from the input: ",
       paste(missing_cols, collapse = ", ")
     )
   }
-
   # Start processing tbl_sql
   seq.data <- bold.search.res %>%
     select(
@@ -73,18 +69,14 @@ bcdm_to_dnastringset <- function(bold.search.res,
     filter(!is.na(.data$nuc)) %>%
     filter(.data$nuc != "") %>%
     mutate(nuc = sql("REGEXP_REPLACE(nuc, '-', '')"))
-
   # Apply marker filter separately
   if (!is.null(marker)) {
     seq.data <- seq.data %>%
       filter(.data$marker_code %in% marker)
   }
-
   con <- dbplyr::remote_con(seq.data)
-
   # Quote column names
   quoted_cols <- DBI::dbQuoteIdentifier(con, cols_for_seq_names)
-
   # Build sequence names from specified columns
   obtain.seq.from.data <- seq.data %>%
     select(nuc, all_of(cols_for_seq_names)) %>%
@@ -97,17 +89,13 @@ bcdm_to_dnastringset <- function(bold.search.res,
       )
     ) %>%
     select(msa.seq.name, nuc)
-
   # Pull into R and convert to named character vector
   seq.from.data <- obtain.seq.from.data %>%
     collect() %>%
     {
       setNames(as.character(.$nuc), .$msa.seq.name)
     }
-
-
   # Convert to DNAStringSet
   dna.4.align <- DNAStringSet(seq.from.data)
-
   return(dna.4.align)
 }

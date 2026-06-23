@@ -58,21 +58,17 @@ bold_search_collect <- function(
 ) {
   # Match the type of file for export
   export.type <- match.arg(export.type)
-
-  # check if the input is a 'tbl_sql' object
+  # checking the data type
   check.tbl.sql(bold.search.res)
-
   # establish a temporary connection (for duckdb)
   con <- dbplyr::remote_con(bold.search.res)
-
   # parquet export (direct and doesnt need chunks)
   if (export && export.type == "parquet") {
     if (is.null(output.path)) {
       stop("Please provide output.path for parquet export")
     }
-
+    # Render the tbl_sql into a SQL like object for using to export the collected result back as a parquet file
     query <- dbplyr::sql_render(bold.search.res)
-
     tryCatch(
       DBI::dbExecute(
         con,
@@ -85,47 +81,36 @@ bold_search_collect <- function(
         )
       }
     )
-
     message("Parquet export complete.")
-
     return(invisible(NULL))
   }
-
   # TSV export needs chunking of data for collection before export
   # 1 Getting chunks
-
   # Disable progress bar
-
   DBI::dbExecute(con, "PRAGMA disable_progress_bar;")
-
+  # chunking the data
   chunk_info <- get_chunk_indices(
     input_file = bold.search.res,
     chunksize = chunk.size
   )
-
   total_rows <- chunk_info$total_rows
   chunk_size <- chunk_info$chunk_size
   chunk_indices <- chunk_info$chunk_indices
   total_chunks <- length(chunk_indices)
-
   # Enable the progress bar
   DBI::dbExecute(con, "PRAGMA enable_progress_bar;")
-
+  # Collecting based on the number of chunks
   if (total_chunks == 1) {
     message(sprintf("Collecting all %d rows in a single chunk...", total_rows))
     res <- bold.search.res %>% dplyr::collect()
   } else {
     tbl_sql <- dbplyr::sql_render(bold.search.res)
-
     res_chunks <- progressr::with_progress({
       p <- progressr::progressor(steps = total_chunks)
-
       lapply(chunk_indices, function(i) {
         offset <- (i - 1) * chunk_size
         size <- min(chunk_size, total_rows - offset)
-
         p(sprintf("Chunk %d/%d (%d rows)", i, total_chunks, size))
-
         sql_query <- paste0(
           "SELECT * FROM (",
           tbl_sql,
@@ -135,7 +120,6 @@ bold_search_collect <- function(
           " OFFSET ",
           offset
         )
-
         out <- tryCatch(
           DBI::dbGetQuery(con, sql_query),
           error = function(e) {
@@ -145,28 +129,21 @@ bold_search_collect <- function(
             )
           }
         )
-
-        gc()
-
+        # If sys.sleep is provided
         if (sys.sleep > 0) {
           Sys.sleep(sys.sleep)
         }
-
         out
       })
     })
-
     # Combine all the chunks
     res <- dplyr::bind_rows(res_chunks)
   }
-
   # Exporting as a TSV
-
   if (export && export.type == "tsv") {
     if (is.null(output.path)) {
       stop("Please provide output.path for TSV export")
     }
-
     utils::write.table(
       res,
       file = output.path,
@@ -174,7 +151,6 @@ bold_search_collect <- function(
       row.names = FALSE,
       quote = FALSE
     )
-
     message("TSV export complete.")
   }
 

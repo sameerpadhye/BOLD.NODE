@@ -16,8 +16,6 @@
 #'
 #' @examples
 #' \dontrun{
-#'
-#'
 #' # Search the BOLD data package
 #' bold_search <- bold_parquet_search(
 #'   input.parquet = parquet_file,
@@ -29,7 +27,8 @@
 #' # Get the field values
 #'
 #' vocab.data <- bcdm_field_values(bold_search, bold_search,
-#' specific.cols = c("inst", "identified.by"))
+#'   specific.cols = c("inst", "identified.by")
+#' )
 #' }
 #' @export
 #'
@@ -46,7 +45,6 @@ bcdm_field_values <- function(
   } else {
     bold_parquet_data <- import_parquet_data(input.data)
   }
-
   # Get unique values per column separately
   terms_list <- lapply(specific.cols, function(col) {
     bold_parquet_data %>%
@@ -55,16 +53,14 @@ bcdm_field_values <- function(
       dplyr::collect() %>%
       dplyr::pull(.data[[col]])
   })
-
+ # Name the elements of the list as per the column names specified in the specific.cols argument
   names(terms_list) <- specific.cols
-
+  # Save RDS file locally
   if (save.data) {
     if (is.null(output.file)) {
       stop("output.file must be provided when save.data = TRUE")
     }
-
     saveRDS(terms_list, paste0(output.file, ".rds"))
   }
-
   return(terms_list)
 }
