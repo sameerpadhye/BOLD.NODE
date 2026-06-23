@@ -119,19 +119,19 @@ collecting or transforming the data.
 
 # 1 Taxonomy
 
-# bold_search_taxonomy <- bold_parquet_search(parquet_path=parquet_file,
+# bold_search_taxonomy <- bold_parquet_search(input.parquet=parquet_file,
 # taxonomy = c("Odonata","Poecilia"))
 
 # 2 Geography
 
-# bold_search_geography <- bold_parquet_search(parquet_path=parquet_file,
+# bold_search_geography <- bold_parquet_search(input.parquet=parquet_file,
 # taxonomy = c("Panthera pardus"),
 # geography = c("India"))
 
 # 3 Combination of many search criteria
 
 # bold_search_combination <- bold_parquet_search(
-# parquet_path=parquet_file,
+# input.parquet=parquet_file,
 # taxonomy = "Coleoptera",
 # geography = "Canada",
 # marker = "COI-5P",
@@ -149,7 +149,7 @@ ensure you don’t exceed the available RAM.
 ``` r
 # Collect data (no export)
 
-# bold_search_geography <- bold_parquet_search(parquet_path=parquet_file,
+# bold_search_geography <- bold_parquet_search(input.parquet=parquet_file,
 # taxonomy = c("Panthera pardus"),
 # geography = c("India"))
 
@@ -160,7 +160,7 @@ ensure you don’t exceed the available RAM.
 
 # Collect data (with parquet export)
 
-# bold_search_collect(
+# collected_data_w_export<-bold_search_collect(
 # bold_search_geography,
 # chunk.size = 50000,
 # export = TRUE,
@@ -225,7 +225,6 @@ creates an occurrence matrix from the searched data based on the
 
 ``` r
 #  Search the data
-
 # bold_search <- bold_parquet_search(
 # input.parquet=parquet_file,
 # taxonomy = "Coleoptera",
@@ -233,12 +232,11 @@ creates an occurrence matrix from the searched data based on the
 # marker = "COI-5P",
 # basecount = c(500, 660))
 
-# Get occurrence data
-
+#  Get occurrence data
 # occurrence_data <- bcdm_to_occmatrix(
-#   bold_search,
-#   taxon.rank = "family",
-#   site.cat = "region")
+# bold_search,
+# taxon.rank = "family",
+# site.cat = "region")
 ```
 
 #### `bcdm_to_dnastringset`
@@ -250,7 +248,6 @@ imported before using this function
 
 ``` r
 #  Search the data
-
 # bold_search <- bold_parquet_search(
 # input.parquet=parquet_file,
 # taxonomy = "Coleoptera",
@@ -258,8 +255,7 @@ imported before using this function
 # marker = "COI-5P",
 # basecount = c(500, 660))
 
-# Get DNAStringSet
-
+#  Get DNAStringSet
 # bold.dnastringset<-bcdm_to_dnastringset(bold_search,
 # marker="COI-5P",
 # cols_for_seq_names = c("processid","family"))
@@ -272,7 +268,6 @@ total records, total countries, amplicon length range and many more
 
 ``` r
 #  Search the data
-
 # bold_search <- bold_parquet_search(
 # input.parquet=parquet_file,
 # taxonomy = "Coleoptera",
@@ -280,9 +275,7 @@ total records, total countries, amplicon length range and many more
 # marker = "COI-5P",
 # basecount = c(500, 660))
 
-
-# Get concise summary of the data
-
+#  Get concise summary of the data
 # bold_summary <- get_concise_summary(bold_search)
 ```
 
