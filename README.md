@@ -30,7 +30,7 @@ downstream analyses:
 
 The user manual for the package can be downloaded from the following
 link
-(<https://github.com/boldsystems-central/BOLDconnectR_examples/blob/main/BOLD.NODE_0.0.3.pdf>)
+(<https://github.com/boldsystems-central/BOLDconnectR_examples/blob/main/BOLD.NODE_v0.0.3.pdf>)
 
 ## Installation
 
