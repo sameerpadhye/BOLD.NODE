@@ -40,8 +40,8 @@ import_parquet_data <- function(path) {
 
 # 2 Check tbl_sql object
 check.tbl.sql <- function(tbl) {
-  if (!inherits(tbl, c("tbl_sql", "tbl_dbi", "tbl"))) {
-    stop("Error: Input must be a tbl_sql / dbplyr table")
+  if (!inherits(tbl, c("tbl_sql", "tbl_dbi"))) {
+    stop("Error: Input must be a bold_parquet_search output (tbl_sql / dbplyr table)")
   }
   TRUE
 }
