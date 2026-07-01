@@ -11,12 +11,15 @@
 #' for each rank, if desired (either as a vector of equal length to ranks or as a named list). The function
 #' can also be applied to any other grouping variable by modifying `groups`.
 #'
-#' \emph{Important Note}: As this function performs operations on the input data, it may be quite slow for very
+#' The provided `bold.search.res` input can be a search result object from \code{\link{bold_parquet_search}}
+#' or a BCDM data frame. Alternatively, it can be any data frame or data table minimally containing `bin_uri`
+#' (or other grouping variable) and taxonomic identifications for all available records.
+#'
+#' **Important Note**: As this function performs operations on the input data, it may be quite slow for very
 #' large data sets and/or weaker machines. Please check the size of `bold.search.res` input objects
 #' using \code{\link{get_concise_summary}} and proceed with caution.
 #'
-#' @param bold.search.res A `tbl_sql` object obtained from \code{\link{bold_parquet_search}}. Optional: one of `bold.search.res` or `bold.df` must be provided.
-#' @param bold.df Data frame in BCDM format, or any data.frame or data.table minimally containing `bin_uri` (or other grouping variable) and taxonomic identifications for all available records. Optional: one of `bold.search.res` or `bold.df` must be provided.
+#' @param bold.search.res A `tbl_sql` object obtained from \code{\link{bold_parquet_search}} or a data frame or data table in BCDM format.
 #' @param ranks A character vector of ranks to consider for consensus identifications. Defaults to the standard BOLD ranks.
 #' @param threshold Numeric value(s) between 0 and 1 indicating the minimum proportion of records in a BIN that must have a concordant identification in order to establish a consensus. Supply as a single value, a vector of length equal to the number of ranks in consideration, or a named list with names corresponding to ranks. If supplied as a named list, an optional "default" value can be set for any ranks that are not explicitly specified (e.g., \code{threshold = list(species = 0.95, default = 0.75)}). Default value is 1.0 (i.e., strict consensus at all ranks).
 #' @param min.ids Numeric value(s) indicating the minimum number of identifications needed to establish a consensus (names with fewer identifications are still included when calculating proportions). Supply as a single value, a vector of length equal to the number of ranks in consideration, or a named list with names corresponding to ranks. If supplied as a named list, an optional "default" value can be set for any ranks that are not explicitly specified (e.g., \code{min.ids = list(family = 1, default = 2)}). Default value is 2 (i.e., min 2 identifications at any rank).
@@ -65,8 +68,7 @@
 #'
 #' @export
 get_bin_consensus <- function(
-  bold.search.res = NULL,
-  bold.df = NULL,
+  bold.search.res,
   ranks = c("kingdom", "phylum", "class", "order", "family", "subfamily", "tribe", "genus", "species", "subspecies"),
   threshold = 1.0,
   min.ids = 1,
@@ -74,26 +76,30 @@ get_bin_consensus <- function(
   groups = "bin_uri",
   discord.format = c("text", "list")
 ) {
-  # Generate a data frame if one is not provided
-  if (is.null(bold.df)) {
-    if (is.null(bold.search.res)) {
-      stop("One of 'bold.df' or 'bold.search.res' must be provided and non-null.")
-    } else {
-      bold.df <- bold.search.res %>%
-        dplyr::filter((!is.na(bin_uri)) & (bin_uri != "")) %>%
-        dplyr::select(all_of(c(groups, ranks))) %>%
-        collect()
-    }
-  }
+  # Check input format
+  is_tbl_sql <- isTRUE(try(check.tbl.sql(bold.search.res), silent = TRUE))
+  if(!is_tbl_sql && !is.data.frame(bold.search.res)) stop("`bold.search.res` must be either a bold_parquet_search output (tbl_sql / dbplyr table) or a data frame / data table.")
+  # Check parameters
   stopifnot(
-    "One or more provided `ranks` is/are missing from `bold.df`." = all(ranks %in% names(bold.df)),
-    "Provided `groups` column is missing from `bold.df`." = (groups %in% names(bold.df)),
+    "One or more provided `ranks` is/are missing from `bold.df`." = all(ranks %in% colnames(bold.search.res)),
+    "Provided `groups` column is missing from `bold.df`." = (groups %in% colnames(bold.search.res)),
     "`threshold` value(s) must be one or more real numbers (i.e., doubles) between 0 and 1." = is.double(unlist(threshold)) & all(unlist(threshold) >= 0) & all(unlist(threshold) <= 1),
     "`threshold` must be either a single number, a vector of unnamed numbers equal in length to `ranks`, or a named list or vector of numbers with names corresponding to ranks." = ((length(threshold) == 1) | (length(threshold) == length(ranks)) | (!is.null(names(threshold)))),
     "`min.ids` value(s) must be one or more whole numbers greater than zero." = is.numeric(unlist(min.ids)) & all(unlist(min.ids) > 0) & all(unlist(min.ids) %% 1 == 0),
     "`min.ids` must be either a single number, a vector of unnamed numbers equal in length to `ranks`, or a named list or vector of numbers with names corresponding to ranks." = ((length(min.ids) == 1) | (length(min.ids) == length(ranks)) | (!is.null(names(min.ids)))),
     '`discord.format` must be one of "list" or "text".' = all(discord.format %in% c("list", "text"))
   )
+  # Collect into data.frame if needed, then create a data.table copy of the data
+  dt <- if (is_tbl_sql) {
+    bold.search.res %>%
+      dplyr::filter((!is.na(bin_uri)) & (bin_uri != "")) %>%
+      dplyr::select(all_of(c(groups, ranks))) %>%
+      collect() %>%
+      as.data.table() %>%
+      copy()
+  } else {
+    as.data.table(copy(bold.search.res))
+  }
   # Parse threshold & min.ids parameters and align them with ranks
   parse_param_vector <- function(param) {
     if ((length(param) != 1) | !is.null(names(param))) {
@@ -115,8 +121,6 @@ get_bin_consensus <- function(
   }
   threshold <- parse_param_vector(threshold)
   min.ids <- parse_param_vector(min.ids)
-  # Create a copy of the data to avoid mutating by reference
-  dt <- as.data.table(copy(bold.df))
   # Replace NA in taxonomy columns with empty values (if ignoring non-scientific names, replace those too)
   dt[, (ranks) := lapply(.SD, function(x) {
     fcase(enforce.scientific & grepl(re_int, x, perl = TRUE), "",

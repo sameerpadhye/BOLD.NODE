@@ -5,8 +5,7 @@
 \title{Compute consensus BIN taxonomy}
 \usage{
 get_bin_consensus(
-  bold.search.res = NULL,
-  bold.df = NULL,
+  bold.search.res,
   ranks = c("kingdom", "phylum", "class", "order", "family", "subfamily", "tribe",
     "genus", "species", "subspecies"),
   threshold = 1,
@@ -17,9 +16,7 @@ get_bin_consensus(
 )
 }
 \arguments{
-\item{bold.search.res}{A \code{tbl_sql} object obtained from \code{\link{bold_parquet_search}}. Optional: one of \code{bold.search.res} or \code{bold.df} must be provided.}
-
-\item{bold.df}{Data frame in BCDM format, or any data.frame or data.table minimally containing \code{bin_uri} (or other grouping variable) and taxonomic identifications for all available records. Optional: one of \code{bold.search.res} or \code{bold.df} must be provided.}
+\item{bold.search.res}{A \code{tbl_sql} object obtained from \code{\link{bold_parquet_search}} or a data frame or data table in BCDM format.}
 
 \item{ranks}{A character vector of ranks to consider for consensus identifications. Defaults to the standard BOLD ranks.}
 
@@ -48,7 +45,11 @@ specified by \code{threshold}, \code{min.ids}, and \code{enforce.scientific}. Di
 for each rank, if desired (either as a vector of equal length to ranks or as a named list). The function
 can also be applied to any other grouping variable by modifying \code{groups}.
 
-\emph{Important Note}: As this function performs operations on the input data, it may be quite slow for very
+The provided \code{bold.search.res} input can be a search result object from \code{\link{bold_parquet_search}}
+or a BCDM data frame. Alternatively, it can be any data frame or data table minimally containing \code{bin_uri}
+(or other grouping variable) and taxonomic identifications for all available records.
+
+\strong{Important Note}: As this function performs operations on the input data, it may be quite slow for very
 large data sets and/or weaker machines. Please check the size of \code{bold.search.res} input objects
 using \code{\link{get_concise_summary}} and proceed with caution.
 }

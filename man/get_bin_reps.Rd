@@ -5,8 +5,7 @@
 \title{Select representative records by BIN}
 \usage{
 get_bin_reps(
-  bold.search.res = NULL,
-  bold.df = NULL,
+  bold.search.res,
   Nreps = 1,
   by.taxon = FALSE,
   non.redundant.taxa = FALSE,
@@ -24,9 +23,7 @@ get_bin_reps(
 )
 }
 \arguments{
-\item{bold.search.res}{A \code{tbl_sql} object obtained from \code{\link{bold_parquet_search}}. Optional: one of \code{bold.search.res} or \code{bold.df} must be provided.}
-
-\item{bold.df}{Data frame in BCDM format, or any data.frame or data.table minimally containing \code{bin_uri}, unique record identifiers (e.g. \code{processid}, \code{sampleid}), taxonomic identifications for all available records, and any fields relevant to the provided selection \code{criteria} (see details). Optional: one of \code{bold.search.res} or \code{bold.df} must be provided.}
+\item{bold.search.res}{A \code{tbl_sql} object obtained from \code{\link{bold_parquet_search}} or a data frame or data table in BCDM format.}
 
 \item{Nreps}{Integer indicating the maximum number of representatives to select for each BIN (or BIN-taxon combination).}
 
@@ -53,6 +50,12 @@ randomly (the default) or deterministically by setting a random seed, making it
 possible to obtain reproducible results for the same input values.
 }
 \details{
+The provided \code{bold.search.res} input can be a search result object from
+\code{\link{bold_parquet_search}} or a BCDM data frame. Alternatively, it can be
+any data frame or data table minimally containing \code{bin_uri}, unique record identifiers
+(e.g. \code{processid} or \code{sampleid}), taxonomic identifications for all available records,
+and any fields relevant to the provided selection \code{criteria} (see below).
+
 Selection \code{criteria} must be listed in order of priority. Available criteria
 include the following:
 \itemize{
@@ -95,10 +98,10 @@ Default selection criteria are as follows:
                 seq_date = "latest")
 }\if{html}{\out{</div>}}
 
-\strong{Note}: The same data provided either as \code{bold.search.res} or \code{bold.df} may
-yield different representative records, even with the same random seed. This
-is because input goes through one of two paths depending on format, each with
-different default tie-breaking behaviours.
+\strong{Note}: The same data provided either as a \code{tbl_sql} object or a data frame
+may yield different representative records, even with the same random seed.
+This is because input goes through one of two paths depending on format, each
+with different default tie-breaking behaviours.
 }
 \examples{
 \dontrun{

@@ -10,6 +10,12 @@
 #' possible to obtain reproducible results for the same input values.
 #'  
 #' @details
+#' The provided `bold.search.res` input can be a search result object from 
+#' \code{\link{bold_parquet_search}} or a BCDM data frame. Alternatively, it can be
+#' any data frame or data table minimally containing `bin_uri`, unique record identifiers
+#' (e.g. `processid` or `sampleid`), taxonomic identifications for all available records,
+#' and any fields relevant to the provided selection `criteria` (see below).
+#' 
 #' Selection `criteria` must be listed in order of priority. Available criteria 
 #' include the following:
 #'   * `vouchered`: If `TRUE`, prioritize records with known voucher 
@@ -50,13 +56,12 @@
 #'                 seq_date = "latest")
 #' ```
 #' 
-#' **Note**: The same data provided either as `bold.search.res` or `bold.df` may
-#' yield different representative records, even with the same random seed. This 
-#' is because input goes through one of two paths depending on format, each with
-#' different default tie-breaking behaviours.
+#' **Note**: The same data provided either as a `tbl_sql` object or a data frame
+#' may yield different representative records, even with the same random seed. 
+#' This is because input goes through one of two paths depending on format, each
+#' with different default tie-breaking behaviours.
 #' 
-#' @param bold.search.res A `tbl_sql` object obtained from \code{\link{bold_parquet_search}}. Optional: one of `bold.search.res` or `bold.df` must be provided.
-#' @param bold.df Data frame in BCDM format, or any data.frame or data.table minimally containing `bin_uri`, unique record identifiers (e.g. `processid`, `sampleid`), taxonomic identifications for all available records, and any fields relevant to the provided selection `criteria` (see details). Optional: one of `bold.search.res` or `bold.df` must be provided.
+#' @param bold.search.res A `tbl_sql` object obtained from \code{\link{bold_parquet_search}} or a data frame or data table in BCDM format.
 #' @param Nreps Integer indicating the maximum number of representatives to select for each BIN (or BIN-taxon combination).
 #' @param by.taxon Logical value indicating whether to select representatives for each unique combination of BIN and taxonomic identification. If `TRUE`, the additional parameters `non_redundant_taxa` and `enforce_scientific` are also applied.
 #' @param non.redundant.taxa Logical value indicating whether to select representatives at the lowest available rank from each distinct taxonomic lineage. For example, in a BIN with the identifications "Apidae" and "Bombus impatiens", only records assigned to "Bombus impatiens" will be selected. Ignored if `by.taxon` is `FALSE`.
@@ -68,8 +73,7 @@
 #'    
 #' @usage
 #' get_bin_reps(
-#'   bold.search.res = NULL,
-#'   bold.df = NULL,
+#'   bold.search.res,
 #'   Nreps = 1,
 #'   by.taxon = FALSE,
 #'   non.redundant.taxa = FALSE,
@@ -122,8 +126,7 @@
 #' 
 #' @export
 get_bin_reps <- function(
-    bold.search.res = NULL,
-    bold.df = NULL,
+    bold.search.res,
     Nreps = 1,
     by.taxon = FALSE,
     non.redundant.taxa = FALSE,
@@ -139,14 +142,14 @@ get_bin_reps <- function(
                     seq_date = c("latest", "oldest")),
     seed = NULL
 ) {
-
-  if (is.null(bold.df) && is.null(bold.search.res)) stop("One of 'bold.df' or 'bold.search.res' must be provided and non-null.")
-
+  # Check input format
+  is_tbl_sql <- isTRUE(try(check.tbl.sql(bold.search.res), silent = TRUE))
+  if(!is_tbl_sql && !is.data.frame(bold.search.res)) stop("`bold.search.res` must be either a bold_parquet_search output (tbl_sql / dbplyr table) or a data frame / data table.")
+  # Check parameters
   stopifnot("'Nreps' must be a single numeric value." = is.numeric(Nreps)  && length(Nreps) == 1,
             "'by.taxon' must be a single logical value." = is.logical(by.taxon) && length(by.taxon) == 1,
             "'non.redundant.taxa' must be a single logical value." = is.logical(non.redundant.taxa) && length(non.redundant.taxa) == 1,
             "'enforce.scientific' must be a single logical value." = is.logical(enforce.scientific) && length(enforce.scientific) == 1)
-
   if(!missing(criteria)) {
     if(length(criteria$seq_length) > 1) {
       stop("'seq_length' criterion must be a single value.")
@@ -156,12 +159,12 @@ get_bin_reps <- function(
         stop("'seq_length' criterion must be one of 'COI_auto', 'longest', 'shortest', or a numeric value.")
       }
     }
-    
     stopifnot("'vouchered' criterion must be a single logical value." =
                 length(criteria$vouchered) == 0 || is.logical(criteria$vouchered) && length(criteria$vouchered) == 1)
     if(length(criteria$coll_date) > 1) stop("'coll_date' criterion must be one of 'latest' or 'oldest'.")
     if(length(criteria$seq_date) > 1) stop("'seq_date' criterion must be one of 'latest' or 'oldest'.")
   } else {
+    # Supply default criteria if param is omitted
     criteria = list(vouchered = TRUE,
                     seq_length = "COI_auto",
                     id_method = c("Morphology", "Morphology and sequence based",
@@ -172,18 +175,16 @@ get_bin_reps <- function(
                     coll_date = "latest",
                     seq_date = "latest")
   }
-
+  # Default BOLD ranks
   ranks <- c("kingdom", "phylum", "class", "order", "family", "subfamily", "tribe", "genus", "species", "subspecies")
-
+  # Define grouping columns
   select_by <- if(by.taxon) {
     c("bin_uri", "identification")
   } else {
     "bin_uri"
   }
-
-  # If local data is not supplied, use `tbl_sql` search result object
-  bin_reps <- if(is.null(bold.df)) {
-    
+  # Proceed according to input object type
+  bin_reps <- if(is_tbl_sql) {
     # Shuffle data to randomize representative order, or set pre-determined order using random seed
     df_shuffle <-if (!is.null(seed)) {
       id_col <- intersect(c("processid", "sampleid", "fieldid", "museumid", "record_id", "specimenid"),
@@ -192,19 +193,15 @@ get_bin_reps <- function(
     } else {
       bold.search.res %>% dplyr::mutate(.rand = random())
     }
-    
     # Build sequence of sort keys to use in query
     sort_sequence <- get_sql_sort(df_shuffle, criteria)
-    
     # Assign temporary column names for sorting
     temp_names <- paste0(".sort_", names(criteria))
-    
     # Assemble expressions for temporary sort columns
     sort_exprs <- setNames(
       lapply(sort_sequence, function(step) step$key),
       temp_names
     )
-    
     # Assemble sequential sort expressions
     arrange_exprs <- c(
       lapply(seq_along(temp_names), function(i) {
@@ -213,12 +210,10 @@ get_bin_reps <- function(
       }),
       list(sym(".rand"))
     )
-    
     # Apply any preliminary transformations (e.g. get modal sequence length per BIN)
     df_prepped <- Reduce(function(df, step) {
       if (!is.null(step$prep)) step$prep(df) else df
     }, sort_sequence, init = df_shuffle)
-    
     # Apply query expressions and collect representatives
     df_reps <- df_prepped %>%
       dplyr::filter(!is.na(bin_uri)) %>%
@@ -231,7 +226,6 @@ get_bin_reps <- function(
       dplyr::arrange(!!!arrange_exprs) %>%
       dplyr::collect() %>%
       dplyr::select(-all_of(temp_names), -.row_rank, -.rand, -any_of(c(".bin_mode")))
-    
     # For simplicity when by.taxon == TRUE all unique combinations of `bin_uri` and `identification` are collected
     # If necessary they are filtered further according to supplied parameters
     if(by.taxon) {
@@ -255,7 +249,6 @@ get_bin_reps <- function(
             as.character()
           df %>% dplyr::filter(identification %in% unique_ids)
         }
-        
         col_order <- names(df_reps)
         df_reps <- df_reps %>%
           dplyr::group_by(bin_uri) %>%
@@ -264,15 +257,11 @@ get_bin_reps <- function(
           dplyr::relocate(all_of(col_order))
       }
     }
-    
     df_reps
-
   } else { # If local data is supplied, select BIN reps from there
-    
     # Randomize representative order (using random seed for pre-determined order if provided)
     if(!is.null(seed)) set.seed(seed)
-    data <- as.data.table(bold.df)[!is.na(bin_uri) & (bin_uri != "")][sample(.N)]
-    
+    data <- as.data.table(bold.search.res)[!is.na(bin_uri) & (bin_uri != "")][sample(.N)]
     # Filter by identification if applicable
     if(by.taxon) {
       if(enforce.scientific) {
@@ -289,15 +278,10 @@ get_bin_reps <- function(
         })], by = "bin_uri"]$V1]
       }
     }
-    
     # Build sequence of sort keys to apply to data table
     sort_sequence <- get_dt_sort(data, criteria)
-
-    # Apply sort keys in sequence to select representatives
+    # Apply sort keys in sequence to select and return representatives
     data[data[do.call("order", sort_sequence), .I[head(round(Nreps, 0))], by = select_by]$V1, ]
-    
   }
-
   return(as.data.frame(bin_reps))
-
 }
