@@ -2,7 +2,7 @@
 % Please edit documentation in R/external.get_bin_consensus.R
 \name{get_bin_consensus}
 \alias{get_bin_consensus}
-\title{Compute consensus BIN taxonomy for BOLD data package}
+\title{Compute consensus BIN taxonomy}
 \usage{
 get_bin_consensus(
   bold.search.res = NULL,
@@ -55,7 +55,7 @@ using \code{\link{get_concise_summary}} and proceed with caution.
 \examples{
 \dontrun{
 
-# Search for BOLD data package
+# Search BOLD data package
 bold_search <- bold_parquet_search(
   input.parquet = parquet_file,
   taxonomy = "Coleoptera",

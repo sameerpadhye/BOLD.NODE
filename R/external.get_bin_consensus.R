@@ -1,4 +1,4 @@
-#' Compute consensus BIN taxonomy for BOLD data package
+#' Compute consensus BIN taxonomy
 #'
 #' @description
 #' Computes and returns consensus taxonomic identifications for each BIN in search results or a BCDM data frame.
@@ -32,7 +32,7 @@
 #' @examples
 #' \dontrun{
 #'
-#' # Search for BOLD data package
+#' # Search BOLD data package
 #' bold_search <- bold_parquet_search(
 #'   input.parquet = parquet_file,
 #'   taxonomy = "Coleoptera",
@@ -94,8 +94,6 @@ get_bin_consensus <- function(
     "`min.ids` must be either a single number, a vector of unnamed numbers equal in length to `ranks`, or a named list or vector of numbers with names corresponding to ranks." = ((length(min.ids) == 1) | (length(min.ids) == length(ranks)) | (!is.null(names(min.ids)))),
     '`discord.format` must be one of "list" or "text".' = all(discord.format %in% c("list", "text"))
   )
-  # Define regex for non-scientific names
-  re_int <- "\\.\\Z|\\S{2,}\\.\\S|[0-9]|\\s[A-Z]|[A-Z]\\Z|[A-Z]{2}|[a-z][A-Z]|_(?!(hn|sl|ss)\\Z)|%|\\?|!|\\[|\\]|\\{|\\}|\\(|\\)|,|\\s(?:aff|agg|cf|complex|group|grp|gr|gp|cmplx|pr|ms|cfr|nr|nsp|near|nomen|hybrid|voucher|form|from|ss|ssl|see|spp?|sample)\\.?(?:\\s|\\Z)"
   # Parse threshold & min.ids parameters and align them with ranks
   parse_param_vector <- function(param) {
     if ((length(param) != 1) | !is.null(names(param))) {
