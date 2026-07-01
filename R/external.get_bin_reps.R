@@ -261,7 +261,7 @@ get_bin_reps <- function(
   } else { # If local data is supplied, select BIN reps from there
     # Randomize representative order (using random seed for pre-determined order if provided)
     if(!is.null(seed)) set.seed(seed)
-    data <- as.data.table(bold.search.res)[!is.na(bin_uri) & (bin_uri != "")][sample(.N)]
+    data <- as.data.table(bold.search.res)[sample(nrow(bold.search.res))][!is.na(bin_uri) & (bin_uri != "")]
     # Filter by identification if applicable
     if(by.taxon) {
       if(enforce.scientific) {
@@ -281,7 +281,7 @@ get_bin_reps <- function(
     # Build sequence of sort keys to apply to data table
     sort_sequence <- get_dt_sort(data, criteria)
     # Apply sort keys in sequence to select and return representatives
-    data[data[do.call("order", sort_sequence), .I[head(round(Nreps, 0))], by = select_by]$V1, ]
+    data[data[do.call("order", sort_sequence), .I[seq_len(min(round(Nreps, 0), .N))], by = select_by]$V1, ]
   }
   return(as.data.frame(bin_reps))
 }
