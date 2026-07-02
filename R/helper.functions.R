@@ -318,12 +318,16 @@ get_sql_sort <- function(df, criteria) {
       list(key = if(criteria$coll_date == "latest") {
         key <- make_sort_key(col = "collection_date_start")
         dplyr::expr(dplyr::coalesce(as.Date(!!key), as.Date("0001-01-01")))
+      } else {
+        key <- make_sort_key(col = "collection_date_start")
       },
       desc = criteria$coll_date == "latest")
     } else if(step == "seq_date") {
       list(key = if(criteria$coll_date == "latest") {
         key <- make_sort_key(col = "sequence_upload_date")
         dplyr::expr(dplyr::coalesce(as.Date(!!key), as.Date("0001-01-01")))
+      } else {
+        key <- make_sort_key(col = "sequence_upload_date")
       },
       desc = criteria$seq_date == "latest")
     }
