@@ -8,8 +8,10 @@ bold_parquet_search(
   input.parquet,
   ids = NULL,
   bins = NULL,
-  taxonomy = NULL,
-  geography = NULL,
+  taxonomy.kingdom = "Animalia",
+  taxonomy.names = NULL,
+  geography.level = "any",
+  geography.names = NULL,
   institutes = NULL,
   identified.by = NULL,
   seq.source = NULL,
@@ -29,9 +31,13 @@ bold_parquet_search(
 
 \item{bins}{Vector of BIN numbers (i.e., URIs) to filter by.}
 
-\item{taxonomy}{Vector of taxonomic names to filter by (can include kingdom, phylum, class, order, family, subfamily, genus, species).}
+\item{taxonomy.kingdom}{Character value specifying the kingdom (includes "all", "Animalia", "Plantae", "Protista", "Fungi", "Bacteria"). Default is "all".}
 
-\item{geography}{Vector of geographic locations to filter by (can include country.ocean, province.state, region, sector, site).}
+\item{taxonomy.names}{Vector of taxonomic names to filter by (includes "kingdom", "phylum", "class", "order", "family", "subfamily","genus", "species").}
+
+\item{geography.level}{A single character value specifying the geographic hierarchy level to search within (includes "any", "country.ocean", "province.state", "region", "sector", "site"). Default is "any".}
+
+\item{geography.names}{Vector of geographic locations to filter by based on the \code{geography.level}.}
 
 \item{institutes}{Vector of institute codes to filter by.}
 
@@ -60,7 +66,7 @@ A \code{tbl_sql} object containing the filtered data. Total records in the searc
 Search the BOLD public data packages available in the parquet format based on various search criteria including taxonomy, geography, institutes etc.
 }
 \details{
-This function loads the BOLD public data packages parquet files (\url{https://boldsystems.org/data/data-packages/}) via DuckDB and applies filters based on the provided parameters. It supports filtering by ids (sampleid, processid), taxonomy (from kingdom to species level), geography (country to site level), biogeography (biome to ecoregion level), BINs, institutes, identifiers, sequence sources, genetic markers, nucleotide base counts, dataset or projects, spatial bounding boxes, and ambiguous base percent cutoffs. Users can also specify particular columns to return using the \code{specific.cols} parameter (column names can be checked using the \code{bcdm_field_names} function). The \code{tbl_sql} object can then be used by any of the \verb{bcdm_to_*} functions for data transformations or \code{bold_search_collect} to load all the data in memory.
+This function loads the BOLD public data packages parquet files (\url{https://boldsystems.org/data/data-packages/}) via DuckDB and applies filters based on the provided parameters. It supports filtering by ids (sampleid, processid), taxonomy (using combination of taxonomy.kingdom and taxonomy.names), geography (using combination of geography.level and geography.names), biogeography (biome to ecoregion level), BINs, institutes, identifiers, sequence sources, genetic markers, nucleotide base counts, dataset or projects, spatial bounding boxes, and ambiguous base percent cutoffs. Taxonomy and geography have a two filter system where \code{taxonomy.kingdom} and \code{geography.level} are assigned default values \code{Animalia} at \code{any} respectively to get all animal records from all matching geographic terms. There are some cases with respect to geographic names where the same names are used at two different geographic levels, e.g., Azerbaijan is a country but there is a region named the same in Iran. Using \code{any} geography level will get records for both but if the \code{geography.level} is set to \code{country.ocean}, only country level records from Azerbaijan will be selected. A similar situation also exists for some taxonomic names where same names exist in both plants and animals (Ex., The genus name Iris exists for plants as well as animals). Users can also specify particular columns to return using the \code{specific.cols} parameter (column names can be checked using the \code{bcdm_field_names} function). The \code{tbl_sql} object can then be used by any of the \verb{bcdm_to_*} functions for data transformations or \code{bold_search_collect} to load all the data in memory.
 }
 \examples{
 \dontrun{
@@ -71,20 +77,20 @@ This function loads the BOLD public data packages parquet files (\url{https://bo
 # Taxonomy
 bold_search <- bold_parquet_search(
   input.parquet = parquet_file,
-  taxonomy = c("Odonata", "Poecilia")
+  taxonomy.names = c("Odonata", "Poecilia")
 )
 
 # Geography
 bold_search <- bold_parquet_search(
   input.parquet = parquet_file,
-  geography = "Canada"
+  geography.names = "Canada"
 )
 
 # Combination of many search criteria
 bold_search <- bold_parquet_search(
   input.parquet = parquet_file,
-  taxonomy = "Coleoptera",
-  geography = "Canada",
+  taxonomy.names = "Coleoptera",
+  geography.names = "Canada",
   marker = "COI-5P",
   basecount = c(500, 660)
 )

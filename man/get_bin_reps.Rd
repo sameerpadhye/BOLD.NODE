@@ -109,8 +109,8 @@ with different default tie-breaking behaviours.
 # Search BOLD data package
 bold_search <- bold_parquet_search(
   input.parquet = parquet_file,
-  taxonomy = "Araneae",
-  geography = "Canada"
+  taxonomy.names = "Araneae",
+  geography.names = "Canada"
 )
 
 # Select three representatives per BIN from the searched data,
@@ -124,7 +124,7 @@ bin_reps <- get_bin_reps(
                                 "Morphology and sequence based"))
 )
 
-# Select one representative for each combination of BIN and taxonomic 
+# Select one representative for each combination of BIN and taxonomic
 # lineage (scientific names only), with preference for 658-bp barcodes
 # (e.g. for building a sequence tree of all known taxa)
 bin_tax_reps <- get_bin_reps(

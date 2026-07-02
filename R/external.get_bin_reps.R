@@ -1,5 +1,5 @@
 #' Select representative records by BIN
-#' 
+#'
 #' @description
 #' Obtain one or more representative record(s) from each BIN in search results or
 #' a BCDM data frame. BIN representatives can also be selected for each unique BIN-taxon
@@ -8,19 +8,19 @@
 #' records are tied after all criteria have been applied, the tie can be broken
 #' randomly (the default) or deterministically by setting a random seed, making it
 #' possible to obtain reproducible results for the same input values.
-#'  
+#'
 #' @details
-#' The provided `bold.search.res` input can be a search result object from 
+#' The provided `bold.search.res` input can be a search result object from
 #' \code{\link{bold_parquet_search}} or a BCDM data frame. Alternatively, it can be
 #' any data frame or data table minimally containing `bin_uri`, unique record identifiers
 #' (e.g. `processid` or `sampleid`), taxonomic identifications for all available records,
 #' and any fields relevant to the provided selection `criteria` (see below).
-#' 
-#' Selection `criteria` must be listed in order of priority. Available criteria 
+#'
+#' Selection `criteria` must be listed in order of priority. Available criteria
 #' include the following:
-#'   * `vouchered`: If `TRUE`, prioritize records with known voucher 
-#'    repositories over those mined from databases like GenBank. Setting this to 
-#'    `FALSE` will prioritize records *without* vouchers. To exclude this 
+#'   * `vouchered`: If `TRUE`, prioritize records with known voucher
+#'    repositories over those mined from databases like GenBank. Setting this to
+#'    `FALSE` will prioritize records *without* vouchers. To exclude this
 #'    criterion, simply omit it. Corresponding BCDM field: `inst`.
 #'   * `seq_length`: Can be used either to specify target barcode sequence
 #'    length as an integer, to preferentially select longer or shorter sequences
@@ -31,9 +31,9 @@
 #'    full codon; in the event of multiple modes, the one closest to 658bp is
 #'    chosen. Corresponding BCDM field: `nuc_basecount`.
 #'   * `id_method`: A character vector listing preferred identification methods
-#'    in order of priority. The function definition lists all available values per 
+#'    in order of priority. The function definition lists all available values per
 #'    the BCDM specification. Corresponding BCDM field: `identification_method`.
-#'   * `inst`: A character vector listing preferred voucher specimen repositories 
+#'   * `inst`: A character vector listing preferred voucher specimen repositories
 #'    in order of priority. Values not present in the input data are ignored.
 #'    Corresponding BCDM field: `inst`.
 #'   * `coll_date`: Prioritize recently collected specimens ("latest") or
@@ -42,7 +42,7 @@
 #'   * `seq_date`: Prioritize recently uploaded sequences ("latest") or
 #'    those with the earliest upload date ("oldest"). Corresponding BCDM field:
 #'    `sequence_upload_date`.
-#'    
+#'
 #' Default selection criteria are as follows:
 #' ```R
 #' criteria = list(vouchered = TRUE,
@@ -55,22 +55,22 @@
 #'                 coll_date = "latest",
 #'                 seq_date = "latest")
 #' ```
-#' 
+#'
 #' **Note**: The same data provided either as a `tbl_sql` object or a data frame
-#' may yield different representative records, even with the same random seed. 
+#' may yield different representative records, even with the same random seed.
 #' This is because input goes through one of two paths depending on format, each
 #' with different default tie-breaking behaviours.
-#' 
+#'
 #' @param bold.search.res A `tbl_sql` object obtained from \code{\link{bold_parquet_search}} or a data frame or data table in BCDM format.
 #' @param Nreps Integer indicating the maximum number of representatives to select for each BIN (or BIN-taxon combination).
 #' @param by.taxon Logical value indicating whether to select representatives for each unique combination of BIN and taxonomic identification. If `TRUE`, the additional parameters `non_redundant_taxa` and `enforce_scientific` are also applied.
 #' @param non.redundant.taxa Logical value indicating whether to select representatives at the lowest available rank from each distinct taxonomic lineage. For example, in a BIN with the identifications "Apidae" and "Bombus impatiens", only records assigned to "Bombus impatiens" will be selected. Ignored if `by.taxon` is `FALSE`.
 #' @param enforce.scientific Logical value indicating whether to ignore representatives with non-scientific, provisional names. Ignored if `by.taxon` is `FALSE`.
 #' @param criteria Named list of selection criteria to apply when sampling representatives, given in priority order. See details for more information and default values.
-#' @param seed Optional positive integer to use as a random seed for reproducible tie-breaking. If `NULL` (the default), ties are broken randomly and selected records may differ between runs. 
-#'   
+#' @param seed Optional positive integer to use as a random seed for reproducible tie-breaking. If `NULL` (the default), ties are broken randomly and selected records may differ between runs.
+#'
 #' @returns A data frame of selected representatives.
-#'    
+#'
 #' @usage
 #' get_bin_reps(
 #'   bold.search.res,
@@ -89,15 +89,15 @@
 #'                  seq_date = c("latest", "oldest")),
 #'   seed = NULL
 #' )
-#' 
+#'
 #' @examples
 #' \dontrun{
 #'
 #' # Search BOLD data package
 #' bold_search <- bold_parquet_search(
 #'   input.parquet = parquet_file,
-#'   taxonomy = "Araneae",
-#'   geography = "Canada"
+#'   taxonomy.names = "Araneae",
+#'   geography.names = "Canada"
 #' )
 #'
 #' # Select three representatives per BIN from the searched data,
@@ -111,7 +111,7 @@
 #'                                 "Morphology and sequence based"))
 #' )
 #'
-#' # Select one representative for each combination of BIN and taxonomic 
+#' # Select one representative for each combination of BIN and taxonomic
 #' # lineage (scientific names only), with preference for 658-bp barcodes
 #' # (e.g. for building a sequence tree of all known taxa)
 #' bin_tax_reps <- get_bin_reps(
@@ -123,7 +123,7 @@
 #'   criteria = list(seq_length = 658)
 #' )
 #' }
-#' 
+#'
 #' @export
 get_bin_reps <- function(
     bold.search.res,
