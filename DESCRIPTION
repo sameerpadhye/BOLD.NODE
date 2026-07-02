@@ -1,5 +1,5 @@
 Package: BOLD.NODE
-Title: Search and Explore BOLD Dataset Releases Efficiently
+Title: Search and Explore BOLD Data Packages Efficiently
 Version: 1.0.0
 Authors@R: c(
     person("Sameer", "Padhye", , "spadhye@uoguelph.ca", role = c("aut", "cre")),
@@ -29,3 +29,4 @@ Suggests:
     Biostrings,
     BiocManager
 Config/roxygen2/version: 8.0.0
+RoxygenNote: 7.3.3
