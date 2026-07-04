@@ -8,8 +8,8 @@ get_bin_reps(
   bold.search.res,
   Nreps = 1,
   by.taxon = FALSE,
-  non.redundant.taxa = FALSE,
   enforce.scientific = FALSE,
+  non.redundant.taxa = FALSE,
   criteria = list(vouchered = TRUE,
                   seq_length = c("COI_auto", "longest", "shortest", 658),
                   id_method = c("Morphology", "Morphology and sequence based",
@@ -27,13 +27,13 @@ get_bin_reps(
 
 \item{Nreps}{Integer indicating the maximum number of representatives to select for each BIN (or BIN-taxon combination).}
 
-\item{by.taxon}{Logical value indicating whether to select representatives for each unique combination of BIN and taxonomic identification. If \code{TRUE}, the additional parameters \code{non_redundant_taxa} and \code{enforce_scientific} are also applied.}
+\item{by.taxon}{Logical value indicating whether to select representatives for each unique combination of BIN and taxonomic identification. If \code{TRUE}, the additional parameters \code{non_redundant_taxa} and \code{enforce_scientific} are also applied. (See 'Sampling representatives by taxon' for more details.)}
 
-\item{non.redundant.taxa}{Logical value indicating whether to select representatives at the lowest available rank from each distinct taxonomic lineage. For example, in a BIN with the identifications "Apidae" and "Bombus impatiens", only records assigned to "Bombus impatiens" will be selected. Ignored if \code{by.taxon} is \code{FALSE}.}
+\item{enforce.scientific}{Logical value indicating whether to ignore non-scientific, provisional names for the purposes of sampling representatives by taxon. Ignored if \code{by.taxon} is \code{FALSE}. (See 'Sampling representatives by taxon' for more details.)}
 
-\item{enforce.scientific}{Logical value indicating whether to ignore representatives with non-scientific, provisional names. Ignored if \code{by.taxon} is \code{FALSE}.}
+\item{non.redundant.taxa}{Logical value indicating whether to select representatives at the lowest available rank from each distinct taxonomic lineage when sampling by taxon. For example, the identifications "Apidae", "Bombus", and "Bombus terrestris" are considered to belong to a single taxonomic lineage, and records assigned to "Bombus terrestris" will be selected first. Ignored if \code{by.taxon} is \code{FALSE}. (See 'Sampling representatives by taxon' for more details.)}
 
-\item{criteria}{Named list of selection criteria to apply when sampling representatives, given in priority order. See details for more information and default values.}
+\item{criteria}{Named list of selection criteria to apply when sampling representatives, given in priority order. See 'Criteria' for more information and default values.}
 
 \item{seed}{Optional positive integer to use as a random seed for reproducible tie-breaking. If \code{NULL} (the default), ties are broken randomly and selected records may differ between runs.}
 }
@@ -41,48 +41,36 @@ get_bin_reps(
 A data frame of selected representatives.
 }
 \description{
-Obtain one or more representative record(s) from each BIN in search results or
-a BCDM data frame. BIN representatives can also be selected for each unique BIN-taxon
-combination. The provided selection criteria are applied in sequence to select
-representatives, thus criteria should be given in order of priority. If multiple
-records are tied after all criteria have been applied, the tie can be broken
-randomly (the default) or deterministically by setting a random seed, making it
-possible to obtain reproducible results for the same input values.
+Obtain one or more representative record(s) from each BIN in search results or a BCDM data frame.
+BIN representatives can also be selected for each unique BIN-taxon combination. The chosen
+selection criteria are applied in sequence to select representatives, thus criteria should be given
+in order of priority. If multiple records are tied after all criteria have been applied, the tie is
+broken at random by default. Alternatively, it is possible to obtain reproducible results for the
+same input values by setting a random seed.
 }
-\details{
-The provided \code{bold.search.res} input can be a search result object from
-\code{\link{bold_parquet_search}} or a BCDM data frame. Alternatively, it can be
-any data frame or data table minimally containing \code{bin_uri}, unique record identifiers
-(e.g. \code{processid} or \code{sampleid}), taxonomic identifications for all available records,
-and any fields relevant to the provided selection \code{criteria} (see below).
+\section{Input}{
+The provided \code{bold.search.res} input can be a search result object from \code{\link{bold_parquet_search}}
+or a BCDM data frame. Alternatively, it can be any data frame or data table minimally containing
+\code{bin_uri}, unique record identifiers (e.g. \code{processid} or \code{sampleid}), taxonomic identifications
+for all available records, and any fields relevant to the provided selection \code{criteria} (see below).
 
+\strong{Important Note}: This function is not optimized for very large \code{tbl_sql} search results,
+particularly those with many unique BINs. On the other hand, input provided as a data frame or data table
+can be processed much more efficient. Therefore, if you intend to keep the full search results in addition
+to BIN representatives, it is recommended that you first collect the results into a data frame using
+\code{\link{bold_search_collect}}.
+}
+
+\section{Criteria}{
 Selection \code{criteria} must be listed in order of priority. Available criteria
 include the following:
-\itemize{
-\item \code{vouchered}: If \code{TRUE}, prioritize records with known voucher
-repositories over those mined from databases like GenBank. Setting this to
-\code{FALSE} will prioritize records \emph{without} vouchers. To exclude this
-criterion, simply omit it. Corresponding BCDM field: \code{inst}.
-\item \code{seq_length}: Can be used either to specify target barcode sequence
-length as an integer, to preferentially select longer or shorter sequences
-("longest", "shortest"), or to select sequences that match the modal* barcode
-length for each BIN ("COI_auto"). If a target length is provided, sequences
-closest to that target are prioritized. *Modal barcode length ("COI_auto"
-option) is determined after first rounding sequence lengths to the nearest
-full codon; in the event of multiple modes, the one closest to 658bp is
-chosen. Corresponding BCDM field: \code{nuc_basecount}.
-\item \code{id_method}: A character vector listing preferred identification methods
-in order of priority. The function definition lists all available values per
-the BCDM specification. Corresponding BCDM field: \code{identification_method}.
-\item \code{inst}: A character vector listing preferred voucher specimen repositories
-in order of priority. Values not present in the input data are ignored.
-Corresponding BCDM field: \code{inst}.
-\item \code{coll_date}: Prioritize recently collected specimens ("latest") or
-those collected longest ago ("oldest"). Records without dates are selected
-last in either case. Corresponding BCDM field: \code{collection_date_start}.
-\item \code{seq_date}: Prioritize recently uploaded sequences ("latest") or
-those with the earliest upload date ("oldest"). Corresponding BCDM field:
-\code{sequence_upload_date}.
+\describe{
+\item{\strong{vouchered}}{If \code{TRUE}, prioritize records with known voucher repositories over those mined from databases like GenBank. Setting this to \code{FALSE} will prioritize records \emph{without} vouchers. To exclude this criterion, simply omit it. (Corresponding BCDM field: \code{inst}.)}
+\item{\strong{seq_length}}{Can be used either to specify target barcode sequence length as an integer, to preferentially select longer or shorter sequences ("longest", "shortest"), or to select sequences that match the modal* barcode length for each BIN ("COI_auto"). If a target length is provided, sequences closest to that target are prioritized. *Modal barcode length ("COI_auto" option) is determined after first rounding sequence lengths to the nearest full codon; in the event of multiple modes, the one closest to 658bp is chosen. (Corresponding BCDM field: \code{nuc_basecount}.)}
+\item{\strong{id_method}}{A character vector listing preferred identification methods in order of priority. The function definition lists all available values per the BCDM specification. (Corresponding BCDM field: \code{identification_method}.)}
+\item{\strong{inst}}{A character vector listing preferred voucher specimen repositories in order of priority. Values not present in the input data are ignored. (Corresponding BCDM field: \code{inst}.)}
+\item{\strong{coll_date}}{Prioritize recently collected specimens ("latest") or those collected longest ago ("oldest"). Records without dates are selected last in either case. (Corresponding BCDM field: \code{collection_date_start}.)}
+\item{\strong{seq_date}}{Prioritize recently uploaded sequences ("latest") or those with the earliest upload date ("oldest"). (Corresponding BCDM field: \code{sequence_upload_date}.)}
 }
 
 Default selection criteria are as follows:
@@ -97,12 +85,44 @@ Default selection criteria are as follows:
                 coll_date = "latest",
                 seq_date = "latest")
 }\if{html}{\out{</div>}}
-
-\strong{Note}: The same data provided either as a \code{tbl_sql} object or a data frame
-may yield different representative records, even with the same random seed.
-This is because input goes through one of two paths depending on format, each
-with different default tie-breaking behaviours.
 }
+
+\section{Sampling representatives by taxon}{
+When \code{by.taxon = TRUE}, representatives are selected for each unique combination of \code{bin_uri} and
+\code{identification}. For example: Sampling single representatives from a BIN containing records identified as
+"Agrilinae", "Agrilus", and "Agrilus VVG_sp.42" will yield three records—one for each name. Two
+additional parameters can be used to tune this behaviour: \code{enforce.scientific}
+and \code{non.redundant.taxa}.
+
+When \code{enforce.scientific = TRUE}, interim / provisional names are ignored when considering unique
+identifications. For example: "Agrilus VVG_sp.42" and "Agrilus" will both be treated as "Agrilus". For the
+BIN from the previous example, this will yield two representatives: one each for "Agrilus" and "Agrilinae".
+Note that records with such names may still be selected as representatives if they are prioritized
+according to the provided criteria, or if they are the only available representatives in a BIN.
+
+When \code{non.redundant.taxa = TRUE}, the identifications in a BIN are compared with respect to their
+full taxonomic classification to determine the most specific name available for each distinct taxonomic
+lineage. For example: "Agrilinae", "Agrilus", and "Agrilus VVG_sp.42" will all be treated as a single
+lineage when selecting representatives by taxon. This taxonomic de-duplication behaviour is
+also affected by the previous parameter: when \code{enforce.scientific} and \code{non.redundant.taxa} are both
+\code{TRUE}, the names "Agrilinae", "Agrilus", "Agrilus VVG_sp.42", and "Agrilus crataegi" all collapse to
+the single taxon "Agrilus crataegi". When \code{non.redundant.taxa} is \code{TRUE}, and \code{enforce.scientific} is
+\code{FALSE}, the same four names collapse to "Agrilus VVG_sp.42" and "Agrilus crataegi". Note that
+records with the lowest identification will be selected first as they carry the relevant taxonomic
+information. Thus, this setting can in some cases override the selection criteria by de-prioritizing
+records with unresolved identifications. Note also that the function will always return at least \code{Nreps}
+records per BIN where possible; if there are fewer than \code{Nreps} records bearing the lowest
+non-redundant identification(s) in a BIN, additional records will be selected as back-fill beginning
+with the next-most specific identification, working upwards.
+}
+
+\section{Reproducibility}{
+It is possible to consistently obtain the same representatives using the same input parameters by
+supplying a random \code{seed}. However, the same data provided either as a \code{tbl_sql} object or a
+data frame may yield different representative records for a given random seed due to differences
+in sorting and tie-breaking behaviours across backends (i.e. DuckDB vs. data.table).
+}
+
 \examples{
 \dontrun{
 
@@ -124,15 +144,15 @@ bin_reps <- get_bin_reps(
                                 "Morphology and sequence based"))
 )
 
-# Select one representative for each combination of BIN and taxonomic 
+# Select one representative for each combination of BIN and taxonomic
 # lineage (scientific names only), with preference for 658-bp barcodes
 # (e.g. for building a sequence tree of all known taxa)
 bin_tax_reps <- get_bin_reps(
   bold.search.res = bold_search,
   Nreps = 1,
   by.taxon = TRUE,
-  non.redundant.taxa = TRUE,
   enforce.scientific = TRUE,
+  non.redundant.taxa = TRUE,
   criteria = list(seq_length = 658)
 )
 }

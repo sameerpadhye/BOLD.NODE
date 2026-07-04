@@ -50,8 +50,10 @@ check.tbl.sql <- function(tbl) {
 bold.search.filters <- function(bold.df,
                                 ids = NULL,
                                 bins = NULL,
-                                taxonomy = NULL,
-                                geography = NULL,
+                                taxonomy.kingdom = 'any',
+                                taxonomy.names = NULL,
+                                geography.level = 'all',
+                                geography.names = NULL,
                                 institutes = NULL,
                                 identified.by = NULL,
                                 seq.source = NULL,
@@ -75,27 +77,79 @@ bold.search.filters <- function(bold.df,
   }
   # 3 taxon name
   # condition to check if the taxon name is of the correct data type
-  if (!is.null(taxonomy)) {
+
+  if (!is.null(taxonomy.names)) {
+
+    # Restrict to a kingdom only if requested
+    if (taxonomy.kingdom != "all") {
+
+      bold.df <- bold.df %>%
+        dplyr::filter(kingdom == taxonomy.kingdom)
+
+    }
+
+    # Apply taxonomy name filter
     bold.df <- bold.df %>%
       dplyr::filter(
-        kingdom %in% !!taxonomy |
-          phylum %in% !!taxonomy |
-          class %in% !!taxonomy |
-          `order` %in% !!taxonomy |
-          family %in% !!taxonomy |
-          subfamily %in% !!taxonomy |
-          genus %in% !!taxonomy |
-          species %in% !!taxonomy
+        phylum %in% taxonomy.names |
+          class %in% taxonomy.names |
+          `order` %in% taxonomy.names |
+          family %in% taxonomy.names |
+          subfamily %in% taxonomy.names |
+          genus %in% taxonomy.names |
+          species %in% taxonomy.names
       )
+
   }
+
   # 4 specific country/region/site/sector
-  if (!is.null(geography)) {
-    bold.df <- bold.df %>%
-      dplyr::filter(country.ocean %in% !!geography |
-        province.state %in% !!geography |
-        region %in% !!geography |
-        sector %in% !!geography |
-        site %in% !!geography)
+  # 4 specific country/region/site/sector
+
+  if (!is.null(geography.names)) {
+
+    # Restrict to a geography level only if requested
+    if (geography.level != "any") {
+
+      if (geography.level == "country.ocean") {
+
+        bold.df <- bold.df %>%
+          dplyr::filter(country.ocean %in% geography.names)
+
+      } else if (geography.level == "province.state") {
+
+        bold.df <- bold.df %>%
+          dplyr::filter(province.state %in% geography.names)
+
+      } else if (geography.level == "region") {
+
+        bold.df <- bold.df %>%
+          dplyr::filter(region %in% geography.names)
+
+      } else if (geography.level == "sector") {
+
+        bold.df <- bold.df %>%
+          dplyr::filter(sector %in% geography.names)
+
+      } else if (geography.level == "site") {
+
+        bold.df <- bold.df %>%
+          dplyr::filter(site %in% geography.names)
+
+      }
+
+    } else {
+
+      bold.df <- bold.df %>%
+        dplyr::filter(
+          country.ocean %in% geography.names |
+            province.state %in% geography.names |
+            region %in% geography.names |
+            sector %in% geography.names |
+            site %in% geography.names
+        )
+
+    }
+
   }
   # 5 Latitude/Longitude bounding box
   if (!is.null(bounding.box)) {

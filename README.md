@@ -56,12 +56,13 @@ functions
 3.  bold_parquet_search
 4.  bold_search_collect
 5.  get_bin_consensus
-6.  get_concise_summary
-7.  *bcdm_to_dnastringset*
-8.  bcdm_to_dwc
-9.  bcdm_to_fasta
-10. bcdm_to_occmatrix
-11. bcdm_to_sf
+6.  get_bin_reps
+7.  get_concise_summary
+8.  *bcdm_to_dnastringset*
+9.  bcdm_to_dwc
+10. bcdm_to_fasta
+11. bcdm_to_occmatrix
+12. bcdm_to_sf
 
 **Note** *Function 7*: *bcdm_to_dnastringset* requires the package
 `Biostrings` to be installed and imported in the R session beforehand.
@@ -106,34 +107,34 @@ categorical fields (e.g. institutes) to make searches easier
 ### 2.Search the dataset
 
 This function lets users search by more than 10 different search
-parameters including taxonomy (species, genus, family etc.), geography
-(country.ocean, province, region), ids (processid, sampleid) and more.
-The users can just input the search query directly (e.g. put *Canada* as
-a query in the `geography` argument or *Coleoptera* in the `taxonomy`
-argument) with the function searching the query in the relevant fields
-internally. The search result is a `tbl_sql` object that is used for
-collecting or transforming the data.
+parameters including taxonomy.names (species, genus, family etc.),
+geography (country.ocean, province, region), ids (processid, sampleid)
+and more. The users can just input the search query directly (e.g. put
+*Canada* as a query in the `geography.names` argument or *Coleoptera* in
+the `taxonomy.names` argument) with the function searching the query in
+the relevant fields internally. The search result is a `tbl_sql` object
+that is used for collecting or transforming the data.
 
 ``` r
 # parquet_file<-'path where the parquet file from BOLD is downloaded'
 
-# 1 Taxonomy
+# 1 taxonomy.names
 
 # bold_search_taxonomy <- bold_parquet_search(input.parquet=parquet_file,
-# taxonomy = c("Odonata","Poecilia"))
+# taxonomy.names = c("Odonata","Poecilia"))
 
 # 2 Geography
 
 # bold_search_geography <- bold_parquet_search(input.parquet=parquet_file,
-# taxonomy = c("Panthera pardus"),
-# geography = c("India"))
+# taxonomy.names= c("Panthera pardus"),
+# geography.names = c("India"))
 
 # 3 Combination of many search criteria
 
 # bold_search_combination <- bold_parquet_search(
 # input.parquet=parquet_file,
-# taxonomy = "Coleoptera",
-# geography = "Canada",
+# taxonomy.names= "Coleoptera",
+# geography.names = "Canada",
 # marker = "COI-5P",
 # basecount = c(500, 660))
 ```
@@ -150,8 +151,8 @@ ensure you don’t exceed the available RAM.
 # Collect data (no export)
 
 # bold_search_geography <- bold_parquet_search(input.parquet=parquet_file,
-# taxonomy = c("Panthera pardus"),
-# geography = c("India"))
+# taxonomy.names = c("Panthera pardus"),
+# geography.names = c("India"))
 
 # collected_data<-bold_search_collect(
 # bold_search_geography,
@@ -166,6 +167,50 @@ ensure you don’t exceed the available RAM.
 # export = TRUE,
 # export.type = "parquet",
 # output.path = userdefinedpath)
+```
+
+### The `get_` functionality
+
+The `get_` functions provide ways of summarizing the data, focusing more
+on the **Barcode Index Number (BIN)** centric summaries that include a
+consensus taxonomy as well as representative records for BINs based on
+different criteria. The `get_concise_summary` gives a succinct summary
+of the searched data.
+
+#### `get_bin_reps`
+
+gets a dataset having one or more representative record(s) from each BIN
+based on different criteria
+
+``` r
+# bold_search <- bold_parquet_search(
+# input.parquet = parquet_file,
+#  taxonomy.names = "Araneae",
+# geography.names = "Canada")
+
+# Select one representative per BIN from the searched data based on sequence length of 658 basepairs
+# bin_tax_reps <- get_bin_reps(
+# bold.search.res = bold_search,
+# criteria = list(seq_length = 658)
+# )
+```
+
+#### `get_concise_summary`
+
+gets a concise summary of the searched data. Search results include
+total records, total countries, amplicon length range and many more
+
+``` r
+#  Search the data
+# bold_search <- bold_parquet_search(
+# input.parquet=parquet_file,
+# taxonomy.names = "Coleoptera",
+# geography.names = "Canada",
+# marker = "COI-5P",
+# basecount = c(500, 660))
+
+#  Get concise summary of the data
+# bold_summary <- get_concise_summary(bold_search)
 ```
 
 ### The `bcdm_to_` functionality
@@ -185,8 +230,8 @@ party tools
 
 # bold_search <- bold_parquet_search(
 # input.parquet=parquet_file,
-# taxonomy = "Coleoptera",
-# geography = "Canada",
+# taxonomy.names = "Coleoptera",
+# geography.names = "Canada",
 # marker = "COI-5P",
 # basecount = c(500, 660))
 
@@ -208,8 +253,8 @@ data analyses
 
 # bold_search <- bold_parquet_search(
 # input.parquet=parquet_file,
-# taxonomy = "Coleoptera",
-# geography = "Canada",
+# taxonomy.names = "Coleoptera",
+# geography.names = "Canada",
 # marker = "COI-5P",
 # basecount = c(500, 660))
 
@@ -227,8 +272,8 @@ creates an occurrence matrix from the searched data based on the
 #  Search the data
 # bold_search <- bold_parquet_search(
 # input.parquet=parquet_file,
-# taxonomy = "Coleoptera",
-# geography = "Canada",
+# taxonomy.names = "Coleoptera",
+# geography.names = "Canada",
 # marker = "COI-5P",
 # basecount = c(500, 660))
 
@@ -250,8 +295,8 @@ imported before using this function
 #  Search the data
 # bold_search <- bold_parquet_search(
 # input.parquet=parquet_file,
-# taxonomy = "Coleoptera",
-# geography = "Canada",
+# taxonomy.names = "Coleoptera",
+# geography.names = "Canada",
 # marker = "COI-5P",
 # basecount = c(500, 660))
 
@@ -259,24 +304,6 @@ imported before using this function
 # bold.dnastringset<-bcdm_to_dnastringset(bold_search,
 # marker="COI-5P",
 # cols_for_seq_names = c("processid","family"))
-```
-
-#### `get_concise_summary`
-
-gets a concise summary of the searched data. Search results include
-total records, total countries, amplicon length range and many more
-
-``` r
-#  Search the data
-# bold_search <- bold_parquet_search(
-# input.parquet=parquet_file,
-# taxonomy = "Coleoptera",
-# geography = "Canada",
-# marker = "COI-5P",
-# basecount = c(500, 660))
-
-#  Get concise summary of the data
-# bold_summary <- get_concise_summary(bold_search)
 ```
 
 #### It takes roughly 10 minutes to collect ~10M records on a i7 2.8GHZ 16GB RAM machine
