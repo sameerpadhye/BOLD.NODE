@@ -379,8 +379,8 @@ get_bin_reps <- function(
     # Apply sort keys in sequence to select and return representatives
     rep_idx <- data[do.call("order", sort_sequence), .I[seq_len(min(Nreps, .N))], by = select_by]$V1
     data <- data[rep_idx, ]
-    if(enforce.scientific || non.redundant.taxa) id_lookup <- id_lookup[rep_idx, ]
     if(by.taxon) {
+      if(enforce.scientific || non.redundant.taxa) id_lookup <- id_lookup[rep_idx, ]
       if(non.redundant.taxa) {
         id_lookup_by_bin <- split(id_lookup, id_lookup$bin_uri)
           # Find and apply the indices of records with the lowest non-redundant identification in each BIN
