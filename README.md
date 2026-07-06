@@ -131,7 +131,8 @@ collecting or transforming the data.
 # scope.geography = 'any',
 # geography = c("India"))
 
-# 2b specifying 'country.ocean' as the geographic scope (so that the search will only get the records where India is the assigned country)
+# 2b specifying 'country.ocean' as the geographic scope (so that the search will only get the 
+# records where India is the assigned country)
 # bold_search_geography <- bold_parquet_search(input.parquet=parquet_file,
 # taxonomy= c("Panthera pardus"),
 # scope.geography = 'country.ocean',
