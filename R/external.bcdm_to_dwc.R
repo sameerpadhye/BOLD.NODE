@@ -24,7 +24,7 @@
 #'   geography = "Australia"
 #' )
 #'
-#' # Get the DNAStringset object
+#' # Get the DwC object
 #'
 #' bold.dwc <- bcdm_to_dwc(bold_search)
 #' }

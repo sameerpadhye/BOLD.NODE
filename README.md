@@ -107,34 +107,43 @@ categorical fields (e.g. institutes) to make searches easier
 ### 2.Search the dataset
 
 This function lets users search by more than 10 different search
-parameters including taxonomy.names (species, genus, family etc.),
-geography (country.ocean, province, region), ids (processid, sampleid)
-and more. The users can just input the search query directly (e.g. put
-*Canada* as a query in the `geography.names` argument or *Coleoptera* in
-the `taxonomy.names` argument) with the function searching the query in
-the relevant fields internally. The search result is a `tbl_sql` object
-that is used for collecting or transforming the data.
+parameters including taxonomy (species, genus, family etc.), geography
+(country.ocean, province, region), ids (processid, sampleid) and more.
+The users can just input the search query directly (e.g. put *Canada* as
+a query in the `geography` argument or *Coleoptera* in the `taxonomy`
+argument) with the function searching the query in the relevant fields
+internally. The search result is a `tbl_sql` object that is used for
+collecting or transforming the data.
 
 ``` r
 # parquet_file<-'path where the parquet file from BOLD is downloaded'
 
-# 1 taxonomy.names
+# 1 Taxonomy
 
 # bold_search_taxonomy <- bold_parquet_search(input.parquet=parquet_file,
-# taxonomy.names = c("Odonata","Poecilia"))
+# taxonomy = c("Odonata","Poecilia"))
 
 # 2 Geography
 
+# 2a without specifying a geographic scope
 # bold_search_geography <- bold_parquet_search(input.parquet=parquet_file,
-# taxonomy.names= c("Panthera pardus"),
-# geography.names = c("India"))
+# taxonomy= c("Panthera pardus"),
+# scope.geography = 'any',
+# geography = c("India"))
+
+# 2b specifying 'country.ocean' as the geographic scope (so that the search will only get the records where India is the assigned country)
+# bold_search_geography <- bold_parquet_search(input.parquet=parquet_file,
+# taxonomy= c("Panthera pardus"),
+# scope.geography = 'country.ocean',
+# geography = c("India"))
+
 
 # 3 Combination of many search criteria
 
 # bold_search_combination <- bold_parquet_search(
 # input.parquet=parquet_file,
-# taxonomy.names= "Coleoptera",
-# geography.names = "Canada",
+# taxonomy= "Coleoptera",
+# geography = "Canada",
 # marker = "COI-5P",
 # basecount = c(500, 660))
 ```
@@ -151,8 +160,8 @@ ensure you don’t exceed the available RAM.
 # Collect data (no export)
 
 # bold_search_geography <- bold_parquet_search(input.parquet=parquet_file,
-# taxonomy.names = c("Panthera pardus"),
-# geography.names = c("India"))
+# taxonomy = c("Panthera pardus"),
+# geography = c("India"))
 
 # collected_data<-bold_search_collect(
 # bold_search_geography,
@@ -185,8 +194,8 @@ based on different criteria
 ``` r
 # bold_search <- bold_parquet_search(
 # input.parquet = parquet_file,
-#  taxonomy.names = "Araneae",
-# geography.names = "Canada")
+#  taxonomy = "Araneae",
+# geography = "Canada")
 
 # Select one representative per BIN from the searched data based on sequence length of 658 basepairs
 # bin_tax_reps <- get_bin_reps(
@@ -204,8 +213,8 @@ total records, total countries, amplicon length range and many more
 #  Search the data
 # bold_search <- bold_parquet_search(
 # input.parquet=parquet_file,
-# taxonomy.names = "Coleoptera",
-# geography.names = "Canada",
+# taxonomy = "Coleoptera",
+# geography = "Canada",
 # marker = "COI-5P",
 # basecount = c(500, 660))
 
@@ -230,8 +239,8 @@ party tools
 
 # bold_search <- bold_parquet_search(
 # input.parquet=parquet_file,
-# taxonomy.names = "Coleoptera",
-# geography.names = "Canada",
+# taxonomy = "Coleoptera",
+# geography = "Canada",
 # marker = "COI-5P",
 # basecount = c(500, 660))
 
@@ -253,8 +262,8 @@ data analyses
 
 # bold_search <- bold_parquet_search(
 # input.parquet=parquet_file,
-# taxonomy.names = "Coleoptera",
-# geography.names = "Canada",
+# taxonomy = "Coleoptera",
+# geography = "Canada",
 # marker = "COI-5P",
 # basecount = c(500, 660))
 
@@ -272,8 +281,8 @@ creates an occurrence matrix from the searched data based on the
 #  Search the data
 # bold_search <- bold_parquet_search(
 # input.parquet=parquet_file,
-# taxonomy.names = "Coleoptera",
-# geography.names = "Canada",
+# taxonomy = "Coleoptera",
+# geography = "Canada",
 # marker = "COI-5P",
 # basecount = c(500, 660))
 
@@ -295,8 +304,8 @@ imported before using this function
 #  Search the data
 # bold_search <- bold_parquet_search(
 # input.parquet=parquet_file,
-# taxonomy.names = "Coleoptera",
-# geography.names = "Canada",
+# taxonomy = "Coleoptera",
+# geography = "Canada",
 # marker = "COI-5P",
 # basecount = c(500, 660))
 

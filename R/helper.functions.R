@@ -81,10 +81,8 @@ bold.search.filters <- function(bold.df,
   if (!is.null(taxonomy.names)) {
     # Restrict to a kingdom only if requested
     if (!is.null(taxonomy.kingdom)) {
-      if (length(taxonomy.kingdom) > 1) stop("Only one kingdom can be specified at a time.")
-
       bold.df <- bold.df %>%
-        dplyr::filter(kingdom == taxonomy.kingdom)
+        dplyr::filter(kingdom %in% taxonomy.kingdom)
     } else {
       bold.df
     }

@@ -31,8 +31,7 @@ bold_search <- bold_parquet_search(
   geography = "Malaysia"
 )
 
-# Get the occurrence matrix
-
+# Get the occurrence matrix#'
 sf_data <- bcdm_to_sf(bold_search, chunk.size = 100000)
 }
 
