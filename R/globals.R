@@ -55,6 +55,7 @@ utils::globalVariables(c(
   ":=",
   ".N",
   ".I",
+  ".BY",
   ".SD",
   ".SDcols",
   "i",
@@ -70,5 +71,6 @@ utils::globalVariables(c(
   ".tiebreak",
   ".mode_rank",
   ".mode",
-  ".bin_mode"
+  ".bin_mode",
+  "id_count"
 ))
