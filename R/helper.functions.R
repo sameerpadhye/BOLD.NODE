@@ -50,9 +50,9 @@ check.tbl.sql <- function(tbl) {
 bold.search.filters <- function(bold.df,
                                 ids = NULL,
                                 bins = NULL,
-                                taxonomy.kingdom = 'any',
+                                taxonomy.kingdom = NULL,
                                 taxonomy.names = NULL,
-                                geography.level = 'all',
+                                geography.level = "any",
                                 geography.names = NULL,
                                 institutes = NULL,
                                 identified.by = NULL,
@@ -79,13 +79,14 @@ bold.search.filters <- function(bold.df,
   # condition to check if the taxon name is of the correct data type
 
   if (!is.null(taxonomy.names)) {
-
     # Restrict to a kingdom only if requested
-    if (taxonomy.kingdom != "all") {
+    if (!is.null(taxonomy.kingdom)) {
+      if (length(taxonomy.kingdom) > 1) stop("Only one kingdom can be specified at a time.")
 
       bold.df <- bold.df %>%
         dplyr::filter(kingdom == taxonomy.kingdom)
-
+    } else {
+      bold.df
     }
 
     # Apply taxonomy name filter
@@ -99,46 +100,30 @@ bold.search.filters <- function(bold.df,
           genus %in% taxonomy.names |
           species %in% taxonomy.names
       )
-
   }
 
   # 4 specific country/region/site/sector
-  # 4 specific country/region/site/sector
 
   if (!is.null(geography.names)) {
-
     # Restrict to a geography level only if requested
     if (geography.level != "any") {
-
       if (geography.level == "country.ocean") {
-
         bold.df <- bold.df %>%
           dplyr::filter(country.ocean %in% geography.names)
-
       } else if (geography.level == "province.state") {
-
         bold.df <- bold.df %>%
           dplyr::filter(province.state %in% geography.names)
-
       } else if (geography.level == "region") {
-
         bold.df <- bold.df %>%
           dplyr::filter(region %in% geography.names)
-
       } else if (geography.level == "sector") {
-
         bold.df <- bold.df %>%
           dplyr::filter(sector %in% geography.names)
-
       } else if (geography.level == "site") {
-
         bold.df <- bold.df %>%
           dplyr::filter(site %in% geography.names)
-
       }
-
     } else {
-
       bold.df <- bold.df %>%
         dplyr::filter(
           country.ocean %in% geography.names |
@@ -147,9 +132,7 @@ bold.search.filters <- function(bold.df,
             sector %in% geography.names |
             site %in% geography.names
         )
-
     }
-
   }
   # 5 Latitude/Longitude bounding box
   if (!is.null(bounding.box)) {
@@ -307,7 +290,6 @@ re_int <- "\\.\\Z|\\S{2,}\\.\\S|[0-9]|\\s[A-Z]|[A-Z]\\Z|[A-Z]{2}|[a-z][A-Z]|_(?!
 # 6 Select BIN reps from `tbl_sql` using DBI & dbplyr
 
 get_sql_sort <- function(df, criteria) {
-
   make_sort_key <- function(col, levels = NULL, grepl_pat = NULL) {
     col_sym <- sym(col)
 
@@ -326,112 +308,114 @@ get_sql_sort <- function(df, criteria) {
   }
 
   sort_sequence <- lapply(setNames(names(criteria), names(criteria)), function(step) {
-    if(step == "vouchered") {
+    if (step == "vouchered") {
       list(key = make_sort_key(grepl_pat = "(?i)GenBank", col = "inst"))
-    } else if(step == "seq_length") {
-
-      if(criteria$seq_length == "COI_auto") {
-        list(prep = function(df) {
-          df %>%
-            dplyr::mutate(
-              .rounded = (round((nuc_basecount - 1) / 3) * 3) + 1
-            ) %>%
-            dplyr::group_by(bin_uri, .rounded) %>%
-            dplyr::mutate(
-              .freq = n()
-            ) %>%
-            dplyr::group_by(bin_uri) %>%
-            dplyr::mutate(
-              .tiebreak = abs(.rounded - 658)
-            ) %>%
-            dbplyr::window_order(desc(.freq), .tiebreak) %>%
-            dplyr::mutate(
-              .mode_rank = dplyr::row_number(),
-              .mode      = dplyr::if_else(.mode_rank == 1L, .rounded, NA_real_),
-              .bin_mode = max(.mode, na.rm = TRUE)
-            ) %>%
-            dplyr::ungroup() %>%
-            dplyr::select(-.rounded, -.freq, -.tiebreak, -.mode_rank, -.mode)
-        },
-        key = dplyr::expr(abs(nuc_basecount - .bin_mode)))
-      } else if(criteria$seq_length == "longest") {
+    } else if (step == "seq_length") {
+      if (criteria$seq_length == "COI_auto") {
+        list(
+          prep = function(df) {
+            df %>%
+              dplyr::mutate(
+                .rounded = (round((nuc_basecount - 1) / 3) * 3) + 1
+              ) %>%
+              dplyr::group_by(bin_uri, .rounded) %>%
+              dplyr::mutate(
+                .freq = n()
+              ) %>%
+              dplyr::group_by(bin_uri) %>%
+              dplyr::mutate(
+                .tiebreak = abs(.rounded - 658)
+              ) %>%
+              dbplyr::window_order(desc(.freq), .tiebreak) %>%
+              dplyr::mutate(
+                .mode_rank = dplyr::row_number(),
+                .mode = dplyr::if_else(.mode_rank == 1L, .rounded, NA_real_),
+                .bin_mode = max(.mode, na.rm = TRUE)
+              ) %>%
+              dplyr::ungroup() %>%
+              dplyr::select(-.rounded, -.freq, -.tiebreak, -.mode_rank, -.mode)
+          },
+          key = dplyr::expr(abs(nuc_basecount - .bin_mode))
+        )
+      } else if (criteria$seq_length == "longest") {
         list(key = make_sort_key(col = "nuc_basecount"), desc = TRUE)
-      } else if(criteria$seq_length == "shortest") {
+      } else if (criteria$seq_length == "shortest") {
         list(key = make_sort_key(col = "nuc_basecount"), desc = FALSE)
       } else {
         list(key = dplyr::expr(abs(nuc_basecount - round(criteria$seq_length, 0))))
       }
-
-    } else if(step == "id_method") {
-      list(key = make_sort_key(col = "identification_method",
-                               levels = criteria$id_method))
-    } else if(step == "inst") {
-      list(key = make_sort_key(col = "inst",
-                               levels = criteria$inst))
-    } else if(step == "coll_date") {
-      list(key = if(criteria$coll_date == "latest") {
-        key <- make_sort_key(col = "collection_date_start")
-        dplyr::expr(dplyr::coalesce(as.Date(!!key), as.Date("0001-01-01")))
-      } else {
-        key <- make_sort_key(col = "collection_date_start")
-      },
-      desc = criteria$coll_date == "latest")
-    } else if(step == "seq_date") {
-      list(key = if(criteria$coll_date == "latest") {
-        key <- make_sort_key(col = "sequence_upload_date")
-        dplyr::expr(dplyr::coalesce(as.Date(!!key), as.Date("0001-01-01")))
-      } else {
-        key <- make_sort_key(col = "sequence_upload_date")
-      },
-      desc = criteria$seq_date == "latest")
+    } else if (step == "id_method") {
+      list(key = make_sort_key(
+        col = "identification_method",
+        levels = criteria$id_method
+      ))
+    } else if (step == "inst") {
+      list(key = make_sort_key(
+        col = "inst",
+        levels = criteria$inst
+      ))
+    } else if (step == "coll_date") {
+      list(
+        key = if (criteria$coll_date == "latest") {
+          key <- make_sort_key(col = "collection_date_start")
+          dplyr::expr(dplyr::coalesce(as.Date(!!key), as.Date("0001-01-01")))
+        } else {
+          key <- make_sort_key(col = "collection_date_start")
+        },
+        desc = criteria$coll_date == "latest"
+      )
+    } else if (step == "seq_date") {
+      list(
+        key = if (criteria$coll_date == "latest") {
+          key <- make_sort_key(col = "sequence_upload_date")
+          dplyr::expr(dplyr::coalesce(as.Date(!!key), as.Date("0001-01-01")))
+        } else {
+          key <- make_sort_key(col = "sequence_upload_date")
+        },
+        desc = criteria$seq_date == "latest"
+      )
     }
   })
 
   sort_sequence
-
 }
 
 # 7 Select BIN reps from data in memory using data.table
 
 get_dt_sort <- function(dt, criteria) {
-
   lapply(names(criteria), function(step) {
-    if(step == "vouchered") {
-      (grepl("(?i)GenBank", dt$inst, perl=T) == criteria$vouchered)
-    } else if(step == "seq_length") {
-
-      seq_sort <- if(criteria$seq_length == "COI_auto") {
+    if (step == "vouchered") {
+      (grepl("(?i)GenBank", dt$inst, perl = T) == criteria$vouchered)
+    } else if (step == "seq_length") {
+      seq_sort <- if (criteria$seq_length == "COI_auto") {
         # find the modal sequence length for each BIN
         mode_by_bin <- dt[, .(mode = {
           t <- table(sapply(nuc_basecount, function(bp) (round((bp - 1) / 3) * 3) + 1))
           modal <- names(t)[t == max(t)]
 
           # in case of multiple modes, select the one nearest to 658bp
-          as.numeric(unname(modal)[which.min(sapply(modal, function (m) abs(as.numeric(m) - 658)))])
+          as.numeric(unname(modal)[which.min(sapply(modal, function(m) abs(as.numeric(m) - 658)))])
         }), by = "bin_uri"]
 
         # output absolute difference between sequence length and modal length for BIN
         dt[, .SD, .SDcols = c("bin_uri", "nuc_basecount")][mode_by_bin, on = "bin_uri"][, ({
           abs(nuc_basecount - mode)
         })]
-
-      } else if(criteria$seq_length == "longest") {
+      } else if (criteria$seq_length == "longest") {
         dt[["nuc_basecount"]] * -1
-      } else if(criteria$seq_length == "shortest") {
+      } else if (criteria$seq_length == "shortest") {
         dt[["nuc_basecount"]]
       } else {
         abs(dt[["nuc_basecount"]] - round(criteria$seq_length, 0))
       }
-
-    } else if(step == "id_method") {
+    } else if (step == "id_method") {
       factor(as.character(dt$identification_method), levels = criteria$id_method)
-    } else if(step == "inst") {
+    } else if (step == "inst") {
       factor(as.character(dt$inst), levels = criteria$inst)
-    } else if(step == "coll_date") {
+    } else if (step == "coll_date") {
       dt$collection_date_start
-    } else if(step == "seq_date") {
+    } else if (step == "seq_date") {
       dt$sequence_upload_date
     }
   })
-
 }

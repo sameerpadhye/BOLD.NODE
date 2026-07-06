@@ -2,15 +2,15 @@
 #'
 #' @description Search the BOLD public data packages available in the parquet format based on various search criteria including taxonomy, geography, institutes etc.
 #'
-#' @details This function loads the BOLD public data packages parquet files (<https://boldsystems.org/data/data-packages/>) via DuckDB and applies filters based on the provided parameters. It supports filtering by ids (sampleid, processid), taxonomy (using combination of taxonomy.kingdom and taxonomy.names), geography (using combination of geography.level and geography.names), biogeography (biome to ecoregion level), BINs, institutes, identifiers, sequence sources, genetic markers, nucleotide base counts, dataset or projects, spatial bounding boxes, and ambiguous base percent cutoffs. Taxonomy and geography have a two filter system where `taxonomy.kingdom` and `geography.level` are assigned default values `Animalia` at `any` respectively to get all animal records from all matching geographic terms. There are some cases with respect to geographic names where the same names are used at two different geographic levels, e.g., Azerbaijan is a country but there is a region named the same in Iran. Using `any` geography level will get records for both but if the `geography.level` is set to `country.ocean`, only country level records from Azerbaijan will be selected. A similar situation also exists for some taxonomic names where same names exist in both plants and animals (Ex., The genus name Iris exists for plants as well as animals). Users can also specify particular columns to return using the `specific.cols` parameter (column names can be checked using the `bcdm_field_names` function). The `tbl_sql` object can then be used by any of the `bcdm_to_*` functions for data transformations or `bold_search_collect` to load all the data in memory.
+#' @details This function loads the BOLD public data packages parquet files (<https://boldsystems.org/data/data-packages/>) via DuckDB and applies filters based on the provided parameters. It supports filtering by ids (sampleid, processid), taxonomy (using combination of scope.taxonomy and taxonomy), geography (using combination of scope.geography and geography), biogeography (biome to ecoregion level), BINs, institutes, identifiers, sequence sources, genetic markers, nucleotide base counts, dataset or projects, spatial bounding boxes, and ambiguous base percent cutoffs. Taxonomy and geography have a two filter system where `scope.taxonomy` and `scope.geography` are assigned default values `NULL` at `any` respectively to get all records from all matching geographic terms. There are some cases with respect to geographic names where the same names are used at two different geographic levels, e.g., Azerbaijan is a country but there is a region named the same in Iran. Using `any` geography level will get records for both but if the `scope.geography` is set to `country.ocean`, only country level records from Azerbaijan will be selected. A similar situation also exists for some taxonomic names where same names exist in both plants and animals (Ex., The genus name Iris exists for plants as well as animals). Users can also specify particular columns to return using the `specific.cols` parameter (column names can be checked using the `bcdm_field_names` function). The `tbl_sql` object can then be used by any of the `bcdm_to_*` functions for data transformations or `bold_search_collect` to load all the data in memory.
 #'
 #' @param input.parquet Path to the input parquet file.
 #' @param ids Vector of process IDs or sample IDs to filter by.
 #' @param bins Vector of BIN numbers (i.e., URIs) to filter by.
-#' @param taxonomy.kingdom Character value specifying the kingdom (includes "all", "Animalia", "Plantae", "Protista", "Fungi", "Bacteria"). Default is "all".
-#' @param taxonomy.names Vector of taxonomic names to filter by (includes "kingdom", "phylum", "class", "order", "family", "subfamily","genus", "species").
-#' @param geography.level A single character value specifying the geographic hierarchy level to search within (includes "any", "country.ocean", "province.state", "region", "sector", "site"). Default is "any".
-#' @param geography.names Vector of geographic locations to filter by based on the `geography.level`.
+#' @param scope.taxonomy Character value specifying the kingdom (includes "all", "Animalia", "Plantae", "Protista", "Fungi", "Bacteria"). Default is NULL.
+#' @param taxonomy Vector of taxonomic names to filter by (includes "kingdom", "phylum", "class", "order", "family", "subfamily","genus", "species").
+#' @param scope.geography A single character value specifying the geographic hierarchy level to search within (includes "any", "country.ocean", "province.state", "region", "sector", "site"). Default is "any".
+#' @param geography Vector of geographic locations to filter by based on the `scope.geography`.
 #' @param institutes Vector of institute codes to filter by.
 #' @param identified.by Vector of identifiers to filter by.
 #' @param seq.source Vector of sequence run sites to filter by.
@@ -38,20 +38,22 @@
 #' # Taxonomy
 #' bold_search <- bold_parquet_search(
 #'   input.parquet = parquet_file,
-#'   taxonomy.names = c("Odonata", "Poecilia")
+#'   taxonomy = c("Odonata", "Poecilia")
 #' )
 #'
 #' # Geography
 #' bold_search <- bold_parquet_search(
 #'   input.parquet = parquet_file,
-#'   geography.names = "Canada"
+#'   geography = "Canada"
 #' )
 #'
 #' # Combination of many search criteria
 #' bold_search <- bold_parquet_search(
 #'   input.parquet = parquet_file,
-#'   taxonomy.names = "Coleoptera",
-#'   geography.names = "Canada",
+#'   scope.taxonomy = 'Animalia',
+#'   taxonomy = "Coleoptera",
+#'   scope.geography = 'country.ocean'
+#'   geography = "Canada",
 #'   marker = "COI-5P",
 #'   basecount = c(500, 660)
 #' )
@@ -61,10 +63,10 @@
 bold_parquet_search <- function(input.parquet,
                                 ids = NULL,
                                 bins = NULL,
-                                taxonomy.kingdom = 'Animalia',
-                                taxonomy.names = NULL,
-                                geography.level = 'any',
-                                geography.names = NULL,
+                                scope.taxonomy = NULL,
+                                taxonomy = NULL,
+                                scope.geography = 'any',
+                                geography = NULL,
                                 institutes = NULL,
                                 identified.by = NULL,
                                 seq.source = NULL,
@@ -95,10 +97,10 @@ bold_parquet_search <- function(input.parquet,
   bold.search.args <- list(
     ids = ids,
     bins = bins,
-    taxonomy.kingdom = taxonomy.kingdom,
-    taxonomy.names = taxonomy.names,
-    geography.level = geography.level,
-    geography.names = geography.names,
+    taxonomy.kingdom = scope.taxonomy,
+    taxonomy.names = taxonomy,
+    geography.level = scope.geography,
+    geography.names = geography,
     institutes = institutes,
     identified.by = identified.by,
     seq.source = seq.source,
