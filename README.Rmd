@@ -59,7 +59,7 @@ Users need to log into BOLD (<https://bench.boldsystems.org/index.php/Login/page
 11. bcdm_to_occmatrix
 12. bcdm_to_sf
 
-**Note** *Function 7*: *bcdm_to_dnastringset* requires the package `Biostrings` to be installed and imported in the R session beforehand. It can be installed using using `BiocManager` package.
+**Note** *Function 8*: *bcdm_to_dnastringset* requires the package `Biostrings` to be installed and imported in the R session beforehand. It can be installed using using `BiocManager` package.
 
 ```{r Biostrings install,warning=FALSE,message=FALSE}
 # if (!requireNamespace("BiocManager", quietly=TRUE))

@@ -64,7 +64,7 @@ functions
 11. bcdm_to_occmatrix
 12. bcdm_to_sf
 
-**Note** *Function 7*: *bcdm_to_dnastringset* requires the package
+**Note** *Function 8*: *bcdm_to_dnastringset* requires the package
 `Biostrings` to be installed and imported in the R session beforehand.
 It can be installed using using `BiocManager` package.
 
