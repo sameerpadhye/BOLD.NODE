@@ -49,7 +49,7 @@ to download the datasets in the `parquet` format. The users can then
 directly use the file as an input for the search and vocabulary
 functions
 
-## BOLD.NODE has 11 functions:
+## BOLD.NODE has 12 functions:
 
 1.  bcdm_field_names
 2.  bcdm_field_values
@@ -92,6 +92,9 @@ optional but useful in some instances):
     exploration/analyses).
 4.  *Optional*: Transform the searched data into a `fasta` or `sf` or
     `DNAStringset` or an `occurrence matrix` for downstream analyses
+5.  *Optional*: Generate concise summary and/or BIN centric summaries of
+    the searched data based on various parameters
+    (taxonomy,attributions,sequence meta data)
 
 ### 1.Get the vocabulary for specific fields
 
