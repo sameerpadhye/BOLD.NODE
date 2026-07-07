@@ -84,22 +84,23 @@ optional but useful in some instances):
 1.  `bcdm_field_values` and `bcdm_field_values` *(Provide the names of
     different BCDM fields and unique terms present in a particular
     field, making it easier for exploring* `bold_parquet_search` *search
-    parameters)*
+    parameters)*.
 2.  `bold_parquet_search` (Searches the dataset based on the user
-    criteria and prints the number of records available)
+    criteria and prints the number of records available).
 3.  `bold_search_collect`(Collects the output of the
     `bold_parquet_search` in memory for downstream
     exploration/analyses).
 4.  *Optional*: Transform the searched data into a `fasta` or `sf` or
     `DNAStringset` or an `occurrence matrix` for downstream analyses
+    (The *bcdm_to* functions).
 5.  *Optional*: Generate concise summary and/or BIN centric summaries of
-    the searched data based on various parameters
-    (taxonomy,attributions,sequence meta data)
+    the searched data based on various parameters (taxonomy,
+    attributions, sequence meta data) (The *get\_* functions).
 
 ### 1.Get the vocabulary for specific fields
 
 This function can be used for getting unique values of some of the
-categorical fields (e.g. institutes) to make searches easier
+categorical fields (e.g. institutes) to make searches easier.
 
 ``` r
 # parquet_file<-'path where the parquet file from BOLD is downloaded'
@@ -193,7 +194,7 @@ of the searched data.
 #### `get_bin_reps`
 
 gets a dataset having one or more representative record(s) from each BIN
-based on different criteria
+based on different criteria.
 
 ``` r
 # bold_search <- bold_parquet_search(
@@ -211,7 +212,7 @@ based on different criteria
 #### `get_concise_summary`
 
 gets a concise summary of the searched data. Search results include
-total records, total countries, amplicon length range and many more
+total records, total countries, amplicon length range and many more.
 
 ``` r
 #  Search the data
@@ -236,7 +237,7 @@ The `bcdm_to_` functions convert the search results from the
 
 Creates a fasta file with customized headers of the searched data. This
 can be exported locally for any downstream analytical pipelines in third
-party tools
+party tools.
 
 ``` r
 #  Search the data
@@ -259,7 +260,7 @@ party tools
 #### `bcdm_to_sf`
 
 generates a `sf` object of the searched data for any downstream spatial
-data analyses
+data analyses.
 
 ``` r
 #  Search the data
@@ -279,7 +280,7 @@ data analyses
 #### `bcdm_to_occmatrix`
 
 creates an occurrence matrix from the searched data based on the
-`taxon.rank`, `taxon.name` (optional) and the `site.cat`
+`taxon.rank`, `taxon.name` (optional) and the `site.cat`.
 
 ``` r
 #  Search the data
@@ -302,7 +303,7 @@ creates an occurrence matrix from the searched data based on the
 generates a `DNAStringSet` (Biostrings object) object of the searched
 data for any downstream sequence alignment and tree generation with
 custom headers. The library `Biostrings` has to be installed and
-imported before using this function
+imported before using this function.
 
 ``` r
 #  Search the data
