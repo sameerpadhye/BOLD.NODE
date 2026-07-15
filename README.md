@@ -229,9 +229,10 @@ total records, total countries, amplicon length range and many more.
 
 ### The `bcdm_to_` functionality
 
-The `bcdm_to_` functions convert the search results from the
-`bold_parquet_search` into objects used in packages such as `vegan`,
-`msa`, `DECIPHER`, `terra`, `geodata` etc.
+The `bcdm_to_*` functions convert the output of `bold_parquet_search`
+into objects compatible with packages such as `vegan`, `msa`,
+`DECIPHER`, `terra`, and `geodata`, enabling seamless interoperability
+with the broader R ecosystem.
 
 #### `bcdm_to_fasta`
 
@@ -320,14 +321,17 @@ imported before using this function.
 # cols_for_seq_names = c("processid","family"))
 ```
 
-#### It takes roughly 10 minutes to collect ~10M records on a i7 2.8GHZ 16GB RAM machine
+## Benchmarks
+
+It takes roughly 10 minutes to collect ~10M records on a i7 2.8GHZ 16GB
+RAM machine
 
 <img src="man/figures/README-benchmark_fig-1.jpeg" alt="" width="100%" />
 
 **The package is under active development and the functionality is
 subject to change**
 
-#### Funding
+### Funding
 
 This work was funded by the [New Frontiers in Research Fund (NFRF) -
 Transformation

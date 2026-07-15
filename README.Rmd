@@ -194,7 +194,7 @@ gets a concise summary of the searched data. Search results include total record
 
 ### The `bcdm_to_` functionality
 
-The `bcdm_to_` functions convert the search results from the `bold_parquet_search` into objects used in packages such as `vegan`, `msa`, `DECIPHER`, `terra`, `geodata` etc.
+The `bcdm_to_*` functions convert the output of `bold_parquet_search` into objects compatible with packages such as `vegan`, `msa`, `DECIPHER`, `terra`, and `geodata`, enabling seamless interoperability with the broader R ecosystem.
 
 #### `bcdm_to_fasta` 
 
@@ -283,7 +283,9 @@ generates a `DNAStringSet` (Biostrings object) object of the searched data for a
 # benchmarks$Category <- factor(benchmarks$Category, levels = c("<1k records", "1k-100k records", "100k-1M records", "1M-5M records", ">5M"))
 ```
 
-#### It takes roughly 10 minutes to collect \~10M records on a i7 2.8GHZ 16GB RAM machine
+## Benchmarks 
+
+It takes roughly 10 minutes to collect \~10M records on a i7 2.8GHZ 16GB RAM machine
 
 ```{r benchmark_fig,fig.width=6, fig.height=4, dpi=300, dev='jpeg',echo=F,warning=F,message=F}
 knitr::include_graphics("/Users/sameerpadhye/Desktop/BOLD.NODE/man/figures/README-benchmark_fig-1.jpeg")
@@ -321,5 +323,5 @@ knitr::include_graphics("/Users/sameerpadhye/Desktop/BOLD.NODE/man/figures/READM
 
 **The package is under active development and the functionality is subject to change**
 
-#### Funding
+### Funding
 This work was funded by the [New Frontiers in Research Fund (NFRF) - Transformation 2020](https://sshrc-crsh.canada.ca/funding-financement/nfrf-fnfr/transformation/transformation-eng.aspx)
