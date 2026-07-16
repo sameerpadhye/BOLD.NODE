@@ -2,7 +2,7 @@
 % Please edit documentation in R/external.bcdm_field_values.R
 \name{bcdm_field_values}
 \alias{bcdm_field_values}
-\title{Extract unique values of different BCDM fields from the BOLD data package}
+\title{Extract unique values from BCDM fields in the BOLD data package}
 \usage{
 bcdm_field_values(
   input.data,

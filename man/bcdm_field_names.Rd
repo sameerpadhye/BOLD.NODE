@@ -2,7 +2,7 @@
 % Please edit documentation in R/external.bcdm_field_names.R
 \name{bcdm_field_names}
 \alias{bcdm_field_names}
-\title{Retrieve metadata of the BOLD BCDM data fields}
+\title{Retrieve BCDM field names and descriptions}
 \usage{
 bcdm_field_names(print.output = FALSE)
 }

@@ -1,4 +1,4 @@
-#' Convert the BOLD parquet search to spatial point dataframe
+#' Convert the BOLD parquet search to simple features dataframe
 #'
 #' @description Converts BOLD search results with coordinate data to spatial points (sf object).
 #'

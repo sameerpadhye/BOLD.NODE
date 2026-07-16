@@ -2,15 +2,15 @@
 #'
 #' @description Extracts occurrence data (specimen counts by taxon and location) from BOLD search results.
 #'
-#' @details This function transforms the search results from `bold_parquet_search` into occurrence data matrices used commonly in biodiversity and ecological analyses by packages like `vegan` and `betapart`. The `kingdom` argument specifies the taxa kingdom with the default value being `Animalia`. The occurrences differ based on the kingdom. For `Animalia`, only records having BINs are counted (i.e., records without BINs are removed before calculations), while for other kingdoms, all records having a sequence are counted (i.e., records without sequences are removed before calculations). It supports aggregation at different taxonomic ranks (from kingdom to species) for a single or multiple taxa (also applicable for `bin_uri`; the difference being that the numbers in each cell would be the number of times that respective BIN is found at a particular `site.cat`), with optional filtering by specific taxon names. `site.cat` can be any of the `geography` fields (Metadata on fields can be checked using the `bcdm_field_names` function). In case where `site.cat` = NULL, the column `coord` will be used as default. The function can convert count data to presence/absence (1/0) format.
-#' \emph{Important Note}: The `bcdm_to_occmatrix` function requires `taxonomy` (including `bin_uri`) and `geography` fields to be available in the `bold_parquet_search` result. In case the `specific.cols` argument is used in the `bold_parquet_search` function to retrieve certain columns that dont have taxonomy and geography columns, the function will throw an error.
+#' @details This function transforms the search results from `bold_parquet_search` into the occurrence data matrices commonly used in biodiversity and ecological analyses by packages like `vegan` and `betapart`. Occurrences differ based on the kingdom. For `Animalia`, only records with BINs are included. For other kingdoms, all records with a sequence are counted (i.e., records without sequences are removed before calculations). Records can be aggregated at different taxonomic ranks (from kingdom to BINs) for a single or multiple taxa, with optional filtering by specific taxon names. `site.cat` can be any of the `geography` fields. The function can convert count data to presence/absence (1/0) format.
+#' \emph{Important Note}: The `bcdm_to_occmatrix` function requires `taxonomy` (including `bin_uri`) and `geography` fields to be available in the `bold_parquet_search` result. In case the `specific.cols` argument is used in the `bold_parquet_search` function to retrieve certain columns that do not have taxonomy and geography columns, the function will throw an error.
 #'
 #'
 #' @param bold.search.res A `tbl_sql` object containing BOLD search results.
 #' @param kingdom Character value specifying the kingdom (default: Animalia).
-#' @param taxon.rank Taxonomic rank to aggregate by (kingdom, phylum, class, order, family, genus, or species).
-#' @param taxon.name Optional vector of specific taxon names to include.
-#' @param site.cat Optional categorical variable to group occurrence data by (e.g., region).
+#' @param taxon.rank Taxonomic rank to aggregate by (kingdom, phylum, class, order, family, genus, species or bin_uri).
+#' @param taxon.name Optional vector of specific taxon names to include (e.g., for `taxon.rank` = 'class', name can be 'Insecta').
+#' @param site.cat Optional categorical variable to group occurrence data by (e.g., region; when `site.cat` = NULL,`coord` used as default)
 #' @param pre.abs Logical indicating whether to convert counts to presence/absence (1/0) data (default: FALSE).
 #'
 #' @return A data frame with occurrence data (taxon names as columns, site categories or coordinates as rows).

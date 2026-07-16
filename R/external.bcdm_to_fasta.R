@@ -2,7 +2,7 @@
 #'
 #' @description Exports nucleotide sequences from BOLD search results to a FASTA file with customizable headers.
 #'
-#' @details This function transforms the search results from `bold_parquet_search` into a FASTA file. A data chunking  option is available to manage large sizes to avoid memory issues. The `fas.header` argument lets users create custom headers using the BCDM field names (Metadata on fields can be checked using the `bcdm_field_names` function).
+#' @details This function transforms the search results from `bold_parquet_search` into a FASTA file. A data chunking  option is available to manage large sizes to avoid memory issues. The `fas.header` argument lets users create custom headers using the BCDM field names. Metadata on fields can be checked using the `bcdm_field_names` function.
 #'
 #' @param bold.search.res A tbl_sql object containing BOLD search results.
 #' @param output.file Path to the output FASTA file.

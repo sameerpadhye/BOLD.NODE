@@ -2,7 +2,7 @@
 % Please edit documentation in R/external.bold_parquet_search.R
 \name{bold_parquet_search}
 \alias{bold_parquet_search}
-\title{Search the BOLD public data packages available in parquet format}
+\title{Search records within a BOLD parquet data package}
 \usage{
 bold_parquet_search(
   input.parquet,
@@ -27,35 +27,35 @@ bold_parquet_search(
 \arguments{
 \item{input.parquet}{Path to the input parquet file.}
 
-\item{ids}{Vector of process IDs or sample IDs to filter by.}
+\item{ids}{Vector of process IDs or sample IDs used to filter records.}
 
-\item{bins}{Vector of BIN numbers (i.e., URIs) to filter by.}
+\item{bins}{Vector of BIN numbers (i.e., URIs) used to filter records.}
 
 \item{scope.taxonomy}{Character value specifying the kingdom (includes "all", "Animalia", "Plantae", "Protista", "Fungi", "Bacteria"). Default is NULL.}
 
 \item{taxonomy}{Vector of taxonomic names to filter by (includes "kingdom", "phylum", "class", "order", "family", "subfamily","genus", "species").}
 
-\item{scope.geography}{A single character value specifying the geographic hierarchy level to search within (includes "any", "country.ocean", "province.state", "region", "sector", "site"). Default is "any".}
+\item{scope.geography}{A single character value specifying the geographic hierarchy level to search within (includes "any", "country.ocean", "province.state", "region", "sector", "site"; default: "any")}
 
 \item{geography}{Vector of geographic locations to filter by based on the \code{scope.geography}.}
 
-\item{institutes}{Vector of institute codes to filter by.}
+\item{institutes}{Vector of institute codes used to filter records.}
 
-\item{identified.by}{Vector of identifiers to filter by.}
+\item{identified.by}{Vector of identifiers used to filter records.}
 
-\item{seq.source}{Vector of sequence run sites to filter by.}
+\item{seq.source}{Vector of sequence run sites used to filter records.}
 
-\item{marker}{Vector of marker codes to filter by.}
+\item{marker}{Vector of marker codes used to filter records.}
 
 \item{basecount}{Nucleotide base count filter - either a single value or a vector of two values for a range.}
 
 \item{biogeo.cat}{Vector of biogeographic/ecological categories to filter by (biome, realm, or ecoregion).}
 
-\item{dataset.projects}{Vector of dataset/project codes to filter by.}
+\item{dataset.projects}{Vector of dataset/project codes used to filter records.}
 
 \item{bounding.box}{Numeric vector of length 4: c(min_lon, max_lon, min_lat, max_lat).}
 
-\item{ambi.base.cutoff}{Character value for filtering data based proportion of ambiguous bases (IUPAC codes). Three values currently available ("<1\%", "1-5\%", or ">5\%"). Default value is NULL.}
+\item{ambi.base.cutoff}{Character value for filtering data based proportion of ambiguous bases (IUPAC codes). Three values currently available ("<1\%", "1-5\%", or ">5\%") (default: NULL).}
 
 \item{specific.cols}{Optional character vector of specific columns to return.}
 }
@@ -63,7 +63,7 @@ bold_parquet_search(
 A \code{tbl_sql} object containing the filtered data. Total records in the search are printed on the console.
 }
 \description{
-Search the BOLD public data packages available in the parquet format based on various search criteria including taxonomy, geography, institutes etc.
+Query records in BOLD parquet data packages using taxonomic, geographic, and other search criteria.
 }
 \details{
 This function loads the BOLD public data packages parquet files (\url{https://boldsystems.org/data/data-packages/}) via DuckDB and applies filters based on the provided parameters. It supports filtering by ids (sampleid, processid), taxonomy (using combination of scope.taxonomy and taxonomy), geography (using combination of scope.geography and geography), biogeography (biome to ecoregion level), BINs, institutes, identifiers, sequence sources, genetic markers, nucleotide base counts, dataset or projects, spatial bounding boxes, and ambiguous base percent cutoffs. Taxonomy and geography have a two filter system where \code{scope.taxonomy} and \code{scope.geography} are assigned default values \code{NULL} at \code{any} respectively to get all records from all matching geographic terms. There are some cases with respect to geographic names where the same names are used at two different geographic levels, e.g., Azerbaijan is a country but there is a region named the same in Iran. Using \code{any} geography level will get records for both but if the \code{scope.geography} is set to \code{country.ocean}, only country level records from Azerbaijan will be selected. A similar situation also exists for some taxonomic names where same names exist in both plants and animals (Ex., The genus name Iris exists for plants as well as animals). Users can also specify particular columns to return using the \code{specific.cols} parameter (column names can be checked using the \code{bcdm_field_names} function). The \code{tbl_sql} object can then be used by any of the \verb{bcdm_to_*} functions for data transformations or \code{bold_search_collect} to load all the data in memory.

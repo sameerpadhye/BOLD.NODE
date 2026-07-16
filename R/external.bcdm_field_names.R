@@ -1,4 +1,4 @@
-#' Retrieve metadata of the BOLD BCDM data fields
+#' Retrieve BCDM field names and descriptions
 #'
 #' @description Provides information on the field (column) names and their respective data type, all of which are compliant with the Barcode Core Data Model (BCDM).
 #'

@@ -22,7 +22,7 @@ writes a FASTA file to disk with custom headers as specified by the user.
 Exports nucleotide sequences from BOLD search results to a FASTA file with customizable headers.
 }
 \details{
-This function transforms the search results from \code{bold_parquet_search} into a FASTA file. A data chunking  option is available to manage large sizes to avoid memory issues. The \code{fas.header} argument lets users create custom headers using the BCDM field names (Metadata on fields can be checked using the \code{bcdm_field_names} function).
+This function transforms the search results from \code{bold_parquet_search} into a FASTA file. A data chunking  option is available to manage large sizes to avoid memory issues. The \code{fas.header} argument lets users create custom headers using the BCDM field names. Metadata on fields can be checked using the \code{bcdm_field_names} function.
 }
 \examples{
 \dontrun{

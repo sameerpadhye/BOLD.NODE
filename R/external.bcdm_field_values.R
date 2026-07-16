@@ -1,4 +1,4 @@
-#' Extract unique values of different BCDM fields from the BOLD data package
+#' Extract unique values from BCDM fields in the BOLD data package
 #'
 #' @description Extracts distinct values of specified field/s in the BOLD parquet data.
 #'

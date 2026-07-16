@@ -2,7 +2,7 @@
 % Please edit documentation in R/external.bcdm_to_sf.R
 \name{bcdm_to_sf}
 \alias{bcdm_to_sf}
-\title{Convert the BOLD parquet search to spatial point dataframe}
+\title{Convert the BOLD parquet search to simple features dataframe}
 \usage{
 bcdm_to_sf(bold.search.res, chunk.size = 1e+05)
 }
