@@ -1,15 +1,15 @@
 #' Collect and export parquet search results
 #'
-#' @description collects, outputs and exports the tbl_sql `bold_parquet_search` results object, processing large datasets in user defined manageable chunks.
+#' @description Collects, outputs and exports the tbl_sql `bold_parquet_search` results object, processing large datasets in user defined manageable chunks.
 #'
-#' @details This function collects (loads it in the R session) the search results from `bold_parquet_search`. Data chunking and system sleep options are available to manage large sizes to avoid memory issues. The function also supports exporting the searches in either TSV or Parquet format. export=FALSE (default) returns the collected data in the R session only. The full output_path has to be provided (along with the intended file name and file extension) when export=TRUE.
-#' \emph{Important Note}: Some data searches (e.g., all Diptera) can get very large and overload the RAM capacity on some machines.
+#' @details This function collects (loads it in the R session) the search results from `bold_parquet_search`. Data chunking and system sleep options are available to manage large sizes to avoid memory issues. The function also supports exporting the searches in either TSV or Parquet format. export=FALSE (default) returns the collected data in the R session only. The full `output.path` has to be provided along with the intended file name and file extension when export=TRUE.
+#' \emph{Important Note}: Some data searches (e.g., all Diptera) can get very large and overload the RAM capacity on some lower specification machines (e.g., 8GB RAM) irrespective of chunking and system sleep arguments.
 #' @param bold.search.res A `tbl_sql` object obtained from `bold_parquet_search`.
-#' @param chunk.size Maximum number of rows to process in each chunk. Default value is 1e6.
-#' @param sys.sleep Time to sleep between chunks in seconds. Default value is 0.
-#' @param export Logical value that allows user to export the output locally. Default value is FALSE.
-#' @param export.type Character string specifying the data type of the exported file (tsv or parquet).
-#' @param output.path Character string specifying the local path for data export along with the file name and extension.
+#' @param chunk.size Maximum number of rows to process in each chunk (default: 1e6).
+#' @param sys.sleep Time to sleep between chunks in seconds (default: 0).
+#' @param export Logical value that allows user to export the output locally (default: FALSE).
+#' @param export.type Character string specifying the data type of the exported file (tsv or parquet).Required when export=TRUE.
+#' @param output.path Character string specifying the local path for data export along with the file name and extension.Required when export=TRUE.
 #'
 #' @return A data frame containing all collected results; if export = TRUE, either a TSV or parquet file exported locally.
 #'
@@ -45,6 +45,7 @@
 #'   export.type = "parquet",
 #'   output.path = "userdefinedpath"
 #' )
+#'
 #' }
 #' @export
 

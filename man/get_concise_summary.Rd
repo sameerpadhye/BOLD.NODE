@@ -16,7 +16,7 @@ A data frame with the summary statistics.
 Creates a summary statistics table from the \code{bold_parquet_search} \code{tb_sql} object.
 }
 \details{
-The function provides a concise summary of the search obtained by \code{bold_parquet_search} that includes details like total records, unique BINs, unique institutes, unique markers and amplicon size range.
+The function provides a concise summary of the search obtained by \code{bold_parquet_search} that includes: total records, unique BINs, unique institutes, unique markers and amplicon size range.
 }
 \examples{
 \dontrun{
