@@ -56,21 +56,21 @@ for all available records, and any fields relevant to the provided selection \co
 
 \strong{Important Note}: This function is not optimized for very large \code{tbl_sql} search results,
 particularly those with many unique BINs. On the other hand, input provided as a data frame or data table
-can be processed much more efficient. Therefore, if you intend to keep the full search results in addition
+can be processed much more efficiently. Therefore, if you intend to keep the full search results in addition
 to BIN representatives, it is recommended that you first collect the results into a data frame using
 \code{\link{bold_search_collect}}.
 }
 
 \section{Criteria}{
-Selection \code{criteria} must be listed in order of priority. Available criteria
-include the following:
+Selection \code{criteria} must be listed in order of priority. Each one acts upon data from a particular BCDM
+field, which must be present in the input data, as indicated below. Available criteria include the following:
 \describe{
-\item{\strong{vouchered}}{If \code{TRUE}, prioritize records with known voucher repositories over those mined from databases like GenBank. Setting this to \code{FALSE} will prioritize records \emph{without} vouchers. To exclude this criterion, simply omit it. (Corresponding BCDM field: \code{inst}.)}
-\item{\strong{seq_length}}{Can be used either to specify target barcode sequence length as an integer, to preferentially select longer or shorter sequences ("longest", "shortest"), or to select sequences that match the modal* barcode length for each BIN ("COI_auto"). If a target length is provided, sequences closest to that target are prioritized. *Modal barcode length ("COI_auto" option) is determined after first rounding sequence lengths to the nearest full codon; in the event of multiple modes, the one closest to 658bp is chosen. (Corresponding BCDM field: \code{nuc_basecount}.)}
-\item{\strong{id_method}}{A character vector listing preferred identification methods in order of priority. The function definition lists all available values per the BCDM specification. (Corresponding BCDM field: \code{identification_method}.)}
-\item{\strong{inst}}{A character vector listing preferred voucher specimen repositories in order of priority. Values not present in the input data are ignored. (Corresponding BCDM field: \code{inst}.)}
-\item{\strong{coll_date}}{Prioritize recently collected specimens ("latest") or those collected longest ago ("oldest"). Records without dates are selected last in either case. (Corresponding BCDM field: \code{collection_date_start}.)}
-\item{\strong{seq_date}}{Prioritize recently uploaded sequences ("latest") or those with the earliest upload date ("oldest"). (Corresponding BCDM field: \code{sequence_upload_date}.)}
+\item{\strong{vouchered}}{If \code{TRUE}, prioritize records with known voucher repositories over those mined from databases like GenBank. Setting this to \code{FALSE} will prioritize records \emph{without} vouchers. To exclude this criterion, simply omit it. (Required field: \code{inst}.)}
+\item{\strong{seq_length}}{Can be used either to specify target barcode sequence length as an integer, to preferentially select longer or shorter sequences ("longest", "shortest"), or to select sequences that match the modal* barcode length for each BIN ("COI_auto"). If a target length is provided, sequences closest to that target are prioritized. *Modal barcode length ("COI_auto" option) is determined after first rounding sequence lengths to the nearest full codon; in the event of multiple modes, the one closest to 658bp is chosen. (Required field: \code{nuc_basecount}.)}
+\item{\strong{id_method}}{A character vector listing preferred identification methods in order of priority. The function definition lists all available values per the BCDM specification. (Required field: \code{identification_method}.)}
+\item{\strong{inst}}{A character vector listing preferred voucher specimen repositories in order of priority. Values not present in the input data are ignored. (Required field: \code{inst}.)}
+\item{\strong{coll_date}}{Prioritize recently collected specimens ("latest") or those collected longest ago ("oldest"). Records without dates are selected last in either case. (Required field: \code{collection_date_start}.)}
+\item{\strong{seq_date}}{Prioritize recently uploaded sequences ("latest") or those with the earliest upload date ("oldest"). (Required field: \code{sequence_upload_date}.)}
 }
 
 Default selection criteria are as follows:
@@ -100,20 +100,19 @@ BIN from the previous example, this will yield two representatives: one each for
 Note that records with such names may still be selected as representatives if they are prioritized
 according to the provided criteria, or if they are the only available representatives in a BIN.
 
-When \code{non.redundant.taxa = TRUE}, the identifications in a BIN are compared with respect to their
+When \code{non.redundant.taxa = TRUE}, the identifications in a BIN are compared in terms of their
 full taxonomic classification to determine the most specific name available for each distinct taxonomic
-lineage. For example: "Agrilinae", "Agrilus", and "Agrilus VVG_sp.42" will all be treated as a single
-lineage when selecting representatives by taxon. This taxonomic de-duplication behaviour is
-also affected by the previous parameter: when \code{enforce.scientific} and \code{non.redundant.taxa} are both
-\code{TRUE}, the names "Agrilinae", "Agrilus", "Agrilus VVG_sp.42", and "Agrilus crataegi" all collapse to
-the single taxon "Agrilus crataegi". When \code{non.redundant.taxa} is \code{TRUE}, and \code{enforce.scientific} is
-\code{FALSE}, the same four names collapse to "Agrilus VVG_sp.42" and "Agrilus crataegi". Note that
-records with the lowest identification will be selected first as they carry the relevant taxonomic
-information. Thus, this setting can in some cases override the selection criteria by de-prioritizing
-records with unresolved identifications. Note also that the function will always return at least \code{Nreps}
-records per BIN where possible; if there are fewer than \code{Nreps} records bearing the lowest
-non-redundant identification(s) in a BIN, additional records will be selected as back-fill beginning
-with the next-most specific identification, working upwards.
+lineage, and any records thus identified will be selected first. For example: "Agrilinae", "Agrilus",
+and "Agrilus VVG_sp.42" will all be treated as a single lineage when selecting representatives by taxon.
+This taxonomic de-duplication behaviour is also affected by the previous parameter: when \code{enforce.scientific}
+and \code{non.redundant.taxa} are both \code{TRUE}, the names "Agrilinae", "Agrilus", "Agrilus VVG_sp.42", and
+"Agrilus crataegi" all collapse to the single taxon "Agrilus crataegi". When \code{non.redundant.taxa} is \code{TRUE},
+and \code{enforce.scientific} is \code{FALSE}, the same four names collapse to "Agrilus VVG_sp.42" and "Agrilus crataegi".
+Note that this option prioritizes records with the lowest available taxonomic information, and in some cases
+can thus override the selection criteria, e.g., if otherwise preferred records have unresolved identifications.
+Note also that the function will always return at least \code{Nreps} records per BIN where possible; if there are
+fewer than \code{Nreps} records bearing the lowest non-redundant identification(s) in a BIN, additional records
+will be selected as back-fill beginning with the next-most specific identification, working upwards.
 }
 
 \section{Reproducibility}{

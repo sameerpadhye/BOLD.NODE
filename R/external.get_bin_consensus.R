@@ -5,11 +5,11 @@
 #'
 #' @details
 #' Consensus is defined as any name that exceeds the specified `threshold`, expressed as a proportion of
-#' records with a concordant identification (i.e., same name, same rank). The function steps backwards through
-#' the eligible `ranks` to determine the lowest available concordant identification that meets the criteria
-#' specified by `threshold`, `min.ids`, and `enforce.scientific`. Different thresholds can be supplied
-#' for each rank, if desired (either as a vector of equal length to ranks or as a named list). The function
-#' can also be applied to any other grouping variable by modifying `groups`.
+#' records with a concordant identification (i.e., same name, same rank). The function steps backwards
+#' (i.e., from subspecies to kingdom) through the eligible `ranks` to determine the lowest available concordant
+#' identification that meets the criteria specified by `threshold`, `min.ids`, and `enforce.scientific`.
+#' Different thresholds can be supplied for each rank, if desired (either as a vector of equal length to ranks
+#' or as a named list). The function can also be applied to any other grouping variable by modifying `groups`.
 #'
 #' The provided `bold.search.res` input can be a search result object from \code{\link{bold_parquet_search}}
 #' or a BCDM data frame. Alternatively, it can be any data frame or data table minimally containing `bin_uri`

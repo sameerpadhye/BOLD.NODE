@@ -1,21 +1,10 @@
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # BOLD.NODE
 
-**BOLD.NODE** is an R package that offers functionality to efficiently
-explore BOLD dataset releases
-(<https://boldsystems.org/data/data-packages/>) in the **Barcode Core
-Data Model (BCDM)** format (for more information on BCDM please visit
-its GitHub repo <https://github.com/boldsystems-central/BCDM>) locally.
-It uses a **DuckDB** back end to query **parquet** files directly in R,
-enabling fast searches even on systems with limited RAM. Data collection
-is optimized through customized chunk sizes and configurable system
-pause intervals.
+**BOLD.NODE** is an R package that offers functionality to efficiently explore BOLD dataset releases (<https://boldsystems.org/data/data-packages/>) in the **Barcode Core Data Model (BCDM)** format locally (for more information on BCDM please visit its GitHub repo <https://github.com/boldsystems-central/BCDM>). It uses a **DuckDB** back end to query **parquet** files directly in R, enabling fast searches even on systems with limited RAM. Data collection is optimized through customized chunk sizes and configurable system pause intervals.
 
-The package also allows seamless conversion of search results into
-standard R data structures without collecting the data in memory for
-downstream analyses:
+The package also allows seamless conversion of search results into standard R data structures without collecting the data in memory for downstream analyses:
 
 1.  **occurrence matrix** (biodiversity and ecology related analyses)
 2.  **sf** (spatial data analyses)
@@ -28,14 +17,11 @@ downstream analyses:
 
 ## User manual
 
-The user manual for the package can be downloaded from the following
-link
-(<https://github.com/boldsystems-central/BOLDconnectR_examples/blob/main/BOLD.NODE_v0.0.3.pdf>)
+The user manual for the package can be downloaded from the following link: (<https://github.com/boldsystems-central/BOLDconnectR_examples/blob/main/BOLD.NODE_v0.0.3.pdf>)
 
 ## Installation
 
-The package can be installed using `devtools::install_github` function
-from the `devtools` package in R (which needs to be installed before)
+The package can be installed using `devtools::install_github` function from the `devtools` package in R (which first needs to be installed).
 
 ``` r
 devtools::install_github("https://github.com/sameerpadhye/BOLD.NODE.git")
@@ -43,11 +29,7 @@ devtools::install_github("https://github.com/sameerpadhye/BOLD.NODE.git")
 
 ## Downloading Data Packages
 
-Users need to log into BOLD
-(<https://bench.boldsystems.org/index.php/Login/page?destination=MAS_Management_UserConsole>)
-to download the datasets in the `parquet` format. The users can then
-directly use the file as an input for the search and vocabulary
-functions
+Users need to log into BOLD (<https://bench.boldsystems.org/index.php/Login/page?destination=MAS_Management_UserConsole>) to download datasets in `parquet` format. Users can then directly use the file as input for the search and vocabulary functions.
 
 ## BOLD.NODE has 12 functions:
 
@@ -64,9 +46,7 @@ functions
 11. bcdm_to_occmatrix
 12. bcdm_to_sf
 
-**Note** *Function 8*: *bcdm_to_dnastringset* requires the package
-`Biostrings` to be installed and imported in the R session beforehand.
-It can be installed using using `BiocManager` package.
+**Note** *Function 8*: *bcdm_to_dnastringset* requires the package `Biostrings` to be installed and imported in the R session beforehand. It can be installed using `BiocManager` package.
 
 ``` r
 # if (!requireNamespace("BiocManager", quietly=TRUE))
@@ -78,29 +58,17 @@ It can be installed using using `BiocManager` package.
 
 ## Workflow for search and collect
 
-A typical workflow for exploring and BOLD data (Steps in *italics* are
-optional but useful in some instances):
+A typical workflow for exploring and BOLD data (Steps in *italics* are optional but useful in some instances):
 
-1.  `bcdm_field_values` and `bcdm_field_values` *(Provide the names of
-    different BCDM fields and unique terms present in a particular
-    field, making it easier for exploring* `bold_parquet_search` *search
-    parameters)*.
-2.  `bold_parquet_search` (Searches the dataset based on the user
-    criteria and prints the number of records available).
-3.  `bold_search_collect`(Collects the output of the
-    `bold_parquet_search` in memory for downstream
-    exploration/analyses).
-4.  *Optional*: Transform the searched data into a `fasta` or `sf` or
-    `DNAStringset` or an `occurrence matrix` for downstream analyses
-    (The *bcdm_to* functions).
-5.  *Optional*: Generate concise summary and/or BIN centric summaries of
-    the searched data based on various parameters (taxonomy,
-    attributions, sequence meta data) (The *get\_* functions).
+1.  `bcdm_field_values` and `bcdm_field_values` *(Provide the names of different BCDM fields and unique terms present in a particular field, making it easier for exploring* `bold_parquet_search` *search parameters)*.
+2.  `bold_parquet_search` (Searches the dataset based on the user criteria and prints the number of records available).
+3.  `bold_search_collect`(Collects the output of the `bold_parquet_search` in memory for downstream exploration/analyses).
+4.  *Optional*: Transform the searched data into a `fasta` or `sf` or `DNAStringset` or an `occurrence matrix` for downstream analyses (the *bcdm_to* functions).
+5.  *Optional*: Generate concise summary and/or BIN-centric summaries of the searched data based on various parameters, e.g., taxonomy, attributions, sequence meta data (the *get\_* functions).
 
-### 1.Get the vocabulary for specific fields
+### 1. Get the vocabulary for specific fields
 
-This function can be used for getting unique values of some of the
-categorical fields (e.g. institutes) to make searches easier.
+This function can be used to get unique values of some of the categorical fields (e.g. institutes) to make searches easier.
 
 ``` r
 # parquet_file<-'path where the parquet file from BOLD is downloaded'
@@ -108,16 +76,9 @@ categorical fields (e.g. institutes) to make searches easier.
 # vocab.data <- bcdm_field_values(parquet_file,specific.cols = c("country.ocean"))
 ```
 
-### 2.Search the dataset
+### 2. Search the dataset
 
-This function lets users search by more than 10 different search
-parameters including taxonomy (species, genus, family etc.), geography
-(country.ocean, province, region), ids (processid, sampleid) and more.
-The users can just input the search query directly (e.g. put *Canada* as
-a query in the `geography` argument or *Coleoptera* in the `taxonomy`
-argument) with the function searching the query in the relevant fields
-internally. The search result is a `tbl_sql` object that is used for
-collecting or transforming the data.
+This function lets users search by more than 10 different search parameters including taxonomy (species, genus, family etc.), geography (country.ocean, province, region), ids (processid, sampleid) and more. The user can simply input the search query directly as an argument (e.g. *Canada* as the `geography` argument or *Coleoptera* as the `taxonomy` argument) with the function searching the query in the relevant fields internally. The search result is a `tbl_sql` object that is used for collecting or transforming the data.
 
 ``` r
 # parquet_file<-'path where the parquet file from BOLD is downloaded'
@@ -153,13 +114,9 @@ collecting or transforming the data.
 # basecount = c(500, 660))
 ```
 
-### 3.Collect the searched data
+### 3. Collect the searched data
 
-The searched data can be collected in memory using this function.
-**Please note** Some queries (e.g., All “Diptera”) may return very large
-datasets. Always check the printed message in the console (shows the
-total records in the search) after search before collecting data to
-ensure you don’t exceed the available RAM.
+The searched data can be collected in memory using this function. **Please note** Some queries (e.g., all “Diptera”) may return very large datasets. Always check the printed message in the console (shows the total records in the search) after search and before collecting data to ensure you don’t exceed the available RAM.
 
 ``` r
 # Collect data (no export)
@@ -185,16 +142,11 @@ ensure you don’t exceed the available RAM.
 
 ### The `get_` functionality
 
-The `get_` functions provide ways of summarizing the data, focusing more
-on the **Barcode Index Number (BIN)** centric summaries that include a
-consensus taxonomy as well as representative records for BINs based on
-different criteria. The `get_concise_summary` gives a succinct summary
-of the searched data.
+The `get_` functions provide multiple ways of summarizing the data. The `get_concise_summary` function gives a succinct summary of the searched data. For each **Barcode Index Number (BIN)** in the search data, `get_bin_consensus` returns consensus taxonomy, while `get_bin_reps` selects a sample of representative records based on provided criteria.
 
 #### `get_bin_reps`
 
-gets a dataset having one or more representative record(s) from each BIN
-based on different criteria.
+Returns a dataset with one or more representative record(s) from each BIN based on specified criteria.
 
 ``` r
 # bold_search <- bold_parquet_search(
@@ -211,8 +163,7 @@ based on different criteria.
 
 #### `get_concise_summary`
 
-gets a concise summary of the searched data. Search results include
-total records, total countries, amplicon length range and many more.
+Returns a concise summary of the searched data. Search results include total records, total countries, amplicon length range and many more.
 
 ``` r
 #  Search the data
@@ -229,16 +180,11 @@ total records, total countries, amplicon length range and many more.
 
 ### The `bcdm_to_` functionality
 
-The `bcdm_to_*` functions convert the output of `bold_parquet_search`
-into objects compatible with packages such as `vegan`, `msa`,
-`DECIPHER`, `terra`, and `geodata`, enabling seamless interoperability
-with the broader R ecosystem.
+The `bcdm_to_*` functions convert the output of `bold_parquet_search` into objects compatible with packages such as `vegan`, `msa`, `DECIPHER`, `terra`, and `geodata`, enabling seamless interoperability with the broader R ecosystem.
 
 #### `bcdm_to_fasta`
 
-Creates a fasta file with customized headers of the searched data. This
-can be exported locally for any downstream analytical pipelines in third
-party tools.
+Creates a fasta file with customized headers of the searched data. This can be exported locally for any downstream analytical pipelines in third party tools.
 
 ``` r
 #  Search the data
@@ -260,8 +206,7 @@ party tools.
 
 #### `bcdm_to_sf`
 
-generates a `sf` object of the searched data for any downstream spatial
-data analyses.
+Generates a `sf` object of the searched data for any downstream spatial data analyses.
 
 ``` r
 #  Search the data
@@ -280,8 +225,7 @@ data analyses.
 
 #### `bcdm_to_occmatrix`
 
-creates an occurrence matrix from the searched data based on the
-`taxon.rank`, `taxon.name` (optional) and the `site.cat`.
+Creates an occurrence matrix from the searched data based on the `taxon.rank`, `taxon.name` (optional) and the `site.cat`.
 
 ``` r
 #  Search the data
@@ -301,10 +245,7 @@ creates an occurrence matrix from the searched data based on the
 
 #### `bcdm_to_dnastringset`
 
-generates a `DNAStringSet` (Biostrings object) object of the searched
-data for any downstream sequence alignment and tree generation with
-custom headers. The library `Biostrings` has to be installed and
-imported before using this function.
+Generates a `DNAStringSet` (Biostrings object) object of the searched data for any downstream sequence alignment and tree generation with custom headers. The library `Biostrings` has to be installed and imported before using this function.
 
 ``` r
 #  Search the data
@@ -323,16 +264,12 @@ imported before using this function.
 
 ## Benchmarks
 
-It takes roughly 10 minutes to collect ~10M records on a i7 2.8GHZ 16GB
-RAM machine
+It takes roughly 10 minutes to collect \~10M records on a i7 2.8GHZ 16GB RAM machine
 
-<img src="man/figures/README-benchmark_fig-1.jpeg" alt="" width="100%" />
+<img src="man/figures/README-benchmark_fig-1.jpeg" width="100%"/>
 
-**The package is under active development and the functionality is
-subject to change**
+**The package is under active development and the functionality is subject to change**
 
 ### Funding
 
-This work was funded by the [New Frontiers in Research Fund (NFRF) -
-Transformation
-2020](https://sshrc-crsh.canada.ca/funding-financement/nfrf-fnfr/transformation/transformation-eng.aspx)
+This work was funded by the [New Frontiers in Research Fund (NFRF) - Transformation 2020](https://sshrc-crsh.canada.ca/funding-financement/nfrf-fnfr/transformation/transformation-eng.aspx)
